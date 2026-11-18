@@ -246,6 +246,73 @@ body.busy, body.busy button{cursor:progress}
 .pager{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;padding:14px 0 6px}
 .pager .btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .pager .gap{color:var(--muted);padding:0 2px}
+
+/* equipment name colours from HV综合汉化 (DDD) */
+@font-face {
+font-family: 'HV Ultimate Star Wheel';
+src: url("data:font/woff;base64,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") format('woff');
+font-style: normal;
+font-weight: 400;
+font-display: block;
+unicode-range: U+168D4;
+}
+.hv-ultimate-symbol {
+font-family: 'HV Ultimate Star Wheel' !important;
+font-style: normal !important;
+font-weight: 400 !important;
+font-variant: normal !important;
+font-size: inherit;
+line-height: inherit;
+}
+.hv-eq-token { white-space:nowrap; border-radius:2px; padding:0 2px; line-height:1.18; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+.hv-eq-q-ultimate { background:#2b2b35; color:#f5f5f5;}
+.hv-eq-q-peerless { background:#ffd760; color:#111; }
+.hv-eq-q-legendary { background:#ffbbff; color:#111; }
+.hv-eq-q-magnificent { background:#a6daf6; color:#111; }
+.hv-eq-q-exquisite { background:#d7e698; color:#111; }
+.hv-eq-q-superior { background:#fbf9f9; color:#111; }
+.hv-eq-q-fine { background:#b9ffb9; color:#111; }
+.hv-eq-q-average { background:#dfdfdf; color:#111; }
+.hv-eq-q-fair { background:#c1c1c1; color:#111; }
+.hv-eq-q-crude { background:#acacac; color:#111; }
+.hv-eq-q-flimsy { background:#848482; color:#fff; }
+.hv-eq-void { background:#fff; color:#5c5a5a; }
+.hv-eq-fire-damage { background:#f97c7c; color:#111; }
+.hv-eq-fire-resist { background:#ffa6a6; color:#111; }
+.hv-eq-cold-damage { background:#94c2f5; color:#111; }
+.hv-eq-cold-resist { background:#a0f4f4; color:#111; }
+.hv-eq-elec-damage { background:#f4f375; color:#111; }
+.hv-eq-elec-resist { background:#ffff00; color:#9f9f16; }
+.hv-eq-wind-damage { background:#7ff97c; color:#111; }
+.hv-eq-wind-resist { background:#b1f9b1; color:#111; }
+.hv-eq-holy-damage { background:#fff; color:#111; }
+.hv-eq-holy-resist { background:#fff; color:#5c5a5a; }
+.hv-eq-dark-damage { background:#000; color:#fff; }
+.hv-eq-dark-resist { background:#ccc; color:#111; }
+.hv-eq-radiant { background:#fff; color:#111; }
+.hv-eq-offense-redtext { color:red; }
+.hv-eq-weight { background:#e8edf2; color:#b00000; }
+.hv-eq-agile { background:#ffa07a; color:#111; }
+.hv-eq-frugal { background:#f0e2ff; color:#7a1fa2; }
+.hv-eq-slaughter { background:#f00; color:#fff; }
+.hv-eq-balance { background:#daa520; color:#fff; }
+.hv-eq-swiftness { background:#ffdb58; color:#111; }
+.hv-eq-destruction { background:#9400d3; color:#fff; }
+.hv-eq-focus { background:#ba55d3; color:#fff; }
+.hv-eq-defense { background:#dcecff; color:#12395c; }
+.hv-eq-barrier { background:#4682b4; color:#fff; }
+.hv-eq-nimble { background:#ffa07a; color:#111; }
+.hv-eq-shadowdancer { background:#708090; color:#f0f8ff; }
+.hv-eq-battlecaster { background:#6a5acd; color:#fff; }
+.hv-eq-arcanist { background:#9370db; color:#fff; }
+.hv-eq-elementalist { background:#74d6d6; color:#073f3f; }
+.hv-eq-heaven { background:#fff4b8; color:#6b5600; }
+.hv-eq-vampire { background:#8b0000; color:#fff; }
+.hv-eq-special-material { background:#ffa500; color:#111; }
+.hv-eq-light { background:#666; color:#fff; }
+.hv-eq-heavy { background:#111; color:#fff; }
+@media (max-width:640px){.seg button{padding:3px 7px}}
+html:lang(zh-Hans){--font-body: Verdana, "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif; --font-display: Georgia, "Times New Roman", "Microsoft YaHei", serif}
 </style>
 </head>
 <body>
@@ -268,13 +335,18 @@ const CFG={
   key:"sb_publishable_lGHhGSrWTjYwfB3TObgAQw_QB1RJ8Mp",
 };
 const ADMIN_CONTACT='st31118aa', RESET_PW='00000';
+/* generated by tools/gen_eqname.py — do not edit by hand.
+   Chinese equipment names, markers (☯ ✪ ☆ ✧) and colours from DDD's HV综合汉化 userscript v1.6.9.3;
+   column 1 is its Simplified Chinese, column 2 the Traditional Chinese conversion.
+   EQN_DICT is in the order the replacements are applied (longest first), as in the userscript. */
+const EQN_DICT=[[" of the Thrice-blessed"," 三重祝福(圣抗+)"," 三重祝福(聖抗+)"],[" of the Thunder-child"," 雷之子(雷抗+)"," 雷之子(雷抗+)"],[" of the Battlecaster"," 战法师(魔耗-魔命+)"," 戰法師(魔耗-魔命+)"],[" of the Elementalist"," 元素使(元素熟练+)"," 元素使(元素熟練+)"],[" of the Earth-walker"," 地行者(增益熟练+)"," 地行者(增益熟練+)"],[" of the Curse-weaver"," 织咒者(减益熟练+)"," 織咒者(減益熟練+)"],[" of the Shadowdancer"," 影舞者(闪避/攻爆+)"," 影舞者(閃避/攻爆+)"],[" of the Heaven-sent"," 天堂(神圣熟练+)"," 天堂(神聖熟練+)"],[" of the Demon-fiend"," 恶魔(黑暗熟练+)"," 惡魔(黑暗熟練+)"],[" of the Spirit-ward"," 幽冥结界(暗抗+)"," 幽冥結界(暗抗+)"],["the Thrice-blessed","三重祝福(圣抗+)","三重祝福(聖抗+)"],[" of the Wind-waker"," 驭风者(风抗+)"," 馭風者(風抗+)"],[" of the Fire-eater"," 吞火者(火抗+)"," 吞火者(火抗+)"],[" of the Frost-born"," 霜裔(冰抗+)"," 霜裔(冰抗+)"],["One-handed Weapon","单手武器","單手武器"],["Two-handed Weapon","双手武器","雙手武器"],["the Thunder-child","雷之子(雷抗+)","雷之子(雷抗+)"],["the Battlecaster","战法师(魔耗-魔命+)","戰法師(魔耗-魔命+)"],["the Elementalist","元素使(元素熟练+)","元素使(元素熟練+)"],["the Earth-walker","地行者(增益熟练+)","地行者(增益熟練+)"],["the Curse-weaver","织咒者(减益熟练+)","織咒者(減益熟練+)"],["the Shadowdancer","影舞者(闪避/攻爆+)","影舞者(閃避/攻爆+)"],[" of the Illithid"," 汲灵(吸血/吸魔+)"," 汲靈(吸血/吸魔+)"],[" of the Arcanist"," 奥术师(无干涉/魔命+)"," 奧術師(無干涉/魔命+)"],["the Heaven-sent","天堂(神圣熟练+)","天堂(神聖熟練+)"],["the Demon-fiend","恶魔(黑暗熟练+)","惡魔(黑暗熟練+)"],["the Spirit-ward","幽冥结界(暗抗+)","幽冥結界(暗抗+)"],[" of the Vampire"," 吸血鬼(吸血+)"," 吸血鬼(吸血+)"],[" of the Banshee"," 女妖(吸血/吸灵+)"," 女妖(吸血/吸靈+)"],[" of Destruction"," 毁灭(法伤+)"," 毀滅(法傷+)"],[" of the Barrier"," 屏障(格挡+)"," 屏障(格擋+)"],[" of the Raccoon"," 浣熊(灵巧+)"," 浣熊(靈巧+)"],[" of the Cheetah"," 猎豹(敏捷+)"," 獵豹(敏捷+)"],["the Wind-waker","驭风者(风抗+)","馭風者(風抗+)"],["the Fire-eater","吞火者(火抗+)","吞火者(火抗+)"],["the Frost-born","霜裔(冰抗+)","霜裔(冰抗+)"],[" of the Nimble"," 灵活(招架+)"," 靈活(招架+)"],[" of Protection"," 保护(物减伤+)"," 保護(物減傷+)"],[" of Deflection"," 偏转(刺减伤+)"," 偏轉(刺減傷+)"],[" of the Turtle"," 乌龟(体质+)"," 烏龜(體質+)"],[" of Slaughter"," 杀戮(攻击+)"," 殺戮(攻擊+)"],[" of Swiftness"," 迅捷(攻速+)"," 迅捷(攻速+)"],[" of Dampening"," 抑制(打减伤+)"," 抑制(打減傷+)"],[" of Stoneskin"," 石肤(斩减伤+)"," 石膚(斬減傷+)"],[" of the Fleet"," 迅捷(闪避+)"," 迅捷(閃避+)"],["the Illithid","汲灵(吸血/吸魔+)","汲靈(吸血/吸魔+)"],["the Arcanist","奥术师(无干涉/魔命+)","奧術師(無干涉/魔命+)"],["Force Shield","力场盾","力場盾"],["Tower Shield","塔盾","塔盾"],[" of Niflheim"," 尼芙菲姆(冰伤+)"," 尼芙菲姆(冰傷+)"],[" of Heimdall"," 海姆达尔(圣伤+)"," 海姆達爾(聖傷+)"],[" of Negation"," 否定(抵抗+)"," 否定(抵抗+)"],["Magnificent","☆史诗☆","☆史詩☆"],["Cloth Armor","布甲","布甲"],["Light Armor","轻甲","輕甲"],["Heavy Armor","重甲","重甲"],["the Vampire","吸血鬼(吸血+)","吸血鬼(吸血+)"],["the Banshee","女妖(吸血/吸灵+)","女妖(吸血/吸靈+)"],["Destruction","毁灭(法伤+)","毀滅(法傷+)"],["the Barrier","屏障(格挡+)","屏障(格擋+)"],["the Raccoon","浣熊(灵巧+)","浣熊(靈巧+)"],["the Cheetah","猎豹(敏捷+)","獵豹(敏捷+)"],["Swordchucks","锁链双剑(双)","鎖鏈雙劍(雙)"],["Kite Shield","鸢盾","鳶盾"],["Breastplate","护胸","護胸"],["Tempestuous","风暴(风伤+)","風暴(風傷+)"],[" of Balance"," 平衡(攻命攻爆+)"," 平衡(攻命攻爆+)"],[" of Mjolnir"," 姆乔尔尼尔(雷伤+)"," 姆喬爾尼爾(雷傷+)"],[" of Warding"," 护佑(魔减伤+)"," 護佑(魔減傷+)"],[" of the Fox"," 狐狸(智力+)"," 狐狸(智力+)"],[" of the Owl"," 猫头鹰(智慧+)"," 貓頭鷹(智慧+)"],["the Nimble","灵活(招架+)","靈活(招架+)"],["Protection","保护(物减伤+)","保護(物減傷+)"],["Deflection","偏转(刺减伤+)","偏轉(刺減傷+)"],["the Turtle","乌龟(体质+)","烏龜(體質+)"],["Shortsword","短剑(单)","短劍(單)"],["Great Mace","巨锤(双)","巨錘(雙)"],["Reinforced","加固的(斩打刺减伤+)","加固的(斬打刺減傷+)"],[" of Fenrir"," 芬里尔(暗伤+)"," 芬里爾(暗傷+)"],[" of the Ox"," 公牛(力量+)"," 公牛(力量+)"],["Exquisite","✧精良✧","✧精良✧"],["Legendary","✪传奇✪","✪傳奇✪"],["Slaughter"," 杀戮(攻击+)"," 殺戮(攻擊+)"],["Swiftness","迅捷(攻速+)","迅捷(攻速+)"],["Dampening","抑制(打减伤+)","抑制(打減傷+)"],["Stoneskin","石肤(斩减伤+)","石膚(斬減傷+)"],["the Fleet","迅捷(闪避+)","迅捷(閃避+)"],["Wakizashi","胁差(单)","脇差(單)"],["Longsword","长剑(双)","長劍(雙)"],["Drakehide","龙鳞(轻)","龍鱗(輕)"],["Gauntlets","护手","護手"],["Shielding","盾化的(格挡+)","盾化的(格擋+)"],[" of Focus"," 专注(法爆魔命+魔耗-)"," 專注(法爆魔命+魔耗-)"],[" of Surtr"," 苏尔特(火伤+)"," 蘇爾特(火傷+)"],[" of Freyr"," 弗雷尔(风伤+)"," 弗雷爾(風傷+)"],["Superior","上等","上等"],["Peerless","☯无双☯","☯無雙☯"],["Ultimate","𖣔终极𖣔","𖣔終極𖣔"],["Niflheim","尼芙菲姆(冰伤+)","尼芙菲姆(冰傷+)"],["Heimdall","海姆达尔(圣伤+)","海姆達爾(聖傷+)"],["Negation","否定(抵抗+)","否定(抵抗+)"],["Gossamer","薄纱(布)","薄紗(布)"],["Ironsilk","铁丝绸(布)","鐵絲綢(布)"],["Reactive","反应(重)","反應(重)"],["Leggings","绑腿","綁腿"],["Sabatons","铁靴","鐵靴"],["Ethereal","虚空(无负重/干涉)","虛空(無負重/干涉)"],["Shocking","闪电(电伤+)","閃電(電傷+)"],["Hallowed","神圣(圣伤+)","神聖(聖傷+)"],["Average","中等","中等"],["Balance","平衡(攻命攻爆+)","平衡(攻命攻爆+)"],["Mjolnir","姆乔尔尼尔(雷伤+)","姆喬爾尼爾(雷傷+)"],["Warding","护佑(魔减伤+)","護佑(魔減傷+)"],["the Fox","狐狸(智力+)","狐狸(智力+)"],["the Owl","猫头鹰(智慧+)","貓頭鷹(智慧+)"],["Buckler","小圆盾","小圓盾"],["Redwood","红木","紅木"],["Katalox","铁木","鐵木"],["Leather","皮革(轻)","皮革(輕)"],["Cuirass","胸甲","胸甲"],["Greaves","护胫","護脛"],["Demonic","恶魔(暗伤+)","惡魔(暗傷+)"],["Radiant","✪魔光✪(法伤+)","✪魔光✪(法傷+)"],["Charged","充能(施速+)","充能(施速+)"],["Mithril","秘银的(负重-)","秘銀的(負重-)"],["Flimsy","脆弱","脆弱"],["Shield","盾牌","盾牌"],["Fenrir","芬里尔(暗伤+)","芬里爾(暗傷+)"],["the Ox","公牛(力量+)","公牛(力量+)"],["Rapier","西洋剑(单)","西洋劍(單)"],["Dagger","匕首(单)","匕首(單)"],["Katana","日本刀(双)","日本刀(雙)"],["Scythe","镰刀(双)","鐮刀(雙)"],["Willow","柳木","柳木"],["Cotton","棉布(布)","棉布(布)"],["Kevlar","凯夫拉(轻)","凱夫拉(輕)"],["Gloves","手套","手套"],["Helmet","头盔","頭盔"],["Arctic","极寒(冰伤+)","極寒(冰傷+)"],["Mystic","神秘(法爆伤+)","神秘(法爆傷+)"],["Zircon","锆石的(圣抗+)","鋯石的(聖抗+)"],["Frugal","节能(魔耗-)","節能(魔耗-)"],["Cobalt","钴石的(冰抗+)","鈷石的(冰抗+)"],["Savage","残暴的(攻爆伤+)","殘暴的(攻爆傷+)"],["/\\bArmor\\b/","盔甲","盔甲"],["/^Fine /","优质 ","優質 "],["Crude","粗糙","粗糙"],["Staff","法杖","法杖"],["Focus","专注(法爆魔命+魔耗-)","專注(法爆魔命+魔耗-)"],["Surtr","苏尔特(火伤+)","蘇爾特(火傷+)"],["Freyr","弗雷尔(风伤+)","弗雷爾(風傷+)"],["Estoc","刺剑(双)","刺劍(雙)"],["Ebony","乌木","烏木"],["Phase","相位(布)","相位(布)"],["Shade","暗影(轻)","暗影(輕)"],["Chain","锁子甲(重)","鎖子甲(重)"],["Plate","板甲(重)","板甲(重)"],["Power","动力(重)","動力(重)"],["Pants","裤子","褲子"],["Shoes","鞋子","鞋子"],["Boots","靴子","靴子"],["Fiery","灼热(火伤+)","灼熱(火傷+)"],["Amber","琥珀的(电抗+)","琥珀的(電抗+)"],["Agile","俊敏的(攻速+)","俊敏的(攻速+)"],["Fair","普通","普通"],["Club","棍(单)","棍(單)"],["Mace","巨锤(双)","巨錘(雙)"],["Robe","长袍","長袍"],["Jade","翡翠的(风抗+)","翡翠的(風抗+)"],["Ruby","红宝石(火抗+)","紅寶石(火抗+)"],["Onyx","缟玛瑙(暗抗+)","縞瑪瑙(暗抗+)"],["Axe","斧(单)","斧(單)"],["Oak","橡木","橡木"],["Cap","帽","帽"]];
+const EQN_COLORS=[["hv-eq-focus","专注(法爆魔命+魔耗-)","專注(法爆魔命+魔耗-)"],["hv-eq-arcanist","奥术师(无干涉/魔命+)","奧術師(無干涉/魔命+)"],["hv-eq-defense","加固的(斩打刺减伤+)","加固的(斬打刺減傷+)"],["hv-eq-shadowdancer","影舞者(闪避/攻爆+)","影舞者(閃避/攻爆+)"],["hv-eq-battlecaster","战法师(魔耗-魔命+)","戰法師(魔耗-魔命+)"],["hv-eq-void","虚空(无负重/干涉)","虛空(無負重/干涉)"],["hv-eq-elec-damage","姆乔尔尼尔(雷伤+)","姆喬爾尼爾(雷傷+)"],["hv-eq-elementalist","元素使(元素熟练+)","元素使(元素熟練+)"],["hv-eq-cold-damage","尼芙菲姆(冰伤+)","尼芙菲姆(冰傷+)"],["hv-eq-holy-damage","海姆达尔(圣伤+)","海姆達爾(聖傷+)"],["hv-eq-holy-resist","三重祝福(圣抗+)","三重祝福(聖抗+)"],["hv-eq-dark-resist","幽冥结界(暗抗+)","幽冥結界(暗抗+)"],["hv-eq-radiant","✪魔光✪(法伤+)","✪魔光✪(法傷+)"],["hv-eq-offense-redtext","残暴的(攻爆伤+)","殘暴的(攻爆傷+)"],["hv-eq-balance","平衡(攻命攻爆+)","平衡(攻命攻爆+)"],["hv-eq-heaven","天堂(神圣熟练+)","天堂(神聖熟練+)"],["hv-eq-fire-damage","苏尔特(火伤+)","蘇爾特(火傷+)"],["hv-eq-fire-resist","红宝石(火抗+)","紅寶石(火抗+)"],["hv-eq-fire-resist","吞火者(火抗+)","吞火者(火抗+)"],["hv-eq-cold-resist","钴石的(冰抗+)","鈷石的(冰抗+)"],["hv-eq-elec-resist","琥珀的(电抗+)","琥珀的(電抗+)"],["hv-eq-elec-resist","雷之子(雷抗+)","雷之子(雷抗+)"],["hv-eq-wind-damage","弗雷尔(风伤+)","弗雷爾(風傷+)"],["hv-eq-wind-resist","翡翠的(风抗+)","翡翠的(風抗+)"],["hv-eq-wind-resist","驭风者(风抗+)","馭風者(風抗+)"],["hv-eq-holy-resist","锆石的(圣抗+)","鋯石的(聖抗+)"],["hv-eq-dark-damage","芬里尔(暗伤+)","芬里爾(暗傷+)"],["hv-eq-dark-resist","缟玛瑙(暗抗+)","縞瑪瑙(暗抗+)"],["hv-eq-weight","秘银的(负重-)","秘銀的(負重-)"],["hv-eq-agile","俊敏的(攻速+)","俊敏的(攻速+)"],["hv-eq-focus","神秘(法爆伤+)","神秘(法爆傷+)"],["hv-eq-defense","盾化的(格挡+)","盾化的(格擋+)"],["hv-eq-vampire","吸血鬼(吸血+)","吸血鬼(吸血+)"],["hv-eq-fire-damage","灼热(火伤+)","灼熱(火傷+)"],["hv-eq-cold-damage","极寒(冰伤+)","極寒(冰傷+)"],["hv-eq-cold-resist","霜裔(冰抗+)","霜裔(冰抗+)"],["hv-eq-elec-damage","闪电(电伤+)","閃電(電傷+)"],["hv-eq-wind-damage","风暴(风伤+)","風暴(風傷+)"],["hv-eq-holy-damage","神圣(圣伤+)","神聖(聖傷+)"],["hv-eq-dark-damage","恶魔(暗伤+)","惡魔(暗傷+)"],["hv-eq-offense-redtext","充能(施速+)","充能(施速+)"],["hv-eq-frugal","节能(魔耗-)","節能(魔耗-)"],["hv-eq-slaughter","杀戮(攻击+)","殺戮(攻擊+)"],["hv-eq-swiftness","迅捷(攻速+)","迅捷(攻速+)"],["hv-eq-destruction","毁灭(法伤+)","毀滅(法傷+)"],["hv-eq-barrier","屏障(格挡+)","屏障(格擋+)"],["hv-eq-nimble","灵活(招架+)","靈活(招架+)"],["hv-eq-q-ultimate","𖣔终极𖣔","𖣔終極𖣔"],["hv-eq-q-peerless","☯无双☯","☯無雙☯"],["hv-eq-q-legendary","✪传奇✪","✪傳奇✪"],["hv-eq-q-magnificent","☆史诗☆","☆史詩☆"],["hv-eq-q-exquisite","✧精良✧","✧精良✧"],["hv-eq-light","凯夫拉","凱夫拉"],["hv-eq-heavy","锁子甲","鎖子甲"],["hv-eq-q-superior","上等","上等"],["hv-eq-q-fine","优质","優質"],["hv-eq-q-average","中等","中等"],["hv-eq-q-fair","普通","普通"],["hv-eq-q-crude","粗糙","粗糙"],["hv-eq-q-flimsy","脆弱","脆弱"],["hv-eq-special-material","相位","相位"],["hv-eq-special-material","暗影","暗影"],["hv-eq-special-material","动力","動力"],["hv-eq-special-material","反应","反應"],["hv-eq-light","皮革","皮革"],["hv-eq-light","龙鳞","龍鱗"],["hv-eq-heavy","锁甲","鎖甲"],["hv-eq-heavy","板甲","板甲"]];
 'use strict';
 /* ================= constants ================= */
 const DAY=864e5, HOUR=36e5, EXPIRE_DAYS=30, STALE_DAYS=3, MAX_INTRADE=3;
 const QUALITIES=['Peerless','Legendary','Magnificent','Exquisite','Superior','Average','Fair','Crude','Flimsy'];
 const QCOLOR={Peerless:'#A8127A',Legendary:'#BF5200',Magnificent:'#2457C8',Exquisite:'#237A35',Superior:'#5E5E5E'};
 const CATS=['One-handed Weapon','Two-handed Weapon','Staff','Shield','Cloth Armor','Light Armor','Heavy Armor'];
-const CAT_ZH={'One-handed Weapon':'單手武器','Two-handed Weapon':'雙手武器','Staff':'法杖','Shield':'盾牌','Cloth Armor':'布甲','Light Armor':'輕甲','Heavy Armor':'重甲'};
 const TYPE_TO_CAT={};
 [['One-handed Weapon',['Rapier','Club','Axe','Wakizashi','Dagger','Shortsword']],
  ['Two-handed Weapon',['Estoc','Longsword','Mace','Great Mace','Katana','Scythe','Swordchucks']],
@@ -334,6 +406,8 @@ const T={zh:{
  log_set_season:"把 Isekai 賽季改為 {s}",
  pw_pending:"待改密碼",
  ad_season_confirm_v1:"確定要封存所有 ISK 的上架中與交易中商品，並進入第 {s} 季？這個動作無法復原。",
+ d_en_name:"英文原名",
+ eq_credit:"裝備中文名稱與配色取自 DDD 的「HV綜合漢化」腳本。",
  eqf_open:"裝備篩選",
  eqf_done:"完成",
  eqf_s_cat:"類別",
@@ -402,7 +476,7 @@ const T={zh:{
  world_main:'主世界',world_isk:'Isekai',login:'登入',register:'註冊',logout:'登出',role_admin:'管理員',suspended:'停權中',
  notifications:'通知',mark_all_read:'全部標為已讀',no_notifs:'沒有通知。',
  tab_available:'上架中',tab_in_trade:'交易中',tab_sold:'已售出',
- f_search:'搜尋裝備名稱',f_cat_all:'全部類型',f_q_all:'全部品質',f_lv:'等級',f_price:'價格',f_attr:'主屬性',f_sort:'排序',
+ f_search:"搜尋裝備名稱（中文、英文都可以）",f_cat_all:'全部類型',f_q_all:'全部品質',f_lv:'等級',f_price:'價格',f_attr:'主屬性',f_sort:'排序',
  sort_new:'最新',sort_price_asc:'價格：低到高',sort_price_desc:'價格：高到低',sort_avg:'ROLL：高到低',sort_lv:'等級：高到低',
  f_clear:'清除篩選',f_seller:'賣家：{name}',
  col_equip:'裝備',col_type:'類型',col_lv:'等級',col_attr:'主屬性',col_avg:'ROLL',col_price:'售價',col_sold_price:'成交價',col_seller:'賣家',col_buyer:'買家',col_status:'狀態',col_date:'日期',col_season:"賽季",col_world:'世界',col_info:'狀況',col_actions:'操作',col_include:'上架',col_role:'身分',col_last:'最後訊息',col_ref:'參考',
@@ -433,7 +507,7 @@ const T={zh:{
  price_invalid:'看不懂這個價格，可以寫 1500000、1.5m 或 800k。',price_ph:'例如 1.5m',new_price:'新售價',
  sell_title:'上架裝備',sell_need_login:'請先登入才能上架。',sell_steps_title:'用 HVUT 產生裝備代碼',
  sell_step1:'在 HV 進入裝備的「整理」頁面',sell_step2:'先按左側的「可交易的」，只留下可以交易的裝備',sell_step3:'勾選要賣的裝備',sell_step4:'按左側的「裝備代碼」',sell_step5:"把跳出來的文字全部複製，貼到下面的框框，按「讀取並加入未上架區」",
- sell_need_hvut:'需要先安裝 HVUT。主世界和 ISK 的裝備可以混在一起貼，網站會自動分開；Soulbound 的裝備會被擋下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 換算的：傳說 170–200、史詩 150–180 對應 0–100%。HVUT 的 AVG 是四捨五入過的整數，所以可能跟實際差 1–2%，需要的話可以直接改。布甲少了 A、I、W 其中一個會自動標成瘸腿。',untrade_note:'記得先按 HVUT 的「可交易的」再勾選。HVUT 代碼不會標出 Untradeable，網站沒辦法替你擋下不可交易的裝備；不可交易的裝備無法用 MoogleMail 寄出，被檢舉會被下架。',lame:'瘸腿',lame_t:'少了 {x} 屬性',
+ sell_need_hvut:'需要先安裝 HVUT。主世界和 ISK 的裝備可以混在一起貼，網站會自動分開；Soulbound 的裝備會被擋下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 換算的：傳奇 170–200、史詩 150–180 對應 0–100%。HVUT 的 AVG 是四捨五入過的整數，所以可能跟實際差 1–2%，需要的話可以直接改。布甲少了 A、I、W 其中一個會自動標成瘸腿。',untrade_note:'記得先按 HVUT 的「可交易的」再勾選。HVUT 代碼不會標出 Untradeable，網站沒辦法替你擋下不可交易的裝備；不可交易的裝備無法用 MoogleMail 寄出，被檢舉會被下架。',lame:'瘸腿',lame_t:'少了 {x} 屬性',
  sell_paste_ph:'把 HVUT 的裝備代碼貼在這裡',sell_sample:'填入範例',sell_parse:'讀取裝備',sell_preview:'確認並填售價',
  sell_ok:'可上架',sell_err_dup:'已經在架上',sell_err_duppaste:'重複貼了兩次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
  sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件裝備。',sell_unread:'下面這幾行讀不懂，已略過：',sell_none:'沒有讀到任何裝備連結。請確認貼上的是 HVUT「裝備代碼」產生的文字。',sell_credits:'售價一律用主世界 Credits，ISK 裝備也一樣。可以寫 1.5m 或 800k。',sell_fix_prices:'有些裝備還沒填售價，或價格格式不對。',sell_nothing:'沒有勾選任何可上架的裝備。',
@@ -468,6 +542,174 @@ const T={zh:{
  just_now:'剛剛',hours_ago:'{h} 小時前',days_ago:'{d} 天前',deleted_user:'（已刪除）',
  footer:'本站只是刊登平台，交易請玩家之間自行用 MoogleMail 以 CoD 完成。只接受遊戲內 Credits，禁止任何現金交易。'
 },
+hans:{
+ brand:"HV 装备市集",
+ msg_count:"私信 {n}",
+ msg_count_t:"私信内容只有提问者和卖家看得到",
+ d_msgs:"私信",
+ msg_n:"{n} 条（内容只有提问者和卖家看得到）",
+ loading:"加载中…",
+ refresh:"刷新",
+ save:"保存",
+ E_CFG:"网站还没填 Supabase 的网址和密钥。请用记事本打开 index.html，在最上面的 CFG 填好 url 和 key。",
+ E_NET:"连不上服务器，请检查网络或稍后再试。",
+ E_SERVER:"服务器发生错误，请稍后再试。",
+ E_AUTH:"登录已过期，请重新登录。",
+ E_BANNED:"你的账号封禁中，不能做这个动作。",
+ E_PW_RESET:"请先设置新的密码。",
+ E_NAME_BAD:"账号不能包含 < > \" ' & 这些符号。",
+ E_RATE:"尝试太多次了，请稍后再试。",
+ E_NOT_AVAILABLE:"这件装备已经不能购买了，可能刚被别人买走，画面已刷新。",
+ E_OWN:"不能买自己的装备。",
+ E_NOT_FOUND:"找不到这件装备。",
+ E_FORBIDDEN:"没有权限做这个动作。",
+ E_STATE:"这件装备的状态已经改变，画面已刷新。",
+ E_PRICE:"价格不正确。",
+ E_BODY:"内容不能空白，也不能太长。",
+ E_BAD:"数据格式不正确。",
+ E_TOO_MANY:"一次最多上架 200 件。",
+ sell_done_dup:"有 {n} 件已经在架上，略过了。",
+ season_set:"赛季名称",
+ season_saved:"已更新赛季。",
+ log_set_season:"把 Isekai 赛季改为 {s}",
+ pw_pending:"待改密码",
+ ad_season_confirm_v1:"确定要封存所有 ISK 的上架中与交易中商品，并进入第 {s} 季？这个动作无法复原。",
+ d_en_name:"英文原名",
+ eq_credit:"装备中文名称与配色取自 DDD 的「HV综合汉化」脚本。",
+ eqf_open:"装备筛选",
+ eqf_done:"完成",
+ eqf_s_cat:"类别",
+ eqf_s_type:"种类",
+ eqf_s_slot:"部位",
+ eqf_s_pre:"前缀",
+ eqf_s_suf:"后缀",
+ eqf_multi:"可复选",
+ eqf_slot_hint:"只有防具有部位",
+ eqf_g_pre_w:"武器・法杖",
+ eqf_g_pre_a:"防具・盾",
+ eqf_g_pre_gem:"宝石",
+ eqf_g_suf_w:"武器",
+ eqf_g_suf_s:"法杖・法术",
+ eqf_g_suf_d:"防御",
+ eqf_g_suf_r:"元素抗性",
+ eqf_none_pre:"无前缀",
+ eqf_none_suf:"无后缀",
+ eqf_nothing:"（目前没有可选的）",
+ eqf_match:"符合 {n} 件",
+ eqf_rule:"同一区选多个＝符合任一个；不同区要同时符合",
+ f_roll:"ROLL %",
+ ad_season_confirm_v2:"确定要封存所有 ISK 的上架中与交易中商品，并换到新赛季？这个动作无法复原。",
+ season_next:"新赛季名称",
+ season_fmt:"例如 2026-2（2026 年第 2 季）。只能用英文字母、数字和 . - _，最多 20 字。",
+ E_SEASON:"赛季名称只能用英文字母、数字和 . - _，最多 20 字，例如 2026-2。",
+ res_total:"共 {n} 件",
+ pg_of:"第 {p} / {n} 页",
+ pg_prev:"上一页",
+ pg_next:"下一页",
+ pg_nav:"分页",
+ sell_other_formats:"也可以贴装备网址，或论坛卖场那种 [url]…[/url] 格式的清单（会一并读出 ROLL% 和售价，划掉的行会略过）。只贴网址的话要自己填名称，等级和主属性会是空白。",
+ sell_import:"读取并加入未上架区",
+ import_done:"已加入 {added} 件、更新 {updated} 件到未上架区，并帮你勾选好了。",
+ import_skip_soul:"Soulbound／不可交易 {n} 件已略过。",
+ import_skip_active:"已经在架上的 {n} 件已略过。",
+ import_skip_struck:"划掉的（已售出）{n} 行已略过。",
+ drafts_title:"未上架区",
+ drafts_hint:"这里的数据存在服务器上，刷新或换电脑都还在。售价和 ROLL 改完会自动保存。勾选多件后可以一次填同一个售价。",
+ drafts_empty:"未上架区是空的。把装备代码或网址贴到上面，按「读取并加入未上架区」。",
+ select_all:"全选",
+ selected_n:"已选 {n} 件",
+ bulk_price:"应用到已选",
+ publish_n:"上架已选的 {n} 件",
+ delete_selected:"删除已选",
+ name_ph:"请填装备名称，例如 Legendary Charged Phase Shoes of Freyr",
+ ds_ok:"可上架",
+ ds_noprice:"待填售价",
+ ds_noname:"缺名称",
+ ds_dup:"已经在架上",
+ publish_done:"已上架 {n} 件。",
+ publish_left:"{n} 件还留在未上架区（缺售价、缺名称或已经在架上）。",
+ del_drafts_confirm:"从未上架区删除这 {n} 件？（不会影响已经上架的装备）",
+ E_NAME_REQ:"请输入账号。",
+ E_NAME_LONG:"账号最多 30 个字符。",
+ E_NAME_TAKEN:"这个账号已经有人使用。",
+ E_PW_SHORT:"密码至少要 6 个字符。",
+ E_LOGIN:"账号或密码不对。",
+ E_CUR_PW:"目前的密码不对。",
+ E_RESET_PW:"新密码不能是 00000。",
+ E_MAX_TRADES:"你同时交易中的装备已经有 3 件（上限），请先完成或放弃其中一件。",
+ E_DUP:"已经在架上",
+ demo_tag:'原型',demo_note:'数据都是假的，只存在你这台浏览器。用右边切换身份，体验卖家、买家和管理员看到的画面。',demo_as:'切换身份',guest:'访客（未登录）',demo_reset:'重设假数据',demo_reset_done:'假数据已重设。',
+ hint_u0:'管理员，也就是你',hint_u1:'卖家，有一条新私信',hint_u2:'买家，正在交易一件',hint_u3:'卖家',hint_u4:'新账号，与 Carol 同 IP',hint_u5:'常常放弃购买',hint_new:'你刚注册的账号',
+ site_sub:'HentaiVerse 玩家装备刊登',nav_market:'市场',nav_sell:'上架',nav_mine:'我的交易',nav_inbox:'私信',nav_admin:'管理后台',
+ world_main:'主世界',world_isk:'Isekai',login:'登录',register:'注册',logout:'登出',role_admin:'管理员',suspended:'封禁中',
+ notifications:'通知',mark_all_read:'全部标为已读',no_notifs:'没有通知。',
+ tab_available:'上架中',tab_in_trade:'交易中',tab_sold:'已售出',
+ f_search:"搜索装备名称（中文、英文都可以）",f_cat_all:'全部类型',f_q_all:'全部品质',f_lv:'等级',f_price:'价格',f_attr:'主属性',f_sort:'排序',
+ sort_new:'最新',sort_price_asc:'价格：低到高',sort_price_desc:'价格：高到低',sort_avg:'ROLL：高到低',sort_lv:'等级：高到低',
+ f_clear:'清除筛选',f_seller:'卖家：{name}',
+ col_equip:'装备',col_type:'类型',col_lv:'等级',col_attr:'主属性',col_avg:'ROLL',col_price:'售价',col_sold_price:'成交价',col_seller:'卖家',col_buyer:'买家',col_status:'状态',col_date:'日期',col_season:"赛季",col_world:'世界',col_info:'状况',col_actions:'操作',col_include:'上架',col_role:'身份',col_last:'最后消息',col_ref:'参考',
+ btn_buy:'购买',yours:'你的商品',empty_results:'没有符合条件的装备。',
+ price_ref:'「{q}」的成交纪录共 {n} 笔',price_min:'最低',price_median:'中位数',price_max:'最高',
+ price_ref_hint:"在搜索框输入装备名称的一部分，或用「装备筛选」选条件，就能看到历史成交价的最低、中位数和最高，例如 Rapier of Slaughter。",
+ credits_only:'所有价格都是主世界 Credits，ISK 装备也一样。',isk_season:"Isekai 赛季 {n}",
+ st_available:'上架中',st_in_trade:'交易中',st_sold:'已售出',st_withdrawn:'已下架',st_archived:'已封存',st_expired:'已过期',
+ open_in_hv:'在 HV 开启装备页',d_listed:'上架日期',d_world:'世界',d_id:'装备 ID',list_price:'原标价',report_user:'举报',
+ login_to_act:'登录后才能购买或私信卖家。',
+ buy_confirm:'确定要买吗？按下后商品会变成「交易中」，卖家会收到通知。之后请等卖家用 MoogleMail 以 CoD 寄给你，收信付款就完成交易。',
+ confirm:'确定',cancel:'取消',close:'关闭',
+ you_are_buyer:'你正在跟卖家交易这件装备，请留意 MoogleMail 的 CoD 信件。',buyer_giveup:'放弃购买',
+ in_trade_other:'这件装备正在交易中。可以排候补，如果交易取消会通知你。',join_wait:'排候补',leave_wait:'取消候补',on_wait:'你在候补名单第 {n} 位。',
+ your_listing:'这是你的商品。',buyer_is:'买家：{name}',buyer_stats:'近 30 天放弃购买 {n} 次',report_buyer:'举报买家',
+ btn_mark_sold:'标记已售出',btn_cancel_trade:'取消交易',btn_edit_price:'改价',btn_withdraw:'下架',btn_renew:'续期',btn_relist:'重新上架',
+ banned_cant:'你的账号封禁中，不能购买或私信。',too_many_trades:'你同时交易中的装备已经有 {n} 件（上限），请先完成或放弃其中一件。',
+ sold_on:'{d} 以 {p} 成交。',note_withdrawn:'这件商品已下架。',note_archived:'这件商品已在 Isekai 换季时封存。',note_expired:'这件商品已过期，市场上看不到。',
+ toast_bought:'已通知卖家，请等对方用 MoogleMail 寄出。',toast_done:'完成。',toast_sent:'已送出。',
+ same_item_sales:'这件装备过去的成交',
+ pm_private_buyer:'只有你和卖家看得到这段对话。',pm_private_seller:'每位买家的留言只有你和那位买家看得到。',pm_threads:'买家私信',pm_with_seller:'私信卖家',pm_none:'还没有人留言。',pm_placeholder:'输入消息',pm_send:'送出',pm_empty_thread:'还没有消息。可以先问问题或议价。',pm_banned:'封禁中无法发送消息。',
+ history:'状态纪录（只有卖家和管理员看得到）',
+ ev_listed:'上架，售价 {p}',ev_buy:'{u} 按下购买',ev_buyer_cancel:'{u} 放弃购买',ev_seller_cancel:'卖家取消交易：{r}',ev_sold:'已售出，成交价 {p}',ev_price:'改价为 {p}',ev_withdraw:'下架：{r}',ev_renew:'续期',ev_relist:'重新上架',ev_archive:'Isekai 换季封存',
+ r_buyer_gave_up:'买家不买了',r_no_response:'买家一直没回应',r_seller_changed:'卖家不卖了',r_other:'其他',r_not_selling:'不卖了',r_sold_elsewhere:'在别处卖掉了（不列入成交纪录）',r_account_deleted:'账号已删除',
+ ms_price:'实际成交价',ms_hint:'有议价的话请填实际付款的金额。这个数字会成为其他玩家参考的成交价。',
+ ct_hint:'商品会回到「上架中」，买家会收到通知。原因会记录下来，只有你和管理员看得到。',reason:'原因',note_optional:'补充说明（可不填）',
+ bg_hint:'商品会回到「上架中」，卖家会收到通知。经常放弃购买可能会被其他玩家举报。',
+ price_invalid:'看不懂这个价格，可以写 1500000、1.5m 或 800k。',price_ph:'例如 1.5m',new_price:'新售价',
+ sell_title:'上架装备',sell_need_login:'请先登录才能上架。',sell_steps_title:'用 HVUT 产生装备代码',
+ sell_step1:'在 HV 进入装备的「整理」页面',sell_step2:'先按左侧的「可交易的」，只留下可以交易的装备',sell_step3:'勾选要卖的装备',sell_step4:'按左侧的「装备代码」',sell_step5:"把跳出来的文字全部复制，贴到下面的框框，按「读取并加入未上架区」",
+ sell_need_hvut:'需要先安装 HVUT。主世界和 ISK 的装备可以混在一起贴，网站会自动分开；Soulbound 的装备会被挡下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 换算的：传奇 170–200、史诗 150–180 对应 0–100%。HVUT 的 AVG 是四舍五入过的整数，所以可能跟实际差 1–2%，需要的话可以直接改。布甲少了 A、I、W 其中一个会自动标成瘸腿。',untrade_note:'记得先按 HVUT 的「可交易的」再勾选。HVUT 代码不会标出 Untradeable，网站没办法替你挡下不可交易的装备；不可交易的装备无法用 MoogleMail 寄出，被举报会被下架。',lame:'瘸腿',lame_t:'少了 {x} 属性',
+ sell_paste_ph:'把 HVUT 的装备代码贴在这里',sell_sample:'填入范例',sell_parse:'读取装备',sell_preview:'确认并填售价',
+ sell_ok:'可上架',sell_err_dup:'已经在架上',sell_err_duppaste:'重复贴了两次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
+ sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件装备。',sell_unread:'下面这几行读不懂，已略过：',sell_none:'没有读到任何装备链接。请确认粘贴的是 HVUT「装备代码」产生的文字。',sell_credits:'售价一律用主世界 Credits，ISK 装备也一样。可以写 1.5m 或 800k。',sell_fix_prices:'有些装备还没填售价，或价格格式不对。',sell_nothing:'没有勾选任何可上架的装备。',
+ mine_selling:'我卖的',mine_buying:'我买的',mine_all:'全部',mine_closed:'已下架／封存',mine_empty:'这里还没有东西。',
+ age_listed:'上架 {d} 天',expires_in:'{d} 天后到期',expired_note:'已过期，市场上看不到，按「续期」重新显示',trade_days:'交易中 {d} 天',stale_warn:'已超过 {d} 天，请跟买家确认或取消交易',
+ b_active:'交易中',b_done:'已成交',b_cancelled:'已放弃或被取消',sold_date:'{d} 成交',
+ login_needed:'请先登录。',
+ inbox_empty:'还没有私信。',inbox_as_seller:'你是卖家',inbox_as_buyer:'你是买家',
+ login_title:'登录',reg_title:'注册账号',f_username:'账号（游戏 ID）',f_password:'密码',f_password2:'再输入一次密码',
+ reg_name_note:'强烈建议使用与论坛相同的 ID，否则买家想用 MoogleMail 联系你会非常麻烦，只能使用网站的私信功能；如果对方不常开网站，就要等很久。',
+ reg_pw_note:'强烈建议不要使用与论坛或其他网站相同的密码。',
+ reg_no_email:'本站不使用 Email。忘记密码时，请用 MoogleMail 联系管理员 {admin} 重设。',
+ err_name_req:'请输入账号。',err_name_long:'账号最多 30 个字符。',err_name_taken:'这个账号已经有人使用。',err_pw_short:'密码至少要 6 个字符。',err_pw_match:'两次输入的密码不一样。',err_login:'账号或密码不对。',
+ login_demo_hint:'原型：示范账号 Alice、Bob、Carol、Dave、Eve、Admin 的密码都是 demo。',
+ no_account:'还没有账号？注册',forgot_pw:'忘记密码？',forgot_title:'忘记密码',forgot_body:'请用 MoogleMail 寄信给 {admin}，在信里写上你在本站的账号名称。管理员重设后，你的密码会变成 {pw}，用它登录后网站会要求你立刻设置新密码。',forgot_note:'为了确认是本人，寄件人的游戏 ID 要跟本站账号名称相同；如果你注册时用了别的名字，请在信里说明。',back_login:'回到登录',change_pw:'更改密码',cur_pw:'目前的密码',new_pw:'新密码',new_pw2:'再输入一次新密码',err_cur_pw:'目前的密码不对。',err_reset_pw:'新密码不能是 {pw}。',pw_changed:'密码已更新。',must_change:'你的密码刚被管理员重设成 {pw}，请先设置新的密码才能继续使用。',have_account:'已经有账号？登录',reg_done:'注册完成，已经登录。',welcome:'欢迎，{name}。',
+ banned_banner:'你的账号封禁到 {until}。原因：{reason}。封禁期间不能上架、购买或私信。',banned_banner_perm:'你的账号已被永久封禁。原因：{reason}。',
+ rp_title:'举报 {name}',rp_cat:'类型',rc_alt:'开分身炒价格',rc_flake:'乱买又放弃，浪费时间',rc_noship:'没有依约完成交易',rc_untrade:'上架不能交易的装备',rc_harass:'骚扰或不当留言',rc_other:'其他',rp_listing:'相关商品',rp_none:'（没有特定商品）',rp_body:'说明（越具体越好）',rp_submit:'送出举报',rp_done:'举报已送出，只有管理员看得到。',rp_need_body:'请写一下发生了什么事。',rp_private:'举报内容只有管理员看得到，被举报的人不会知道是谁举报的。',
+ ad_reports:'举报',ad_users:'用户',ad_ip:'同 IP 警示',ad_trades:'成交纪录',ad_season:'Isekai 换季',ad_log:'操作纪录',ad_open:'待处理',ad_resolved:'已处理',
+ ad_reporter:'{a} 举报 {b}',ad_target_stats:'{name}：近 30 天购买 {buy} 次、放弃 {cancel} 次，被举报 {rep} 次，注册 {age} 天',
+ ad_warn:'警告',ad_ban:'封禁',ad_unban:'解除封禁',ad_resolve:'标记已处理',ad_resolve_note:'处理备注（只有你看得到）',ad_reset_pw:'重设密码',ad_delete:'删除账号',ad_no_reports:'没有举报。',ad_resolved_note:'处理备注：{note}',
+ ad_u_name:'账号',ad_u_joined:'注册',ad_u_listing:'上架中',ad_u_sold:'卖出',ad_u_bought:'买到',ad_u_cancel:'放弃（30天）',ad_u_reports:'被举报',ad_u_state:'状态',ad_normal:'正常',ad_banned_until:'封禁到 {d}',ad_banned_perm:'永久封禁',ad_warned:'警告 {n} 次',ad_ip_with:'与 {names} 同 IP',
+ ad_ip_title:'这些账号使用同一个注册 IP',ad_ip_note:'系统只保存 IP 加盐后的哈希值，用来比对是否相同，连管理员也看不到原始 IP。同一个家庭、学校、网吧或手机网络可能共用 IP，要不要处理请自行判断。',ad_ip_dismiss:'确认没问题',ad_ip_none:'目前没有共用注册 IP 的账号。',ad_ip_dismissed:'已确认没问题',
+ ad_trade_hint:'买家栏只有你看得到。疑似分身刷价的纪录可以排除，就不会出现在公开的已售出列表和成交价统计。',ad_exclude:'排除',ad_include:'恢复',ad_excluded:'已排除',ad_included:'列入',
+ ad_season_now:"目前 Isekai 赛季：{n}",ad_season_btn:'Isekai 换季：封存所有 ISK 商品',ad_season_desc:"所有 ISK 的「上架中」和「交易中」商品会改成「已封存」，卖家会收到通知。成交纪录会保留并标上赛季。",ad_season_confirm:'确定要封存 {n} 件 ISK 商品，并进入第 {s} 季？这个动作无法复原。',ad_season_done:"已封存 {n} 件，现在是 Isekai 赛季 {s}。",
+ ad_log_empty:'还没有操作纪录。',
+ warn_title:'警告 {name}',warn_msg:'消息内容（会出现在对方的通知里）',warn_need:'请输入消息。',
+ ban_title:'封禁 {name}',ban_dur:'时间',d1:'1 天',d3:'3 天',d7:'7 天',d30:'30 天',dperm:'永久',ban_reason:'原因（对方会看到）',ban_effect:'封禁期间不能上架、购买或私信，上架中的商品会从市场隐藏。',ban_need:'请输入原因。',
+ pw_title:'重设 {name} 的密码',pw_confirm:'把 {name} 的密码重设成 {pw}？对方下次登录时，网站会要求他立刻改成新密码。',pw_check:'收到 MoogleMail 时，先确认寄件人的游戏 ID 跟这个账号名称相同，避免有人冒名要求重设别人的密码。',pw_done:'已重设 {name} 的密码。',
+ del_title:'删除 {name} 的账号',del_desc:'删除后无法复原。对方上架中的商品会下架，成交纪录保留。对方可以用同一个名字重新注册。',del_done:'已删除 {name} 的账号。',
+ log_warn:'警告 {name}：{msg}',log_ban:'封禁 {name}（{dur}）：{reason}',log_unban:'解除 {name} 的封禁',log_pw:'重设 {name} 的密码',log_del:'删除账号 {name}',log_resolve:'处理举报 #{id}：{note}',log_ip:'确认同 IP 账号没问题：{names}',log_exclude:'排除成交纪录：{item}',log_include:'恢复成交纪录：{item}',log_season:"Isekai 换季，封存 {n} 件，进入赛季 {s}",
+ n_buy:'{u} 想买你的 {item}，已变成交易中。请用 MoogleMail 以 CoD 寄给 {u}。',n_msg:'{u} 在 {item} 传了私信给你。',n_buyer_cancel:'{u} 放弃购买 {item}，商品已回到上架中。',n_seller_cancel:'卖家取消了 {item} 的交易：{r}。',n_sold:'{item} 交易完成，卖家已标记售出。',n_wait:'你候补的 {item} 又可以购买了。',n_admin_pm:'管理员消息：{text}',n_ban:'你的账号已被封禁（{dur}）：{reason}',n_unban:'你的账号已解除封禁。',n_archived:'Isekai 换季，你有 {n} 件 ISK 商品已封存。',n_report_done:'你提交的举报已处理，谢谢回报。',n_report:'{a} 举报了 {b}，请到管理后台查看。',n_ip:'新注册的 {u} 与 {others} 使用相同 IP，请到管理后台确认。',
+ just_now:'刚刚',hours_ago:'{h} 小时前',days_ago:'{d} 天前',deleted_user:'（已删除）',
+ footer:'本站只是刊登平台，交易请玩家之间自行用 MoogleMail 以 CoD 完成。只接受游戏内 Credits，禁止任何现金交易。'
+},
 en:{
  brand:"HV Gear Market",
  msg_count:"{n} msg",
@@ -500,6 +742,8 @@ en:{
  log_set_season:"Renamed the Isekai season to {s}",
  pw_pending:"must change password",
  ad_season_confirm_v1:"Archive every Isekai listing that is for sale or in trade, and start season {s}? This cannot be undone.",
+ d_en_name:"English name",
+ eq_credit:"",
  eqf_open:"Equipment filter",
  eqf_done:"Done",
  eqf_s_cat:"Category",
@@ -568,7 +812,7 @@ en:{
  world_main:'Persistent',world_isk:'Isekai',login:'Log in',register:'Sign up',logout:'Log out',role_admin:'admin',suspended:'suspended',
  notifications:'Notifications',mark_all_read:'Mark all read',no_notifs:'No notifications.',
  tab_available:'For sale',tab_in_trade:'In trade',tab_sold:'Sold',
- f_search:'Search equipment name',f_cat_all:'All categories',f_q_all:'All qualities',f_lv:'Level',f_price:'Price',f_attr:'Primary stats',f_sort:'Sort',
+ f_search:"Search equipment names (English or Chinese)",f_cat_all:'All categories',f_q_all:'All qualities',f_lv:'Level',f_price:'Price',f_attr:'Primary stats',f_sort:'Sort',
  sort_new:'Newest',sort_price_asc:'Price: low to high',sort_price_desc:'Price: high to low',sort_avg:'ROLL: high to low',sort_lv:'Level: high to low',
  f_clear:'Clear filters',f_seller:'Seller: {name}',
  col_equip:'Equipment',col_type:'Type',col_lv:'Level',col_attr:'Stats',col_avg:'ROLL',col_price:'Price',col_sold_price:'Sold for',col_seller:'Seller',col_buyer:'Buyer',col_status:'Status',col_date:'Date',col_season:"Season",col_world:'World',col_info:'Details',col_actions:'Actions',col_include:'List',col_role:'Role',col_last:'Last message',col_ref:'Reference',
@@ -643,7 +887,11 @@ function t(k,p){
 
 /* ================= state ================= */
 const P={lang:'zh',world:'main',token:''};               // kept in this browser
-function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}}
+function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}if(!LANGS.some(l=>l[0]===P.lang))P.lang='zh';}
+/* interface languages: [code, button, full name, html lang] — the Simplified text is converted from the Traditional at build time */
+const LANGS=[['zh','繁中','繁體中文','zh-Hant'],['hans','简中','简体中文','zh-Hans'],['en','EN','English','en']];
+const isZh=()=>P.lang!=='en';
+const htmlLang=()=>(LANGS.find(l=>l[0]===P.lang)||LANGS[0])[3];
 function savePrefs(){try{localStorage.setItem(LS_KEY,JSON.stringify(P));}catch(e){}}
 const A={me:null,market:null,mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
 function defaultFilters(){return {q:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',rMin:'',rMax:'',attrs:[],sort:'new',seller:'',eq:{cat:[],type:[],slot:[],pre:[],suf:[]}};}
@@ -725,9 +973,69 @@ function priceHTML(v){return `<span class="price" title="${fmtNum(Math.round(v))
 function parsePrice(s){s=String(s||'').trim().toLowerCase().replace(/[,\s]/g,'').replace(/credits?$|c$/,'');const m=s.match(/^(\d+(?:\.\d+)?)([km]?)$/);if(!m)return null;let v=parseFloat(m[1]);if(m[2]==='k')v*=1e3;if(m[2]==='m')v*=1e6;v=Math.round(v);return v>0&&v<1e12?v:null;}
 function fmtDate(ms){const d=new Date(ms);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function ago(x){const diff=Date.now()-ts(x);if(diff<HOUR)return t('just_now');if(diff<DAY)return t('hours_ago',{h:Math.floor(diff/HOUR)});return t('days_ago',{d:Math.floor(diff/DAY)});}
-function catLabel(c){return P.lang==='zh'?(CAT_ZH[c]||c||'—'):(c||'—');}
-function qName(l){const q=l.quality||'';const rest=q&&l.name.startsWith(q+' ')?l.name.slice(q.length+1):l.name;return q?`<span class="q" style="color:${QCOLOR[q]||'var(--ink)'}">${esc(q)}</span> ${esc(rest)}`:esc(rest);}
-function nameCell(l){return `<span class="nm">${qName(l)}</span><a class="ext" href="${esc(eqUrl(l))}" target="_blank" rel="noopener" data-act="noop" title="${t('open_in_hv')}" aria-label="${t('open_in_hv')}">↗</a>`;}
+function catLabel(c){return (isZh()?eqZh(c):c)||'—';}
+/* ================= Chinese equipment names =================
+   In 繁中 / 简中 equipment names are shown the way DDD's HV综合汉化 userscript shows them: the same word
+   replacements (EQN_DICT, longest first) and the same coloured markers (EQN_COLORS). The data is in
+   src/eqname.js, made by tools/gen_eqname.py. Names are stored in English; this only changes the display. */
+const EQN_COL={hans:1,zh:2};
+const eqnCache={1:new Map(),2:new Map()};
+let eqnRules=null;
+function eqnCompiled(){
+  if(!eqnRules)eqnRules=EQN_DICT.map(([k,hans,hant])=>{const m=k.match(/^\/(.*)\/([a-z]*)$/);
+    return [m?new RegExp(m[1],'g'):new RegExp(k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+'),'g'),hans,hant];});
+  return eqnRules;
+}
+/* English equipment text (a name, a type, a category) in the current Chinese script; unchanged in English */
+function eqZh(text){
+  const col=EQN_COL[P.lang];if(!col||!text)return text||'';
+  const c=eqnCache[col];if(c.has(text))return c.get(text);
+  let out=String(text);for(const r of eqnCompiled())out=out.replace(r[0],r[col]);
+  c.set(text,out);return out;
+}
+const eqGlyph=h=>h.replace(/\u{168D4}/gu,'<span class="hv-ultimate-symbol">\u{168D4}</span>');
+/* the same, as HTML with coloured markers */
+function eqZhHTML(text){
+  const col=EQN_COL[P.lang];if(!col)return esc(text);
+  const src=eqZh(text);let h='',i=0;
+  while(i<src.length){
+    const r=EQN_COLORS.find(x=>src.startsWith(x[col],i));
+    if(r){h+=`<span class="hv-eq-token ${r[0]}">${eqGlyph(esc(r[col]))}</span>`;i+=r[col].length;continue;}
+    let next=src.length;for(const x of EQN_COLORS){const f=src.indexOf(x[col],i+1);if(f!==-1&&f<next)next=f;}
+    h+=esc(src.slice(i,next));i=next;
+  }
+  return h;
+}
+/* Chinese words typed in the search box become the English words they translate, e.g. 魔光 → Radiant,
+   火伤 → Fiery or Surtr. Each group is a list of alternatives; every group has to match. */
+let eqnIdx=null;
+function eqnIndex(){
+  if(!eqnIdx){const cats=new Set(['One-handed Weapon','Two-handed Weapon','Cloth Armor','Light Armor','Heavy Armor']);   /* category names never appear in item names */
+    eqnIdx=EQN_DICT.filter(([k])=>!cats.has(k)).map(([k,hans,hant])=>{const m=k.match(/^\/(.*)\/[a-z]*$/);
+      const en=(m?m[1].replace(/\\b|\^|\$/g,''):k).replace(/^\s*of\s+/,'').trim();return {en,zh:[hans.trim(),hant.trim()]};});}
+  return eqnIdx;
+}
+function eqnLookup(w){const out=new Set();for(const e of eqnIndex())if(e.zh[0].includes(w)||e.zh[1].includes(w))out.add(e.en);return [...out];}
+const CJK_RUN=/[㐀-鿿豈-﫿]+|[^㐀-鿿豈-﫿]+/g,CJK=/[㐀-鿿豈-﫿]/;
+function queryGroups(q){
+  const groups=[];
+  for(const tok of String(q||'').trim().split(/\s+/).filter(Boolean)){
+    for(const run of tok.match(CJK_RUN)||[]){
+      if(!CJK.test(run)){const w=run.replace(/[^\w\-'.]/g,'');if(w)groups.push([w]);continue;}
+      /* longest piece first: 鐵木法杖 → 鐵木 + 法杖 */
+      let i=0,miss='';
+      while(i<run.length){
+        let j=run.length,hit=null;
+        for(;j>i;j--){const m=eqnLookup(run.slice(i,j));if(m.length){hit=m;break;}}
+        if(hit){groups.push(hit.slice(0,40));i=j;}else{miss+=run[i];i++;}
+      }
+      if(miss)groups.push([miss]);
+    }
+  }
+  return groups.slice(0,8);
+}
+function qName(l){if(isZh())return eqZhHTML(l.name);const q=l.quality||'';const rest=q&&l.name.startsWith(q+' ')?l.name.slice(q.length+1):l.name;return q?`<span class="q" style="color:${QCOLOR[q]||'var(--ink)'}">${esc(q)}</span> ${esc(rest)}`:esc(rest);}
+function nameCell(l){return `<span class="nm"${isZh()?` title="${esc(l.name)}"`:''}>${qName(l)}</span><a class="ext" href="${esc(eqUrl(l))}" target="_blank" rel="noopener" data-act="noop" title="${t('open_in_hv')}" aria-label="${t('open_in_hv')}">↗</a>`;}
 function worldBadge(l){return l.world==='isekai'?`<span class="wb isk">ISK</span>`:`<span class="wb">${t('world_main')}</span>`;}
 function attrHTML(a){return a?`<span class="attr">${a.split('').map(x=>`<b title="${ATTR_NAME[x]||x}">${x}</b>`).join('')}</span>`:'<span class="muted">—</span>';}
 function lameHTML(l){return l&&l.lame?` <span class="pill lame" title="${t('lame_t',{x:l.lame})}">${t('lame')}</span>`:'';}
@@ -740,7 +1048,7 @@ function typeFromName(name){let tp=deriveType(name);const c=catOf(tp);
   if(/Armor$/.test(c)){const pm=name.match(new RegExp('\\b'+tp+'\\s+([A-Z][a-z]+)\\b'));if(pm&&pm[1]!=='Of')tp=tp+' '+pm[1];}
   return tp;}
 function deriveType(name){for(const k of TYPE_KEYS){if(new RegExp('\\b'+k+'\\b').test(name))return k;}return '';}
-function notifText(n){const p=Object.assign({},n.params);if(p.rk)p.r=t(p.rk);if(p.dk)p.dur=t(p.dk);return t('n_'+n.type,p);}
+function notifText(n){const p=Object.assign({},n.params);if(p.item)p.item=eqZh(p.item);if(p.rk)p.r=t(p.rk);if(p.dk)p.dur=t(p.dk);return t('n_'+n.type,p);}
 
 /* ================= import parser ================= */
 function stripBB(s){return s.replace(/\[\/?(?:size|b|i|u|s|color|font|url)(?:=[^\]]*)?\]/gi,'');}
@@ -799,7 +1107,7 @@ function parseImport(text){
 /* ================= rendering ================= */
 function render(){
   renderHeader();renderBanner();renderMain();
-  $('#foot').textContent=t('footer');
+  $('#foot').textContent=t('footer')+(isZh()?' '+t('eq_credit'):'');
   const n=A.me?A.me.unread:0;document.title=(n?`(${n}) `:'')+t('brand');
 }
 const BELL='<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a6 6 0 0 0-6 6v3.6l-1.7 2.8A1 1 0 0 0 5.2 17h13.6a1 1 0 0 0 .9-1.6L18 12.6V9a6 6 0 0 0-6-6zm0 19a2.5 2.5 0 0 0 2.4-2H9.6a2.5 2.5 0 0 0 2.4 2z"/></svg>';
@@ -808,7 +1116,7 @@ function renderHeader(){
   const nav=[['market','nav_market'],['sell','nav_sell'],['mine','nav_mine'],['inbox','nav_inbox']];
   if(isAdmin())nav.push(['admin','nav_admin']);
   let right=`<div class="seg" role="group" aria-label="World"><button data-act="world" data-v="main" class="${P.world==='main'?'on':''}" aria-pressed="${P.world==='main'}">${t('world_main')}</button><button data-act="world" data-v="isekai" class="${P.world==='isekai'?'on':''}" aria-pressed="${P.world==='isekai'}">Isekai</button></div>
-  <div class="seg" role="group" aria-label="Language"><button data-act="lang" data-v="zh" class="${P.lang==='zh'?'on':''}" aria-pressed="${P.lang==='zh'}">中文</button><button data-act="lang" data-v="en" class="${P.lang==='en'?'on':''}" aria-pressed="${P.lang==='en'}">EN</button></div>`;
+  <div class="seg" role="group" aria-label="Language">${LANGS.map(([v,b,full])=>`<button data-act="lang" data-v="${v}" class="${P.lang===v?'on':''}" aria-pressed="${P.lang===v}" title="${full}" aria-label="${full}">${b}</button>`).join('')}</div>`;
   if(u){
     let dd='';
     if(UI.notifOpen){
@@ -890,22 +1198,16 @@ const EQ_SUF_GROUPS=[['eqf_g_suf_w',['Slaughter','Balance','Swiftness','the Nimb
   ['eqf_g_suf_s',['Destruction','Focus',...EQ_ELEM,...EQ_PROF,'the Fox','the Owl']],
   ['eqf_g_suf_d',[...EQ_MIT,'Negation','the Barrier','the Fleet','the Shadowdancer','the Arcanist','the Turtle']],
   ['eqf_g_suf_r',EQ_EM],['',['-']]];
-/* Chinese names shown beside the English ones */
-const EQ_ZH={
- 'One-handed Weapon':'單手武器','Two-handed Weapon':'雙手武器','Staff':'法杖','Shield':'盾牌','Cloth Armor':'布甲','Light Armor':'輕甲','Heavy Armor':'重甲',
- Axe:'斧',Club:'棍棒',Dagger:'匕首',Rapier:'西洋劍',Shortsword:'短劍',Wakizashi:'脇差',Estoc:'刺劍',Katana:'太刀',Longsword:'長劍',Mace:'錘',Scythe:'鐮刀',Swordchucks:'劍節棍',
- Oak:'橡木',Redwood:'紅木',Willow:'柳木',Katalox:'鐵木',Ebony:'烏木',Buckler:'圓盾',Kite:'鳶盾',Tower:'塔盾',Force:'力場盾',
- Cotton:'棉',Gossamer:'薄紗',Ironsilk:'鐵絲',Phase:'相位',Leather:'皮革',Drakehide:'龍皮',Kevlar:'凱夫拉',Shade:'暗影',Plate:'板甲',Chain:'鎖甲',Reactive:'反應',Power:'動力',
- head:'頭',body:'身',hands:'手',legs:'腿',feet:'腳',
- Ethereal:'虛空',Fiery:'火焰',Arctic:'冰霜',Shocking:'閃電',Tempestuous:'風暴',Hallowed:'神聖',Demonic:'黑暗',
- Radiant:'魔光',Charged:'充能',Mystic:'神秘',Frugal:'節能',Reinforced:'加固',Agile:'敏捷',Savage:'野蠻',Mithril:'秘銀',Shielding:'防護',
- Ruby:'紅寶石',Cobalt:'鈷藍',Amber:'琥珀',Jade:'翡翠',Zircon:'鋯石',Onyx:'瑪瑙',
- Slaughter:'屠戮',Balance:'平衡',Swiftness:'迅捷','the Nimble':'靈巧','the Battlecaster':'戰法','the Vampire':'吸血鬼','the Illithid':'奪心魔','the Banshee':'女妖','the Ox':'公牛','the Raccoon':'浣熊','the Cheetah':'獵豹',
- Destruction:'毀滅',Focus:'專注',Surtr:'火',Niflheim:'冰',Mjolnir:'雷',Freyr:'風',Heimdall:'聖',Fenrir:'暗',
- 'the Elementalist':'元素','the Heaven-sent':'天堂','the Demon-fiend':'惡魔','the Earth-walker':'大地','the Curse-weaver':'詛咒','the Fox':'狐狸','the Owl':'貓頭鷹',
- Protection:'保護',Warding:'守護',Dampening:'抑制',Deflection:'偏轉',Stoneskin:'石膚',Negation:'否定','the Barrier':'屏障','the Fleet':'迅速','the Shadowdancer':'影舞者','the Arcanist':'秘法師','the Turtle':'烏龜',
- 'the Fire-eater':'抗火','the Frost-born':'抗冰','the Thunder-child':'抗雷','the Wind-waker':'抗風','the Thrice-blessed':'抗聖','the Spirit-ward':'抗暗',
-};
+/* slot names (the dictionary only has the slot words of each armor type) */
+const EQ_SLOT_ZH={head:['头','頭'],body:['身','身'],hands:['手','手'],legs:['腿','腿'],feet:['脚','腳']};
+const EQ_TYPE_FULL={Kite:'Kite Shield',Tower:'Tower Shield',Force:'Force Shield'};
+/* Chinese label of a filter option; the type hints (单)/(布)… are dropped because types are already grouped */
+function eqZhOpt(sec,opt){
+  if(sec==='slot')return EQ_SLOT_ZH[opt][P.lang==='hans'?0:1];
+  if(sec==='type')return eqZh(EQ_TYPE_FULL[opt]||opt).replace(/\([^()]*\)$/,'');
+  if(sec==='suf')return eqZh(' of '+opt).trim();
+  return eqZh(opt);
+}
 const EQ_SECS=['cat','type','slot','pre','suf'];
 const eqPicked=(sec,opt)=>UI.filters.eq[sec].includes(opt);
 const eqAnyIn=(arr,list)=>arr.some(v=>v==='-'||list.includes(v));
@@ -927,12 +1229,12 @@ const eqVisible=(sec,opt)=>eqPicked(sec,opt)||EQ_TYPES.some(ty=>eqTypeFits(ty,se
 function eqText(sec,opt){
   if(opt==='-')return t(sec==='pre'?'eqf_none_pre':'eqf_none_suf');
   const en=sec==='slot'?EQ_SLOT_EN[opt]:opt;
-  return P.lang==='zh'?(EQ_ZH[opt]||en):en;
+  return isZh()?eqZhOpt(sec,opt):en;
 }
 function eqLabel(sec,opt){
   if(opt==='-')return esc(eqText(sec,opt));
   const en=sec==='slot'?EQ_SLOT_EN[opt]:opt;
-  return P.lang==='zh'?`${esc(EQ_ZH[opt]||en)}<span class="en">${esc(en)}</span>`:esc(en);
+  return isZh()?`${esc(eqZhOpt(sec,opt))}<span class="en">${esc(en)}</span>`:esc(en);
 }
 const eqChip=(sec,opt)=>`<button type="button" class="chip ${eqPicked(sec,opt)?'on':''}" data-act="eqf" data-sec="${sec}" data-opt="${esc(opt)}" aria-pressed="${eqPicked(sec,opt)}">${eqLabel(sec,opt)}</button>`;
 function eqRows(sec,groups,labelOf){
@@ -945,7 +1247,7 @@ function eqRows(sec,groups,labelOf){
 }
 function eqBodyHTML(){
   const cats=CATS.filter(c=>eqVisible('cat',c));
-  const typeRows=eqRows('type',CATS.map(c=>[c,EQ_TYPES.filter(ty=>ty.cat===c).map(ty=>ty.key)]),c=>P.lang==='zh'?EQ_ZH[c]:c);
+  const typeRows=eqRows('type',CATS.map(c=>[c,EQ_TYPES.filter(ty=>ty.cat===c).map(ty=>ty.key)]),c=>isZh()?eqZh(c):c);
   const slotVis=EQ_SLOTS.some(k=>eqVisible('slot',k));
   const sec=(k,body,small)=>`<div class="eqf-sec"><h3>${t('eqf_s_'+k)}<small>${small||t('eqf_multi')}</small></h3>${body}</div>`;
   return sec('cat',cats.length?`<div class="eqf-grp"><div class="eqf-cs">${cats.map(c=>eqChip('cat',c)).join('')}</div></div>`:`<div class="eqf-none">${t('eqf_nothing')}</div>`)
@@ -977,7 +1279,7 @@ function eqClose(focusBtn){UI.eqOpen=false;renderEqf();if(focusBtn){const b=$('#
    items however big the market grows. Text boxes search shortly after typing stops; lists and buttons at once. */
 function searchArgs(){
   const f=UI.filters;
-  return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_f:{q:f.q.trim(),qual:f.qual,
+  return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_f:{q:f.q.trim(),qa:queryGroups(f.q),qual:f.qual,
     cats:f.eq.cat,types:f.eq.type,slots:f.eq.slot,pres:f.eq.pre,sufs:f.eq.suf,
     lv_min:parseInt(f.lvMin)||null,lv_max:parseInt(f.lvMax)||null,p_min:parsePrice(f.pMin)||null,p_max:parsePrice(f.pMax)||null,
     r_min:pct(f.rMin),r_max:pct(f.rMax),
@@ -1012,7 +1314,7 @@ function renderMarketHead(){const h=$('#mk-title'),tb=$('#mtabs');if(h)h.textCon
 function viewMarket(){
   const f=UI.filters;
   const head=`<div class="mhead"><h1 id="mk-title">${esc(mkTitle())}</h1><span class="muted">${t('credits_only')}</span></div>`;
-  const qOpts=['Peerless','Legendary','Magnificent','Exquisite','Superior'].map(q=>`<option value="${q}" ${f.qual===q?'selected':''}>${q}</option>`).join('');
+  const qOpts=['Peerless','Legendary','Magnificent','Exquisite','Superior'].map(q=>`<option value="${q}" ${f.qual===q?'selected':''}>${isZh()?esc(eqZh(q))+' '+q:q}</option>`).join('');
   const sorts=['new','price_asc','price_desc','avg','lv'].map(s=>`<option value="${s}" ${f.sort===s?'selected':''}>${t('sort_'+s)}</option>`).join('');
   return head+`
   <div class="tabs" role="tablist" id="mtabs">${tabsHTML()}</div>
@@ -1065,7 +1367,7 @@ function renderResults(){
   h+=`<div class="rsum">${t('res_total',{n:d.total.toLocaleString()})}${pages>1?' · '+t('pg_of',{p:d.page,n:pages}):''}</div>`;
   if(sold){
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th>${isk?`<th>${t('col_season')}</th>`:''}</tr></thead><tbody>`+
-    arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>${esc(l.season??'?')}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
+    arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(eqZh(l.type))}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>${esc(l.season??'?')}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
   } else {
     const it=UI.tab==='in_trade';
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_seller')}</th><th>${it?t('col_status'):''}</th></tr></thead><tbody>`+
@@ -1074,7 +1376,7 @@ function renderResults(){
       if(it)a=pill('in_trade');
       else if(u&&u.id===l.seller_id)a=`<span class="tag">${t('yours')}</span>`;
       else a=`<button class="btn small primary" data-act="buy-ask" data-lid="${l.id}">${t('btn_buy')}</button>`;
-      return `<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
+      return `<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(eqZh(l.type))}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
     }).join('')+`</tbody></table></div>`;
   }
   box.innerHTML=h+pagerHTML(d);
@@ -1093,7 +1395,8 @@ function detailHTML(d){
   const u=A.me,v=d.viewer||{},st=d.status;
   const priceRow=st==='sold'?[t('col_sold_price'),priceHTML(d.sold_price)+` <span class="muted small">（${t('list_price')} ${fmtPrice(d.price)}）</span>`]:[t('col_price'),priceHTML(d.price)];
   const rows=[
-    [t('col_type'),`${esc(d.type||'—')} · ${esc(catLabel(d.cat))}`],
+    ...(isZh()?[[t('d_en_name'),`<span class="en-name">${esc(d.name)}</span>`]]:[]),
+    [t('col_type'),`${esc(eqZh(d.type)||'—')} · ${esc(catLabel(d.cat))}`],
     [t('col_lv'),d.level??'—'],
     [t('col_attr'),attrCell(d)],
     [t('col_avg'),avgHTML(d.roll)+(d.hv_avg!=null?` <span class="muted small">（HVUT AVG ${d.hv_avg}）</span>`:'')],
@@ -1222,7 +1525,7 @@ function draftsHTML(){
   <button class="btn small danger" data-act="draft-delete" ${sel?'':'disabled'}>${t('delete_selected')}</button></div>
   <div class="tablewrap"><table><thead><tr><th></th><th>${t('col_equip')}</th><th>${t('col_world')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')} %</th><th>${t('col_price')}</th><th>${t('col_status')}</th></tr></thead><tbody>
   ${list.map(d=>`<tr><td><input type="checkbox" data-dsel="${d.id}" ${UI.dsel.has(d.id)?'checked':''} aria-label="${t('select_all')}"></td>
-    <td>${d.name?nameCell(d):`<input data-dname="${d.id}" class="grow" style="min-width:260px" placeholder="${t('name_ph')}" aria-label="${t('col_equip')}"><a class="ext" href="${esc(eqUrl(d))}" target="_blank" rel="noopener" data-act="noop">↗ ${d.equip_id}</a>`}<div class="sub">${esc(d.type||'—')} · ${esc(catLabel(d.cat))}</div></td>
+    <td>${d.name?nameCell(d):`<input data-dname="${d.id}" class="grow" style="min-width:260px" placeholder="${t('name_ph')}" aria-label="${t('col_equip')}"><a class="ext" href="${esc(eqUrl(d))}" target="_blank" rel="noopener" data-act="noop">↗ ${d.equip_id}</a>`}<div class="sub">${esc(eqZh(d.type)||'—')} · ${esc(catLabel(d.cat))}</div></td>
     <td>${worldBadge(d)}</td><td class="num">${d.level??'—'}</td><td>${attrCell(d)}</td>
     <td><input data-droll="${d.id}" class="sm rollin" inputmode="decimal" placeholder="—" value="${d.roll??''}" aria-label="ROLL %"></td>
     <td><input data-dprice="${d.id}" class="sm" placeholder="${t('price_ph')}" value="${d.price?fmtPrice(d.price):''}" aria-label="${t('col_price')}"></td>
@@ -1334,7 +1637,7 @@ function adReports(D){
   return seg+`<div class="cards">${list.map(r=>{
     const canMod=r.target_role!=='admin'&&!r.target_deleted;
     return `<div class="card"><div class="card-h"><span class="pill ${r.status==='open'?'in_trade':'sold'}">${t(r.cat)}</span><b>${t('ad_reporter',{a:r.reporter,b:r.target})}</b><span class="muted small">#${r.id} · ${ago(r.at)}</span></div>
-    ${r.listing_id?`<div class="small">${t('rp_listing')}：<button class="link" data-act="open" data-lid="${r.listing_id}">${esc(r.listing_name||('#'+r.listing_id))}</button></div>`:''}
+    ${r.listing_id?`<div class="small">${t('rp_listing')}：<button class="link" data-act="open" data-lid="${r.listing_id}">${r.listing_name?eqZhHTML(r.listing_name):'#'+r.listing_id}</button></div>`:''}
     <p class="quote">${esc(r.body)}</p>
     <div class="muted small">${statsText(r.target,r.stats)}</div>
     ${r.status==='open'?`<div class="card-a"><label class="sr" for="res-${r.id}">${t('ad_resolve_note')}</label><input id="res-${r.id}" class="grow" maxlength="1000" placeholder="${t('ad_resolve_note')}"><button class="btn small primary" data-act="ad-resolve" data-id="${r.id}">${t('ad_resolve')}</button>${canMod?modBtns(r.target_id,r.target,r.target_banned):''}</div>`:`<div class="muted small">${t('ad_resolved_note',{note:r.note||'—'})}</div>`}
@@ -1369,7 +1672,7 @@ function adSeason(D){
 }
 function adLogView(D){
   if(!D.log.length)return `<div class="empty">${t('ad_log_empty')}</div>`;
-  return `<ol class="loglist" reversed>${D.log.map(e=>{const p=Object.assign({},e.params);if(p.dk)p.dur=t(p.dk);if(e.kind==='exclude'||e.kind==='include')p.item=(p.item||'')+' · '+fmtPrice(p.p||0);const d=new Date(ts(e.at));return `<li><span class="muted small">${fmtDate(d)} ${d.toTimeString().slice(0,5)}</span> · ${t('log_'+e.kind,p)}</li>`;}).join('')}</ol>`;
+  return `<ol class="loglist" reversed>${D.log.map(e=>{const p=Object.assign({},e.params);if(p.dk)p.dur=t(p.dk);if(p.item)p.item=eqZh(p.item);if(e.kind==='exclude'||e.kind==='include')p.item=(p.item||'')+' · '+fmtPrice(p.p||0);const d=new Date(ts(e.at));return `<li><span class="muted small">${fmtDate(d)} ${d.toTimeString().slice(0,5)}</span> · ${t('log_'+e.kind,p)}</li>`;}).join('')}</ol>`;
 }
 
 /* ================= modals ================= */
@@ -1382,11 +1685,12 @@ function closeModal(){$('#modal-root').innerHTML='';UI.detailId=null;UI.buyConfi
 function back(){if(UI.detailId&&A.detail)renderDetail();else closeModal();}
 function okCancel(a,attrs,label,cls){return `<div class="mbtns"><button class="btn" data-act="sub-cancel">${t('cancel')}</button><button class="btn ${cls||'primary'}" data-act="${a}" ${attrs}>${label||t('confirm')}</button></div>`;}
 const nm=el=>esc(el.dataset.name||'');
-function mMarkSold(el){openModal(t('btn_mark_sold'),`<div class="form"><b>${nm(el)}</b><label for="m-price">${t('ms_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="muted small" style="margin:0">${t('ms_hint')}</p><p class="err" id="m-err"></p></div>${okCancel('ms-ok',`data-lid="${el.dataset.lid}"`)}`);}
-function mCancelTrade(el){openModal(t('btn_cancel_trade'),`<div class="form"><b>${nm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_buyer_gave_up','r_no_response','r_seller_changed','r_other'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('ct_hint')}</p></div>${okCancel('ct-ok',`data-lid="${el.dataset.lid}"`,t('btn_cancel_trade'),'danger')}`);}
-function mEditPrice(el){openModal(t('btn_edit_price'),`<div class="form"><b>${nm(el)}</b><label for="m-price">${t('new_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="err" id="m-err"></p></div>${okCancel('ep-ok',`data-lid="${el.dataset.lid}"`)}`);}
-function mWithdraw(el){openModal(t('btn_withdraw'),`<div class="form"><b>${nm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_not_selling','r_sold_elsewhere'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select></div>${okCancel('wd-ok',`data-lid="${el.dataset.lid}"`,t('btn_withdraw'),'danger')}`);}
-function mGiveup(el){openModal(t('buyer_giveup'),`<div class="form"><b>${nm(el)}</b><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('bg_hint')}</p></div>${okCancel('giveup-ok',`data-lid="${el.dataset.lid}"`,t('buyer_giveup'),'danger')}`);}
+const eqNm=el=>eqZhHTML(el.dataset.name||'');
+function mMarkSold(el){openModal(t('btn_mark_sold'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('ms_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="muted small" style="margin:0">${t('ms_hint')}</p><p class="err" id="m-err"></p></div>${okCancel('ms-ok',`data-lid="${el.dataset.lid}"`)}`);}
+function mCancelTrade(el){openModal(t('btn_cancel_trade'),`<div class="form"><b>${eqNm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_buyer_gave_up','r_no_response','r_seller_changed','r_other'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('ct_hint')}</p></div>${okCancel('ct-ok',`data-lid="${el.dataset.lid}"`,t('btn_cancel_trade'),'danger')}`);}
+function mEditPrice(el){openModal(t('btn_edit_price'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('new_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="err" id="m-err"></p></div>${okCancel('ep-ok',`data-lid="${el.dataset.lid}"`)}`);}
+function mWithdraw(el){openModal(t('btn_withdraw'),`<div class="form"><b>${eqNm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_not_selling','r_sold_elsewhere'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select></div>${okCancel('wd-ok',`data-lid="${el.dataset.lid}"`,t('btn_withdraw'),'danger')}`);}
+function mGiveup(el){openModal(t('buyer_giveup'),`<div class="form"><b>${eqNm(el)}</b><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('bg_hint')}</p></div>${okCancel('giveup-ok',`data-lid="${el.dataset.lid}"`,t('buyer_giveup'),'danger')}`);}
 function mReport(el){
   const lid=el.dataset.lid||'';const lname=A.detail&&String(A.detail.id)===lid?A.detail.name:'';
   openModal(t('rp_title',{name:el.dataset.name||''}),`<div class="form"><label for="m-cat">${t('rp_cat')}</label><select id="m-cat">${['rc_alt','rc_flake','rc_noship','rc_untrade','rc_harass','rc_other'].map(c=>`<option value="${c}">${t(c)}</option>`).join('')}</select><label for="m-lid">${t('rp_listing')}</label><select id="m-lid"><option value="">${t('rp_none')}</option>${lid?`<option value="${lid}" selected>${esc(lname||('#'+lid))}</option>`:''}</select><label for="m-body">${t('rp_body')}</label><textarea id="m-body" rows="4" maxlength="2000" autofocus></textarea><p class="muted small" style="margin:0">${t('rp_private')}</p><p class="err" id="m-err"></p></div>${okCancel('rp-ok',`data-uid="${el.dataset.uid}"`,t('rp_submit'))}`);
@@ -1435,7 +1739,7 @@ const H={
   'modal-back'(el,e){if(e.target===el&&!UI.forcePw)closeModal();},
   'sub-cancel'(){back();},
   world(el){P.world=el.dataset.v;savePrefs();UI.filters.seller='';UI.page=1;A.market=null;if(UI.view!=='market')go('market');else{render();refresh();}},
-  lang(el){P.lang=el.dataset.v;document.documentElement.lang=P.lang==='zh'?'zh-Hant':'en';savePrefs();const keep=UI.detailId;render();if(keep&&A.detail)renderDetail();else if(!UI.forcePw)closeModal();},
+  lang(el){P.lang=el.dataset.v;document.documentElement.lang=htmlLang();savePrefs();const keep=UI.detailId;render();if(keep&&A.detail)renderDetail();else if(!UI.forcePw)closeModal();},
   reload(){refresh();},
   tab(el){UI.tab=el.dataset.v;UI.page=1;renderMarketHead();renderResults();runSearch();},
   page(el){UI.page=Math.max(1,Number(el.dataset.v)||1);const r=$('#results');if(r){r.classList.add('stale');r.scrollIntoView({block:'start'});}runSearch();},
@@ -1571,7 +1875,7 @@ document.addEventListener('change',e=>{const el=e.target;const did=el.dataset&&(
 window.addEventListener('beforeunload',()=>{for(const k of Object.keys(pendingSaves))runDraftSave(k);});
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&UI.eqOpen&&!$('#modal-root').innerHTML){eqClose(true);return;}
-  if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){back();}
+  if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){if($('#modal-root .detail'))closeModal();else back();}
   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&e.target.id&&e.target.id.startsWith('pm-in-')){const b=e.target.parentElement.querySelector('[data-act="pm-send"]');if(b)b.click();}
 });
 function route(){
@@ -1586,7 +1890,7 @@ setInterval(async()=>{if(!P.token||document.hidden)return;try{await loadMe();ren
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!$('#modal-root').innerHTML&&!UI.busy)refresh();});
 
 loadPrefs();
-document.documentElement.lang=P.lang==='zh'?'zh-Hant':'en';
+document.documentElement.lang=htmlLang();
 (async()=>{
   try{await loadMe();}catch(e){}
   route();
