@@ -217,6 +217,11 @@ footer{border-top:1px solid var(--line);padding:14px 0 30px;color:var(--muted);f
 body.busy, body.busy button{cursor:progress}
 .bulk{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:4px}
 .bulk label{display:inline-flex;gap:5px;align-items:center}
+#results.stale{opacity:.5;transition:opacity .15s}
+.rsum{color:var(--muted);font-size:12px;padding:8px 2px 4px}
+.pager{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;padding:14px 0 6px}
+.pager .btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.pager .gap{color:var(--muted);padding:0 2px}
 </style>
 </head>
 <body>
@@ -305,6 +310,11 @@ const T={zh:{
  log_set_season:"把 Isekai 季數設為 {s}",
  pw_pending:"待改密碼",
  ad_season_confirm_v1:"確定要封存所有 ISK 的上架中與交易中商品，並進入第 {s} 季？這個動作無法復原。",
+ res_total:"共 {n} 件",
+ pg_of:"第 {p} / {n} 頁",
+ pg_prev:"上一頁",
+ pg_next:"下一頁",
+ pg_nav:"分頁",
  sell_other_formats:"也可以貼裝備網址，或論壇賣場那種 [url]…[/url] 格式的清單（會一併讀出 ROLL% 和售價，劃掉的行會略過）。只貼網址的話要自己填名稱，等級和主屬性會是空白。",
  sell_import:"讀取並加入未上架區",
  import_done:"已加入 {added} 件、更新 {updated} 件到未上架區，並幫你勾選好了。",
@@ -440,6 +450,11 @@ en:{
  log_set_season:"Set the Isekai season to {s}",
  pw_pending:"must change password",
  ad_season_confirm_v1:"Archive every Isekai listing that is for sale or in trade, and start season {s}? This cannot be undone.",
+ res_total:"{n} items",
+ pg_of:"page {p} of {n}",
+ pg_prev:"Prev",
+ pg_next:"Next",
+ pg_nav:"Pages",
  sell_other_formats:"You can also paste plain equipment links, or forum shop lists in [url]…[/url] format (ROLL % and prices are read too; struck-out lines are skipped). For a plain link you have to type the name, and level and stats stay blank.",
  sell_import:"Read and add to drafts",
  import_done:"Added {added} and updated {updated} items in your drafts, and ticked them for you.",
@@ -554,9 +569,9 @@ function t(k,p){
 const P={lang:'zh',world:'main',token:''};               // kept in this browser
 function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}}
 function savePrefs(){try{localStorage.setItem(LS_KEY,JSON.stringify(P));}catch(e){}}
-const A={me:null,market:{},mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
+const A={me:null,market:null,mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
 function defaultFilters(){return {q:'',cat:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',attrs:[],sort:'new',seller:''};}
-const UI={view:'market',tab:'available',filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
+const UI={view:'market',tab:'available',page:1,filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
   sellText:'',sellBad:[],importMsg:'',dsel:new Set(),notifOpen:false,detailId:null,buyConfirm:null,forcePw:false,busy:false};
 
 /* ================= server ================= */
@@ -596,7 +611,7 @@ async function loadMe(){
 }
 async function loadView(){
   switch(UI.view){
-    case 'market':A.market[P.world]=await rpc('hv_market',{p_world:P.world});break;
+    case 'market':await loadMarket();break;
     case 'mine':A.mine=A.me?await api('hv_mine'):null;break;
     case 'inbox':A.inbox=A.me?await api('hv_inbox'):null;break;
     case 'admin':A.admin=isAdmin()?await api('hv_admin_data'):null;break;
@@ -744,22 +759,50 @@ function renderMain(){
   let h='';
   switch(UI.view){case 'sell':h=viewSell();break;case 'mine':h=viewMine();break;case 'inbox':h=viewInbox();break;case 'admin':h=viewAdmin();break;default:h=viewMarket();}
   $('#main').innerHTML=h;
-  if(UI.view==='market'&&A.market[P.world])renderResults();
+  if(UI.view==='market'&&A.market)renderResults();
 }
 function needLogin(k){return `<div class="panel pad"><p>${t(k)}</p><div class="row-btns"><button class="btn primary" data-act="login">${t('login')}</button><button class="btn" data-act="register">${t('register')}</button></div></div>`;}
 
-/* ---- market ---- */
-function viewMarket(){
-  const data=A.market[P.world];
+/* ---- market ----
+   Filtering, sorting and paging happen in the database (hv_market_search), so a visit downloads one page of 50
+   items however big the market grows. Text boxes search shortly after typing stops; lists and buttons at once. */
+function searchArgs(){
   const f=UI.filters;
-  const head=`<div class="mhead"><h1>${P.world==='main'?t('world_main'):t('isk_season',{n:data?data.season:'…'})}</h1><span class="muted">${t('credits_only')}</span></div>`;
-  if(!data)return head+LOADING();
-  const counts={available:data.items.filter(l=>l.status==='available').length,in_trade:data.items.filter(l=>l.status==='in_trade').length,sold:data.sold.length};
+  return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_f:{q:f.q.trim(),cat:f.cat,qual:f.qual,
+    lv_min:parseInt(f.lvMin)||null,lv_max:parseInt(f.lvMax)||null,p_min:parsePrice(f.pMin)||null,p_max:parsePrice(f.pMax)||null,
+    attrs:f.attrs.join(''),seller:f.seller?Number(f.seller):null,sort:f.sort}};
+}
+let mkSeq=0,mkTimer=null;
+/* only the newest request may update the page, so a slow answer never overwrites a newer one */
+async function loadMarket(){
+  const seq=++mkSeq,args=searchArgs();
+  const d=await rpc('hv_market_search',args);
+  if(seq!==mkSeq)return false;
+  d.world=args.p_world;A.market=d;return true;
+}
+async function runSearch(){
+  clearTimeout(mkTimer);
+  try{if(await loadMarket()&&UI.view==='market'){renderMarketHead();renderResults();}}catch(e){handleErr(e);}
+}
+function searchSoon(delay){
+  UI.page=1;clearTimeout(mkTimer);
+  const box=$('#results');if(box)box.classList.add('stale');
+  mkTimer=setTimeout(runSearch,delay);
+}
+function mkTitle(){const d=A.market;return P.world==='main'?t('world_main'):t('isk_season',{n:d?d.season:'…'});}
+function tabsHTML(){
+  const c=(A.market&&A.market.world===P.world&&A.market.counts)||{};
+  return ['available','in_trade','sold'].map(k=>`<button class="tab ${UI.tab===k?'on':''}" role="tab" aria-selected="${UI.tab===k}" data-act="tab" data-v="${k}">${t('tab_'+k)} <span class="cnt">${c[k]??'…'}</span></button>`).join('');
+}
+function renderMarketHead(){const h=$('#mk-title'),tb=$('#mtabs');if(h)h.textContent=mkTitle();if(tb)tb.innerHTML=tabsHTML();}
+function viewMarket(){
+  const f=UI.filters;
+  const head=`<div class="mhead"><h1 id="mk-title">${esc(mkTitle())}</h1><span class="muted">${t('credits_only')}</span></div>`;
   const catOpts=CATS.map(c=>`<option value="${c}" ${f.cat===c?'selected':''}>${esc(catLabel(c))}</option>`).join('');
   const qOpts=['Peerless','Legendary','Magnificent','Exquisite','Superior'].map(q=>`<option value="${q}" ${f.qual===q?'selected':''}>${q}</option>`).join('');
   const sorts=['new','price_asc','price_desc','avg','lv'].map(s=>`<option value="${s}" ${f.sort===s?'selected':''}>${t('sort_'+s)}</option>`).join('');
   return head+`
-  <div class="tabs" role="tablist">${['available','in_trade','sold'].map(k=>`<button class="tab ${UI.tab===k?'on':''}" role="tab" aria-selected="${UI.tab===k}" data-act="tab" data-v="${k}">${t('tab_'+k)} <span class="cnt">${counts[k]}</span></button>`).join('')}</div>
+  <div class="tabs" role="tablist" id="mtabs">${tabsHTML()}</div>
   <div class="panel">
     <div class="filters">
       <label class="sr" for="f-q">${t('f_search')}</label><input id="f-q" class="grow" type="search" data-f="q" placeholder="${t('f_search')}" value="${esc(f.q)}">
@@ -773,43 +816,33 @@ function viewMarket(){
       <button class="btn small" data-act="clear-filters">${t('f_clear')}</button>
       <button class="btn small" data-act="reload">${t('refresh')}</button>
     </div>
-    <div id="results"></div>
+    <div id="results">${A.market?'':`<div class="empty">${t('loading')}</div>`}</div>
   </div>`;
 }
-function marketList(){
-  const data=A.market[P.world];if(!data)return [];
-  const f=UI.filters,sold=UI.tab==='sold';
-  let arr=sold?data.sold.slice():data.items.filter(l=>l.status===UI.tab);
-  const pk=sold?'sold_price':'price',tk=sold?'sold_at':'renewed_at';
-  const words=f.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const lvMin=parseInt(f.lvMin)||0,lvMax=parseInt(f.lvMax)||Infinity,pMin=parsePrice(f.pMin)||0,pMax=parsePrice(f.pMax)||Infinity;
-  arr=arr.filter(l=>{
-    const nm=l.name.toLowerCase();
-    if(words.some(w=>!nm.includes(w)))return false;
-    if(f.cat&&l.cat!==f.cat)return false;
-    if(f.qual&&l.quality!==f.qual)return false;
-    const lv=l.level||0;if(lv<lvMin||lv>lvMax)return false;
-    if(l[pk]<pMin||l[pk]>pMax)return false;
-    if(f.attrs.length&&!f.attrs.every(a=>(l.attrs||'').includes(a)))return false;
-    if(f.seller&&String(l.seller_id)!==String(f.seller))return false;
-    return true;
-  });
-  const sorters={new:(a,b)=>ts(b[tk])-ts(a[tk]),price_asc:(a,b)=>a[pk]-b[pk],price_desc:(a,b)=>b[pk]-a[pk],avg:(a,b)=>(b.roll??-1)-(a.roll??-1),lv:(a,b)=>(b.level||0)-(a.level||0)};
-  return arr.sort(sorters[f.sort]||sorters.new);
+function pagerHTML(d){
+  const pages=Math.max(1,Math.ceil(d.total/d.per)),p=Math.min(d.page,pages);
+  if(pages<=1)return '';
+  const nums=[...new Set([1,p-2,p-1,p,p+1,p+2,pages])].filter(n=>n>=1&&n<=pages).sort((a,b)=>a-b);
+  let h='',last=0;
+  for(const n of nums){if(n-last>1)h+=`<span class="gap">…</span>`;h+=`<button class="btn small ${n===p?'on':''}" data-act="page" data-v="${n}" ${n===p?'aria-current="page"':''}>${n}</button>`;last=n;}
+  return `<nav class="pager" aria-label="${t('pg_nav')}"><button class="btn small" data-act="page" data-v="${p-1}" ${p<=1?'disabled':''}>‹ ${t('pg_prev')}</button>${h}<button class="btn small" data-act="page" data-v="${p+1}" ${p>=pages?'disabled':''}>${t('pg_next')} ›</button></nav>`;
 }
 function renderResults(){
   const box=$('#results');if(!box)return;
-  const arr=marketList(),u=A.me,sold=UI.tab==='sold',isk=P.world==='isekai';
+  const d=A.market,u=A.me,sold=UI.tab==='sold',isk=P.world==='isekai';
+  box.classList.remove('stale');
+  if(!d||d.tab!==UI.tab||d.world!==P.world){box.innerHTML=`<div class="empty">${t('loading')}</div>`;return;}
+  const arr=d.items;
   let h='';
   if(sold){
-    const q=UI.filters.q.trim();
-    if(q&&arr.length){
-      const v=arr.map(l=>l.sold_price).sort((a,b)=>a-b);const k=v.length;
-      const med=k%2?v[(k-1)/2]:(v[k/2-1]+v[k/2])/2;
-      h+=`<div class="pref"><div class="pref-t">${t('price_ref',{q,n:k})}</div><div class="pref-n"><div><span>${t('price_min')}</span>${priceHTML(v[0])}</div><div><span>${t('price_median')}</span>${priceHTML(med)}</div><div><span>${t('price_max')}</span>${priceHTML(v[k-1])}</div></div></div>`;
+    const q=UI.filters.q.trim(),st=d.stats;
+    if(q&&st&&st.n){
+      h+=`<div class="pref"><div class="pref-t">${t('price_ref',{q,n:st.n})}</div><div class="pref-n"><div><span>${t('price_min')}</span>${priceHTML(st.min)}</div><div><span>${t('price_median')}</span>${priceHTML(Math.round(st.median))}</div><div><span>${t('price_max')}</span>${priceHTML(st.max)}</div></div></div>`;
     } else if(!q) h+=`<div class="hint">${t('price_ref_hint')}</div>`;
   }
   if(!arr.length){box.innerHTML=h+`<div class="empty">${t('empty_results')}</div>`;return;}
+  const pages=Math.max(1,Math.ceil(d.total/d.per));
+  h+=`<div class="rsum">${t('res_total',{n:d.total.toLocaleString()})}${pages>1?' · '+t('pg_of',{p:d.page,n:pages}):''}</div>`;
   if(sold){
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th>${isk?`<th>${t('col_season')}</th>`:''}</tr></thead><tbody>`+
     arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>S${l.season??'?'}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
@@ -824,7 +857,7 @@ function renderResults(){
       return `<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
     }).join('')+`</tbody></table></div>`;
   }
-  box.innerHTML=h;
+  box.innerHTML=h+pagerHTML(d);
 }
 
 /* ---- detail ---- */
@@ -996,20 +1029,17 @@ async function doImport(){
   UI.sellBad=bad;UI.importMsg='';
   if(!items.length){UI.importMsg='';renderMain();toast(t('sell_none'),true);return;}
   const soul=items.filter(x=>x.soul||x.untr).length;
-  let active=new Set();
-  try{for(const w of new Set(items.map(x=>x.world))){const d=await rpc('hv_market',{p_world:w});A.market[w]=d;d.items.forEach(l=>active.add(w+':'+l.equip_id));}}catch(e){}
-  const seen=new Set(),todo=[];let onMarket=0;
+  const seen=new Set(),todo=[];
   for(const it of items){
     const k=it.world+':'+it.equip_id;
     if(it.soul||it.untr||seen.has(k))continue;seen.add(k);
-    if(active.has(k)){onMarket++;continue;}
     todo.push(it);
   }
-  let added=0,updated=0;
+  let added=0,updated=0,onMarket=0;
   const ok=await act(async()=>{
     for(let i=0;i<todo.length;i+=500){
       const chunk=todo.slice(i,i+500).map(r=>({world:r.world,equip_id:r.equip_id,equip_key:r.equip_key,quality:r.quality,name:r.name,type:r.type,cat:r.cat,level:r.level,attrs:r.attrs,lame:r.lame,roll:r.roll,hv_avg:r.hv_avg,price:r.price}));
-      const r=await api('hv_draft_add',{p_items:chunk});added+=r.added;updated+=r.updated;
+      const r=await api('hv_draft_add',{p_items:chunk});added+=r.added;updated+=r.updated;onMarket+=r.active||0;
     }
   });
   if(!ok)return;
@@ -1179,14 +1209,15 @@ const H={
   close(){closeModal();},
   'modal-back'(el,e){if(e.target===el&&!UI.forcePw)closeModal();},
   'sub-cancel'(){back();},
-  world(el){P.world=el.dataset.v;savePrefs();UI.filters.seller='';if(UI.view!=='market')go('market');else{render();refresh();}},
+  world(el){P.world=el.dataset.v;savePrefs();UI.filters.seller='';UI.page=1;A.market=null;if(UI.view!=='market')go('market');else{render();refresh();}},
   lang(el){P.lang=el.dataset.v;document.documentElement.lang=P.lang==='zh'?'zh-Hant':'en';savePrefs();const keep=UI.detailId;render();if(keep&&A.detail)renderDetail();else if(!UI.forcePw)closeModal();},
   reload(){refresh();},
-  tab(el){UI.tab=el.dataset.v;renderMain();},
-  attr(el){const a=el.dataset.v,arr=UI.filters.attrs,i=arr.indexOf(a);if(i>=0)arr.splice(i,1);else arr.push(a);renderMain();},
-  'clear-filters'(){UI.filters=defaultFilters();renderMain();},
-  'clear-seller'(){UI.filters.seller='';renderMain();},
-  'seller-filter'(el,e){e.preventDefault();UI.filters=defaultFilters();UI.filters.seller=el.dataset.uid;UI.filters.sellerName=el.dataset.name;if(UI.tab!=='sold')UI.tab='available';closeModal();if(UI.view!=='market')go('market');else renderMain();},
+  tab(el){UI.tab=el.dataset.v;UI.page=1;renderMarketHead();renderResults();runSearch();},
+  page(el){UI.page=Math.max(1,Number(el.dataset.v)||1);const r=$('#results');if(r){r.classList.add('stale');r.scrollIntoView({block:'start'});}runSearch();},
+  attr(el){const a=el.dataset.v,arr=UI.filters.attrs,i=arr.indexOf(a);if(i>=0)arr.splice(i,1);else arr.push(a);renderMain();searchSoon(0);},
+  'clear-filters'(){UI.filters=defaultFilters();renderMain();searchSoon(0);},
+  'clear-seller'(){UI.filters.seller='';renderMain();searchSoon(0);},
+  'seller-filter'(el,e){e.preventDefault();UI.filters=defaultFilters();UI.filters.seller=el.dataset.uid;UI.filters.sellerName=el.dataset.name;if(UI.tab!=='sold')UI.tab='available';UI.page=1;closeModal();if(UI.view!=='market')go('market');else{renderMain();searchSoon(0);}},
   open(el){UI.buyConfirm=null;openDetail(el.dataset.lid);},
   'buy-ask'(el){if(!A.me){mLogin();return;}UI.buyConfirm=N(el.dataset.lid);openDetail(el.dataset.lid);},
   buy(el){UI.buyConfirm=N(el.dataset.lid);renderDetail();},
@@ -1290,7 +1321,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('submit',e=>{e.preventDefault();const f=e.target.dataset.form;if(f==='login')doLogin();if(f==='reg')doRegister();if(f==='chpw')doChangePw();});
 document.addEventListener('input',e=>{
   const el=e.target;
-  if(el.dataset.f){UI.filters[el.dataset.f]=el.value;renderResults();return;}
+  if(el.dataset.f){UI.filters[el.dataset.f]=el.value;searchSoon(el.tagName==='SELECT'?0:450);return;}
   if(el.id==='sell-text'){UI.sellText=el.value;return;}
   if(el.id==='dsel-all'){if(el.checked)(A.drafts||[]).forEach(d=>UI.dsel.add(d.id));else UI.dsel.clear();renderDrafts();return;}
   if(el.dataset.dsel!==undefined){const id=N(el.dataset.dsel);if(el.checked)UI.dsel.add(id);else UI.dsel.delete(id);renderDrafts();return;}
