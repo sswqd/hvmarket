@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HV Market</title>
+<title>HV 裝備市集 · HV Gear Market</title>
 <link rel="icon" href="data:,">
 <style>
 /* HentaiVerse parchment + maroon, so players feel at home. Layout: one column, header nav, tables for scanning. */
@@ -215,6 +215,8 @@ footer{border-top:1px solid var(--line);padding:14px 0 30px;color:var(--muted);f
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 
 body.busy, body.busy button{cursor:progress}
+.bulk{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:4px}
+.bulk label{display:inline-flex;gap:5px;align-items:center}
 </style>
 </head>
 <body>
@@ -272,6 +274,11 @@ const LS_KEY='hvmarket';
 
 /* ================= i18n ================= */
 const T={zh:{
+ brand:"HV 裝備市集",
+ msg_count:"私訊 {n}",
+ msg_count_t:"私訊內容只有提問者和賣家看得到",
+ d_msgs:"私訊",
+ msg_n:"{n} 則（內容只有提問者和賣家看得到）",
  loading:"載入中…",
  refresh:"重新整理",
  save:"儲存",
@@ -298,6 +305,28 @@ const T={zh:{
  log_set_season:"把 Isekai 季數設為 {s}",
  pw_pending:"待改密碼",
  ad_season_confirm_v1:"確定要封存所有 ISK 的上架中與交易中商品，並進入第 {s} 季？這個動作無法復原。",
+ sell_other_formats:"也可以貼裝備網址，或論壇賣場那種 [url]…[/url] 格式的清單（會一併讀出 ROLL% 和售價，劃掉的行會略過）。只貼網址的話要自己填名稱，等級和主屬性會是空白。",
+ sell_import:"讀取並加入未上架區",
+ import_done:"已加入 {added} 件、更新 {updated} 件到未上架區，並幫你勾選好了。",
+ import_skip_soul:"Soulbound／不可交易 {n} 件已略過。",
+ import_skip_active:"已經在架上的 {n} 件已略過。",
+ import_skip_struck:"劃掉的（已售出）{n} 行已略過。",
+ drafts_title:"未上架區",
+ drafts_hint:"這裡的資料存在伺服器上，重新整理或換電腦都還在。售價和 ROLL 改完會自動儲存。勾選多件後可以一次填同一個售價。",
+ drafts_empty:"未上架區是空的。把裝備代碼或網址貼到上面，按「讀取並加入未上架區」。",
+ select_all:"全選",
+ selected_n:"已選 {n} 件",
+ bulk_price:"套用到已選",
+ publish_n:"上架已選的 {n} 件",
+ delete_selected:"刪除已選",
+ name_ph:"請填裝備名稱，例如 Legendary Charged Phase Shoes of Freyr",
+ ds_ok:"可上架",
+ ds_noprice:"待填售價",
+ ds_noname:"缺名稱",
+ ds_dup:"已經在架上",
+ publish_done:"已上架 {n} 件。",
+ publish_left:"{n} 件還留在未上架區（缺售價、缺名稱或已經在架上）。",
+ del_drafts_confirm:"從未上架區刪除這 {n} 件？（不會影響已經上架的裝備）",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -343,7 +372,7 @@ const T={zh:{
  bg_hint:'商品會回到「上架中」，賣家會收到通知。經常放棄購買可能會被其他玩家檢舉。',
  price_invalid:'看不懂這個價格，可以寫 1500000、1.5m 或 800k。',price_ph:'例如 1.5m',new_price:'新售價',
  sell_title:'上架裝備',sell_need_login:'請先登入才能上架。',sell_steps_title:'用 HVUT 產生裝備代碼',
- sell_step1:'在 HV 進入裝備的「整理」頁面',sell_step2:'先按左側的「可交易的」，只留下可以交易的裝備',sell_step3:'勾選要賣的裝備',sell_step4:'按左側的「裝備代碼」',sell_step5:'把跳出來的文字全部複製，貼到下面的框框',
+ sell_step1:'在 HV 進入裝備的「整理」頁面',sell_step2:'先按左側的「可交易的」，只留下可以交易的裝備',sell_step3:'勾選要賣的裝備',sell_step4:'按左側的「裝備代碼」',sell_step5:"把跳出來的文字全部複製，貼到下面的框框，按「讀取並加入未上架區」",
  sell_need_hvut:'需要先安裝 HVUT。主世界和 ISK 的裝備可以混在一起貼，網站會自動分開；Soulbound 的裝備會被擋下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 換算的：傳說 170–200、史詩 150–180 對應 0–100%。HVUT 的 AVG 是四捨五入過的整數，所以可能跟實際差 1–2%，需要的話可以直接改。布甲少了 A、I、W 其中一個會自動標成瘸腿。',untrade_note:'記得先按 HVUT 的「可交易的」再勾選。HVUT 代碼不會標出 Untradeable，網站沒辦法替你擋下不可交易的裝備；不可交易的裝備無法用 MoogleMail 寄出，被檢舉會被下架。',lame:'瘸腿',lame_t:'少了 {x} 屬性',
  sell_paste_ph:'把 HVUT 的裝備代碼貼在這裡',sell_sample:'填入範例',sell_parse:'讀取裝備',sell_preview:'確認並填售價',
  sell_ok:'可上架',sell_err_dup:'已經在架上',sell_err_duppaste:'重複貼了兩次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
@@ -380,6 +409,11 @@ const T={zh:{
  footer:'本站只是刊登平台，交易請玩家之間自行用 MoogleMail 以 CoD 完成。只接受遊戲內 Credits，禁止任何現金交易。'
 },
 en:{
+ brand:"HV Gear Market",
+ msg_count:"{n} msg",
+ msg_count_t:"Only the sender and the seller can read these messages",
+ d_msgs:"Messages",
+ msg_n:"{n} (only the sender and the seller can read them)",
  loading:"Loading…",
  refresh:"Refresh",
  save:"Save",
@@ -406,6 +440,28 @@ en:{
  log_set_season:"Set the Isekai season to {s}",
  pw_pending:"must change password",
  ad_season_confirm_v1:"Archive every Isekai listing that is for sale or in trade, and start season {s}? This cannot be undone.",
+ sell_other_formats:"You can also paste plain equipment links, or forum shop lists in [url]…[/url] format (ROLL % and prices are read too; struck-out lines are skipped). For a plain link you have to type the name, and level and stats stay blank.",
+ sell_import:"Read and add to drafts",
+ import_done:"Added {added} and updated {updated} items in your drafts, and ticked them for you.",
+ import_skip_soul:"{n} Soulbound / untradeable items skipped.",
+ import_skip_active:"{n} already listed, skipped.",
+ import_skip_struck:"{n} struck-out (sold) lines skipped.",
+ drafts_title:"Drafts (not listed yet)",
+ drafts_hint:"Drafts are saved on the server, so they survive a reload or another device. Price and ROLL changes save automatically. Tick several items to give them one price at once.",
+ drafts_empty:"No drafts. Paste equipment code or links above and click \"Read and add to drafts\".",
+ select_all:"Select all",
+ selected_n:"{n} selected",
+ bulk_price:"Apply to selected",
+ publish_n:"List {n} selected",
+ delete_selected:"Delete selected",
+ name_ph:"Equipment name, e.g. Legendary Charged Phase Shoes of Freyr",
+ ds_ok:"Ready",
+ ds_noprice:"Needs a price",
+ ds_noname:"Needs a name",
+ ds_dup:"Already listed",
+ publish_done:"Listed {n} items.",
+ publish_left:"{n} stayed in drafts (no price, no name or already listed).",
+ del_drafts_confirm:"Remove these {n} items from your drafts? (Listed items are not affected.)",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -451,7 +507,7 @@ en:{
  bg_hint:'The item goes back to For Sale and the seller is notified. Backing out often may get you reported by other players.',
  price_invalid:'Could not read that price. Use 1500000, 1.5m or 800k.',price_ph:'e.g. 1.5m',new_price:'New price',
  sell_title:'List equipment',sell_need_login:'Log in to list equipment.',sell_steps_title:'Generate equipment code with HVUT',
- sell_step1:'In HV, open the equipment management page',sell_step2:'First click the tradeable-only filter on the left (可交易的) so only tradeable items are shown',sell_step3:'Tick the equipment you want to sell',sell_step4:'Click “Equipment Code” on the left',sell_step5:'Copy all of the text that appears and paste it into the box below',
+ sell_step1:'In HV, open the equipment management page',sell_step2:'First click the tradeable-only filter on the left (可交易的) so only tradeable items are shown',sell_step3:'Tick the equipment you want to sell',sell_step4:'Click “Equipment Code” on the left',sell_step5:"Copy all of the text that appears, paste it into the box below and click \"Read and add to drafts\"",
  sell_need_hvut:'Requires HVUT. You can paste Persistent and Isekai equipment together; the site sorts them. Soulbound items are rejected.',roll_from_avg:'ROLL % is converted from HVUT’s AVG: Legendary 170–200 and Magnificent 150–180 map to 0–100%. HVUT rounds AVG to a whole number, so the result can be off by 1–2%; edit it if you need to. Cloth armor missing A, I or W is flagged as lame.',untrade_note:'Remember to click HVUT’s tradeable-only filter before ticking items. The HVUT code does not mark Untradeable items, so the site cannot reject them; an untradeable item cannot be sent by MoogleMail, and reported listings are taken down.',lame:'Lame',lame_t:'missing {x}',
  sell_paste_ph:'Paste the HVUT equipment code here',sell_sample:'Fill in sample',sell_parse:'Read equipment',sell_preview:'Check and set prices',
  sell_ok:'Ready',sell_err_dup:'Already listed',sell_err_duppaste:'Pasted twice',sell_err_soul:'Soulbound, cannot be listed',sell_err_untrade:'Untradeable, cannot be listed',
@@ -501,7 +557,7 @@ function savePrefs(){try{localStorage.setItem(LS_KEY,JSON.stringify(P));}catch(e
 const A={me:null,market:{},mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
 function defaultFilters(){return {q:'',cat:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',attrs:[],sort:'new',seller:''};}
 const UI={view:'market',tab:'available',filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
-  sellText:'',sellRows:null,sellBad:[],notifOpen:false,detailId:null,buyConfirm:null,forcePw:false,busy:false};
+  sellText:'',sellBad:[],importMsg:'',dsel:new Set(),notifOpen:false,detailId:null,buyConfirm:null,forcePw:false,busy:false};
 
 /* ================= server ================= */
 class ApiErr extends Error{constructor(code){super(code);this.code=code;}}
@@ -544,6 +600,10 @@ async function loadView(){
     case 'mine':A.mine=A.me?await api('hv_mine'):null;break;
     case 'inbox':A.inbox=A.me?await api('hv_inbox'):null;break;
     case 'admin':A.admin=isAdmin()?await api('hv_admin_data'):null;break;
+    case 'sell':
+      A.drafts=A.me?await api('hv_drafts'):null;
+      if(A.drafts){const ids=new Set(A.drafts.map(d=>d.id));UI.dsel=new Set([...UI.dsel].filter(i=>ids.has(i)));}
+      break;
   }
 }
 async function refresh(){
@@ -581,51 +641,75 @@ function worldBadge(l){return l.world==='isekai'?`<span class="wb isk">ISK</span
 function attrHTML(a){return a?`<span class="attr">${a.split('').map(x=>`<b title="${ATTR_NAME[x]||x}">${x}</b>`).join('')}</span>`:'<span class="muted">—</span>';}
 function lameHTML(l){return l&&l.lame?` <span class="pill lame" title="${t('lame_t',{x:l.lame})}">${t('lame')}</span>`:'';}
 function attrCell(l){return attrHTML(l.attrs)+lameHTML(l);}
+function mcHTML(l){const n=l&&l.msg_count||0;return n?` <span class="tag mc" title="${t('msg_count_t')}">${t('msg_count',{n})}</span>`:'';}
 function avgHTML(v){if(v==null||v==='')return '<span class="muted">—</span>';v=Number(v);return `<span class="avg ${v>=80?'hi':''}"><span class="avgbar"><i style="width:${Math.max(0,Math.min(100,v))}%"></i></span>${v.toFixed(1)}%</span>`;}
 function pill(st){return `<span class="pill ${st}">${t('st_'+st)}</span>`;}
 function sellerLink(l){return `<a href="#market" data-act="seller-filter" data-uid="${l.seller_id}" data-name="${esc(l.seller)}">${esc(l.seller)}</a>`;}
+function typeFromName(name){let tp=deriveType(name);const c=catOf(tp);
+  if(/Armor$/.test(c)){const pm=name.match(new RegExp('\\b'+tp+'\\s+([A-Z][a-z]+)\\b'));if(pm&&pm[1]!=='Of')tp=tp+' '+pm[1];}
+  return tp;}
 function deriveType(name){for(const k of TYPE_KEYS){if(new RegExp('\\b'+k+'\\b').test(name))return k;}return '';}
 function notifText(n){const p=Object.assign({},n.params);if(p.rk)p.r=t(p.rk);if(p.dk)p.dur=t(p.dk);return t('n_'+n.type,p);}
 
-/* ================= HVUT parser ================= */
+/* ================= import parser ================= */
 function stripBB(s){return s.replace(/\[\/?(?:size|b|i|u|s|color|font|url)(?:=[^\]]*)?\]/gi,'');}
-function parseHVUT(text){
-  /* [size=3] = category, [size=2] = type, then
-     [316911528] [url=https://hentaiverse.org/equip/316911528/acd6e112b5]Name[/url] (Lv.500, AVG: 186, IW)
-     Soulbound items have "Soulbound" in place of the level. HVUT's AVG is the average base-stat roll. */
-  const items=[],bad=[];let cat='',type='';
+const EQ_RE='(?:https?:\\/\\/)?(?:alt\\.)?hentaiverse\\.org\\/(isekai\\/)?equip\\/(\\d+)\\/([0-9a-f]{6,})';
+/* Reads, one item per line:
+   - HVUT "equipment code": [316911528] [url=https://hentaiverse.org/equip/316911528/acd6e112b5]Name[/url] (Lv.500, AVG: 186, IW)
+     with [size=3] category and [size=2] type headings; "Soulbound" replaces the level
+   - forum shop lines: [oak01] [url=…]Name[/url] (64.4% iw) (Lv.500) - (150k); lines wrapped in [s]…[/s] are sold and skipped
+   - plain links: https://hentaiverse.org/equip/314232310/afe61dd0ed (the name then has to be typed in) */
+function parseImport(text){
+  const items=[],bad=[];let cat='',type='',struck=0;
   const catByLower={};CATS.forEach(c=>catByLower[c.toLowerCase()]=c);
   for(const raw of String(text).split(/\r?\n/)){
     const line=raw.trim();if(!line)continue;
     const h=line.match(/^\[size=(\d+)\]\s*\[b\]\s*\[(.+?)\]\s*\[\/b\]\s*\[\/size\]$/i);
     if(h){const nm=h[2].trim();if(+h[1]>=3){cat=catByLower[nm.toLowerCase()]||nm;type='';}else type=nm;continue;}
-    const m=line.match(/\[url=\s*(?:https?:\/\/)?(?:alt\.)?hentaiverse\.org\/(isekai\/)?equip\/(\d+)\/([0-9a-f]{6,})\/?\s*\]([\s\S]*?)\[\/url\]\s*(?:\(([^()]*)\))?/i);
-    if(!m){bad.push(line);continue;}
-    const world=m[1]?'isekai':'main',equip_id=+m[2],equip_key=m[3].toLowerCase();
-    const name=stripBB(m[4]).replace(/\s+/g,' ').trim();
+    if(/^\[s\]/i.test(line)){if(new RegExp(EQ_RE,'i').test(line))struck++;continue;}
+    let world,equip_id,equip_key,name='',tail='';
+    const m=line.match(new RegExp('\\[url=\\s*'+EQ_RE+'\\/?\\s*\\]([\\s\\S]*?)\\[\\/url\\]','i'));
+    if(m){world=m[1]?'isekai':'main';equip_id=+m[2];equip_key=m[3].toLowerCase();name=stripBB(m[4]).replace(/\s+/g,' ').trim();tail=line.slice(m.index+m[0].length);}
+    else{
+      const u=line.match(new RegExp(EQ_RE,'i'));
+      if(!u){bad.push(line);continue;}
+      world=u[1]?'isekai':'main';equip_id=+u[2];equip_key=u[3].toLowerCase();tail=line.slice(u.index+u[0].length);
+      const rest=stripBB(tail).replace(/\([^()]*\)/g,' ').replace(/\s-\s*$/,'').replace(/\s+/g,' ').trim();
+      if(QUALITIES.includes(rest.split(' ')[0]))name=rest;
+    }
+    if(!/^[A-Za-z]/.test(name))name=name.replace(/^[^A-Za-z]+/,'');
     const first=name.split(' ')[0];const quality=QUALITIES.includes(first)?first:'';
-    let level=null,soul=false,untr=false,attrs='',hv_avg=null;
-    for(const part of (m[5]||'').split(',').map(x=>x.trim()).filter(Boolean)){
-      let x;
-      if((x=part.match(/^(?:Lv|Level)\.?\s*(\d{1,4})$/i)))level=+x[1];
-      else if(/^soul\s*bound$/i.test(part))soul=true;
-      else if(/^un\s*trad(?:e)?able$/i.test(part))untr=true;
-      else if((x=part.match(/^AVG\s*[:=]?\s*(\d+(?:\.\d+)?)/i)))hv_avg=Math.round(+x[1]);
-      else if(/^[SDEAIW]{1,6}$/.test(part))attrs=part;
+    let level=null,soul=false,untr=false,attrs='',hv_avg=null,roll=null,rem='',priceText='';
+    for(const g of tail.matchAll(/(\s-\s*)?\(([^()]*)\)/g)){
+      if(g[1]){priceText=g[2].trim();continue;}
+      for(const part of g[2].split(',').map(x=>x.trim()).filter(Boolean)){
+        let x;
+        if((x=part.match(/^(?:Lv|Level)\.?\s*(\d{1,4})$/i)))level=+x[1];
+        else if(/^soul\s*bound$/i.test(part))soul=true;
+        else if(/^un\s*trad(?:e)?able$/i.test(part))untr=true;
+        else if((x=part.match(/^AVG\s*[:=]?\s*(\d+(?:\.\d+)?)/i)))hv_avg=Math.round(+x[1]);
+        else if(/^[SDEAIW]{1,6}$/.test(part))attrs=part;
+        else if((x=part.match(/^(\d+(?:\.\d+)?)\s*%(?:\s+([aiw]{1,3}))?/i))){roll=+x[1];if(x[2])rem=x[2].toUpperCase();}
+      }
     }
     if(/靈魂綁定|灵魂绑定/.test(line))soul=true;
-    let tp=type||deriveType(name);const c=cat&&CATS.includes(cat)?cat:catOf(tp);
-    if(/Armor$/.test(c)&&tp&&!/\s/.test(tp)){const pm=name.match(new RegExp('\\b'+tp+'\\s+([A-Z][a-z]+)\\b'));if(pm&&pm[1]!=='Of')tp=tp+' '+pm[1];}
-    items.push({world,equip_id,equip_key,name,quality,type:tp,cat:c,level,roll:rollFromAvg(quality,hv_avg),hv_avg,attrs,lame:lameOf(c,attrs),soul,untr});
+    /* the name decides type and category; HVUT headings only fill in when the name has no known type */
+    const nt=typeFromName(name);
+    const tp=nt||(m?type:'');
+    const c=catOf(nt)||(m&&cat&&CATS.includes(cat)?cat:catOf(tp));
+    if(!attrs&&rem)attrs=['A','I','W'].filter(x=>rem.includes(x)).join('');
+    if(roll==null)roll=rollFromAvg(quality,hv_avg);
+    if(roll!=null&&(roll<0||roll>100))roll=null;
+    items.push({world,equip_id,equip_key,name,quality,type:tp,cat:c,level,roll,hv_avg,attrs,lame:lameOf(c,attrs),soul,untr,price:parsePrice(priceText)});
   }
-  return {items,bad};
+  return {items,bad,struck};
 }
 
 /* ================= rendering ================= */
 function render(){
   renderHeader();renderBanner();renderMain();
   $('#foot').textContent=t('footer');
-  const n=A.me?A.me.unread:0;document.title=(n?`(${n}) `:'')+'HV Market';
+  const n=A.me?A.me.unread:0;document.title=(n?`(${n}) `:'')+t('brand');
 }
 const BELL='<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a6 6 0 0 0-6 6v3.6l-1.7 2.8A1 1 0 0 0 5.2 17h13.6a1 1 0 0 0 .9-1.6L18 12.6V9a6 6 0 0 0-6-6zm0 19a2.5 2.5 0 0 0 2.4-2H9.6a2.5 2.5 0 0 0 2.4 2z"/></svg>';
 function renderHeader(){
@@ -645,7 +729,7 @@ function renderHeader(){
   } else {
     right+=`<button class="btn small" data-act="login">${t('login')}</button><button class="btn small primary" data-act="register">${t('register')}</button>`;
   }
-  $('#hdr').innerHTML=`<div class="wrap hrow"><div class="brand"><a href="#market">HV Market</a><span class="sub">${t('site_sub')}</span></div>
+  $('#hdr').innerHTML=`<div class="wrap hrow"><div class="brand"><a href="#market">${t('brand')}</a><span class="sub">${t('site_sub')}</span></div>
   <nav class="nav">${nav.map(([v,k])=>`<a class="navbtn ${UI.view===v?'on':''}" href="#${v}">${t(k)}</a>`).join('')}</nav>
   <div class="hright">${right}</div></div>`;
 }
@@ -728,7 +812,7 @@ function renderResults(){
   if(!arr.length){box.innerHTML=h+`<div class="empty">${t('empty_results')}</div>`;return;}
   if(sold){
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th>${isk?`<th>${t('col_season')}</th>`:''}</tr></thead><tbody>`+
-    arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>S${l.season??'?'}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
+    arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>S${l.season??'?'}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
   } else {
     const it=UI.tab==='in_trade';
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_seller')}</th><th>${it?t('col_status'):''}</th></tr></thead><tbody>`+
@@ -737,7 +821,7 @@ function renderResults(){
       if(it)a=pill('in_trade');
       else if(u&&u.id===l.seller_id)a=`<span class="tag">${t('yours')}</span>`;
       else a=`<button class="btn small primary" data-act="buy-ask" data-lid="${l.id}">${t('btn_buy')}</button>`;
-      return `<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
+      return `<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
     }).join('')+`</tbody></table></div>`;
   }
   box.innerHTML=h;
@@ -763,6 +847,7 @@ function detailHTML(d){
     priceRow,
     [t('col_seller'),`${esc(d.seller)}${u&&!v.is_seller&&!d.seller_deleted?` · <button class="link" data-act="report" data-uid="${d.seller_id}" data-name="${esc(d.seller)}" data-lid="${d.id}">${t('report_user')}</button>`:''}`],
     [t('d_world'),worldBadge(d)+(d.world==='isekai'&&d.season?` ${t('isk_season',{n:d.season})}`:'')],
+    [t('d_msgs'),t('msg_n',{n:d.msg_count||0})],
     [t('d_listed'),fmtDate(ts(d.created_at))],
     [t('d_id'),`<a href="${esc(eqUrl(d))}" target="_blank" rel="noopener">${d.equip_id} ↗</a>`],
   ];
@@ -852,66 +937,90 @@ function evText(e){
 }
 function historyHTML(d){return `<div class="section"><h4>${t('history')}</h4><ul class="hist">${d.history.map(e=>`<li>${fmtDate(ts(e.at))} · ${evText(e)}</li>`).join('')}</ul></div>`;}
 
-/* ---- sell ---- */
+/* ---- sell: import box + drafts ("未上架區", kept on the server) ---- */
 function viewSell(){
   const u=A.me;if(!u)return needLogin('sell_need_login');
   if(isBanned(u))return `<div class="notice bad">${t('banned_cant')}</div>`;
-  return `<div class="mhead"><h1>${t('sell_title')}</h1></div>
-  <div class="sellgrid">
-    <div class="panel pad">
+  const imp=`<div class="panel pad">
       <h2>${t('sell_steps_title')}</h2>
       <ol class="steps"><li>${t('sell_step1')}</li><li><b>${t('sell_step2')}</b></li><li>${t('sell_step3')}</li><li>${t('sell_step4')}</li><li>${t('sell_step5')}</li></ol>
-      <p class="muted small">${t('sell_need_hvut')}</p>
+      <p class="muted small" style="margin:0 0 4px">${t('sell_need_hvut')}</p>
+      <p class="muted small" style="margin:0 0 8px">${t('sell_other_formats')}</p>
       <label class="sr" for="sell-text">${t('sell_paste_ph')}</label>
-      <textarea id="sell-text" rows="9" placeholder="${t('sell_paste_ph')}">${esc(UI.sellText)}</textarea>
-      <div class="row-btns"><button class="btn primary" data-act="sell-parse">${t('sell_parse')}</button></div>
-    </div>
-    <div id="sell-preview">${sellPreviewHTML()}</div>
-  </div>`;
+      <textarea id="sell-text" rows="8" placeholder="${t('sell_paste_ph')}">${esc(UI.sellText)}</textarea>
+      <div class="row-btns"><button class="btn primary" data-act="sell-import">${t('sell_import')}</button></div>
+      ${UI.importMsg?`<div class="notice ok" style="margin-top:10px">${UI.importMsg}</div>`:''}
+      ${UI.sellBad.length?`<p class="muted small">${t('sell_unread')}</p><pre class="badlines">${esc(UI.sellBad.join('\n'))}</pre>`:''}
+    </div>`;
+  return `<div class="mhead"><h1>${t('sell_title')}</h1></div><div class="sellgrid">${imp}<div id="drafts-box">${draftsHTML()}</div></div>`;
 }
-function sellPreviewHTML(){
-  const rows=UI.sellRows;if(!rows)return '';
-  const badBlock=UI.sellBad.length?`<p class="muted small">${t('sell_unread')}</p><pre class="badlines">${esc(UI.sellBad.join('\n'))}</pre>`:'';
-  if(!rows.length)return `<div class="panel pad"><div class="notice bad">${t('sell_none')}</div>${badBlock}</div>`;
-  const n=rows.filter(r=>r.st==='ok'&&r.include).length;
-  const stLabel=r=>r.st==='ok'?`<span class="pill available">${t('sell_ok')}</span>`:`<span class="pill bad">${t({dup:'sell_err_dup',duppaste:'sell_err_duppaste',soul:'sell_err_soul',untrade:'sell_err_untrade'}[r.st])}</span>`;
-  return `<div class="panel pad"><h2>${t('sell_preview')}</h2><p class="muted small">${t('sell_credits')}</p><div class="notice info">${t('roll_from_avg')}</div><div class="notice">${t('untrade_note')}</div>
-  <div class="tablewrap"><table><thead><tr><th>${t('col_include')}</th><th>${t('col_equip')}</th><th>${t('col_world')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')} %</th><th>${t('col_price')}</th><th>${t('col_status')}</th></tr></thead><tbody>
-  ${rows.map((r,i)=>`<tr><td>${r.st==='ok'?`<input type="checkbox" id="inc-${i}" data-inc="${i}" ${r.include?'checked':''} aria-label="${t('col_include')}">`:''}</td>
-    <td>${nameCell(r)}<div class="sub">${esc(r.type||'—')} · ${esc(catLabel(r.cat))}</div></td><td>${worldBadge(r)}</td><td class="num">${r.level??'—'}</td><td>${attrCell(r)}</td>
-    <td>${r.st==='ok'?`<input id="rl-${i}" class="sm rollin" data-rl="${i}" inputmode="decimal" placeholder="—" value="${esc(r.rollText)}" aria-label="ROLL %">`:avgHTML(r.roll)}</td>
-    <td>${r.st==='ok'?`<input id="sp-${i}" class="sm ${r.priceErr?'err':''}" data-sp="${i}" placeholder="${t('price_ph')}" value="${esc(r.priceText)}" aria-label="${t('col_price')}">`:''}</td><td>${stLabel(r)}</td></tr>`).join('')}
-  </tbody></table></div>
-  ${badBlock}
-  <div class="row-btns"><button class="btn primary" data-act="sell-submit" ${n?'':'disabled'}>${t('sell_submit',{n})}</button></div></div>`;
+function draftState(d){return d.dup?'dup':!d.name?'noname':!d.price?'noprice':'ok';}
+function draftPill(d){const s=draftState(d);return `<span class="pill ${s==='ok'?'available':s==='dup'?'bad':'in_trade'}">${t('ds_'+s)}</span>`;}
+function draftsHTML(){
+  const list=A.drafts;
+  if(!list)return LOADING();
+  const n=list.length,sel=list.filter(d=>UI.dsel.has(d.id)).length;
+  let h=`<div class="panel pad"><h2>${t('drafts_title')} <span class="cnt">${n}</span></h2><p class="muted small" style="margin:0 0 8px">${t('drafts_hint')}</p>`;
+  if(!n)return h+`<div class="empty">${t('drafts_empty')}</div></div>`;
+  h+=`<div class="notice info">${t('roll_from_avg')}</div><div class="notice" style="margin-top:6px">${t('untrade_note')}</div>
+  <div class="bulk"><label><input type="checkbox" id="dsel-all" ${sel===n?'checked':''}> ${t('select_all')}</label><b>${t('selected_n',{n:sel})}</b>
+  <label class="sr" for="bulk-price">${t('bulk_price')}</label><input id="bulk-price" class="sm" placeholder="${t('price_ph')}"><button class="btn small" data-act="draft-bulk-price" ${sel?'':'disabled'}>${t('bulk_price')}</button>
+  <button class="btn small primary" data-act="draft-publish" ${sel?'':'disabled'}>${t('publish_n',{n:sel})}</button>
+  <button class="btn small danger" data-act="draft-delete" ${sel?'':'disabled'}>${t('delete_selected')}</button></div>
+  <div class="tablewrap"><table><thead><tr><th></th><th>${t('col_equip')}</th><th>${t('col_world')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')} %</th><th>${t('col_price')}</th><th>${t('col_status')}</th></tr></thead><tbody>
+  ${list.map(d=>`<tr><td><input type="checkbox" data-dsel="${d.id}" ${UI.dsel.has(d.id)?'checked':''} aria-label="${t('select_all')}"></td>
+    <td>${d.name?nameCell(d):`<input data-dname="${d.id}" class="grow" style="min-width:260px" placeholder="${t('name_ph')}" aria-label="${t('col_equip')}"><a class="ext" href="${esc(eqUrl(d))}" target="_blank" rel="noopener" data-act="noop">↗ ${d.equip_id}</a>`}<div class="sub">${esc(d.type||'—')} · ${esc(catLabel(d.cat))}</div></td>
+    <td>${worldBadge(d)}</td><td class="num">${d.level??'—'}</td><td>${attrCell(d)}</td>
+    <td><input data-droll="${d.id}" class="sm rollin" inputmode="decimal" placeholder="—" value="${d.roll??''}" aria-label="ROLL %"></td>
+    <td><input data-dprice="${d.id}" class="sm" placeholder="${t('price_ph')}" value="${d.price?fmtPrice(d.price):''}" aria-label="${t('col_price')}"></td>
+    <td id="dst-${d.id}">${draftPill(d)}</td></tr>`).join('')}
+  </tbody></table></div></div>`;
+  return h;
 }
-function renderSellPreview(){const el=$('#sell-preview');if(el)el.innerHTML=sellPreviewHTML();}
-async function doParse(){
-  const {items,bad}=parseHVUT(UI.sellText);
-  /* items already on the market (anyone's) cannot be listed twice */
+function renderDrafts(){const el=$('#drafts-box');if(el)el.innerHTML=draftsHTML();}
+/* field edits are saved on their own shortly after typing stops, and before listing */
+const pendingSaves={};
+function queueDraftSave(id,key,value){const k=id+':'+key;if(pendingSaves[k])clearTimeout(pendingSaves[k].tm);pendingSaves[k]={id,key,value,tm:setTimeout(()=>runDraftSave(k),700)};}
+async function runDraftSave(k){
+  const p=pendingSaves[k];if(!p)return;clearTimeout(p.tm);delete pendingSaves[k];
+  const set={};
+  if(p.key==='name'){const nmv=String(p.value).replace(/\s+/g,' ').trim();const q=QUALITIES.includes(nmv.split(' ')[0])?nmv.split(' ')[0]:'';const tp=typeFromName(nmv);Object.assign(set,{name:nmv,quality:q,type:tp,cat:catOf(tp)});}
+  else set[p.key]=p.value;
+  try{await api('hv_draft_update',{p_ids:[p.id],p_set:set});const d=(A.drafts||[]).find(x=>x.id===p.id);if(d)Object.assign(d,set);}
+  catch(e){handleErr(e);}
+}
+async function flushDraftSaves(){await Promise.all(Object.keys(pendingSaves).map(runDraftSave));}
+function updDraftPill(d){const el=document.getElementById('dst-'+d.id);if(el)el.innerHTML=draftPill(d);}
+async function doImport(){
+  const {items,bad,struck}=parseImport(UI.sellText);
+  UI.sellBad=bad;UI.importMsg='';
+  if(!items.length){UI.importMsg='';renderMain();toast(t('sell_none'),true);return;}
+  const soul=items.filter(x=>x.soul||x.untr).length;
   let active=new Set();
   try{for(const w of new Set(items.map(x=>x.world))){const d=await rpc('hv_market',{p_world:w});A.market[w]=d;d.items.forEach(l=>active.add(w+':'+l.equip_id));}}catch(e){}
-  const seen=new Set();
-  UI.sellRows=items.map(it=>{
-    const k=it.world+':'+it.equip_id;let st='ok';
-    if(it.soul)st='soul';else if(it.untr)st='untrade';else if(seen.has(k))st='duppaste';else if(active.has(k))st='dup';
-    seen.add(k);return Object.assign(it,{st,include:st==='ok',priceText:'',priceErr:false,rollText:it.roll!=null?String(it.roll):''});
+  const seen=new Set(),todo=[];let onMarket=0;
+  for(const it of items){
+    const k=it.world+':'+it.equip_id;
+    if(it.soul||it.untr||seen.has(k))continue;seen.add(k);
+    if(active.has(k)){onMarket++;continue;}
+    todo.push(it);
+  }
+  let added=0,updated=0;
+  const ok=await act(async()=>{
+    for(let i=0;i<todo.length;i+=500){
+      const chunk=todo.slice(i,i+500).map(r=>({world:r.world,equip_id:r.equip_id,equip_key:r.equip_key,quality:r.quality,name:r.name,type:r.type,cat:r.cat,level:r.level,attrs:r.attrs,lame:r.lame,roll:r.roll,hv_avg:r.hv_avg,price:r.price}));
+      const r=await api('hv_draft_add',{p_items:chunk});added+=r.added;updated+=r.updated;
+    }
   });
-  UI.sellBad=bad;renderSellPreview();
-}
-async function doSubmitSell(){
-  const rows=(UI.sellRows||[]).filter(r=>r.st==='ok'&&r.include);
-  if(!rows.length){toast(t('sell_nothing'),true);return;}
-  let bad=false;
-  rows.forEach(r=>{r.price=parsePrice(r.priceText);r.priceErr=!r.price;if(r.priceErr)bad=true;const v=parseFloat(String(r.rollText).replace('%',''));r.rollV=Number.isFinite(v)&&v>=0&&v<=100?Math.round(v*10)/10:null;});
-  if(bad){renderSellPreview();toast(t('sell_fix_prices'),true);return;}
-  const items=rows.map(r=>({world:r.world,equip_id:r.equip_id,equip_key:r.equip_key,quality:r.quality,name:r.name,type:r.type,cat:r.cat,level:r.level,attrs:r.attrs,lame:r.lame,roll:r.rollV,hv_avg:r.hv_avg,price:r.price}));
-  let res=null;
-  const ok=await act(async()=>{res=await api('hv_list_items',{p_items:items});});
-  if(!ok||!res)return;
-  toast(t('sell_done',{n:res.listed})+(res.dup&&res.dup.length?' '+t('sell_done_dup',{n:res.dup.length}):''));
-  UI.sellRows=null;UI.sellText='';UI.sellBad=[];UI.mineTab='selling';UI.mineStatus='available';
-  go('mine');
+  if(!ok)return;
+  const keys=new Set(todo.map(x=>x.world+':'+x.equip_id));
+  (A.drafts||[]).forEach(d=>{if(keys.has(d.world+':'+d.equip_id))UI.dsel.add(d.id);});
+  const parts=[t('import_done',{added,updated})];
+  if(soul)parts.push(t('import_skip_soul',{n:soul}));
+  if(onMarket)parts.push(t('import_skip_active',{n:onMarket}));
+  if(struck)parts.push(t('import_skip_struck',{n:struck}));
+  UI.importMsg=parts.join(' ');UI.sellText='';
+  render();
 }
 
 /* ---- mine ---- */
@@ -1114,8 +1223,13 @@ const H={
   forgot(){mForgot();},
   'change-pw'(){mChangePw(false);},
   async logout(){const tok=P.token;P.token='';A.me=null;savePrefs();UI.notifOpen=false;UI.forcePw=false;closeModal();try{await rpc('hv_logout',{p_token:tok});}catch(e){}if(UI.view==='admin')go('market');else render();},
-  'sell-parse'(){UI.sellText=val('sell-text');doParse();},
-  'sell-submit'(){doSubmitSell();},
+  'sell-import'(){UI.sellText=val('sell-text');doImport();},
+  'draft-bulk-price'(){const p=parsePrice(val('bulk-price'));if(!p){toast(t('price_invalid'),true);return;}const ids=[...UI.dsel];
+    act(async()=>{await flushDraftSaves();await api('hv_draft_update',{p_ids:ids,p_set:{price:p}});},t('toast_done'));},
+  'draft-publish'(){const ids=[...UI.dsel];let r=null;
+    act(async()=>{await flushDraftSaves();r=await api('hv_draft_publish',{p_ids:ids});}).then(ok=>{if(!ok||!r)return;const left=r.dup+r.noprice+r.noname;toast(t('publish_done',{n:r.listed})+(left?' '+t('publish_left',{n:left}):''),left>0);});},
+  'draft-delete'(){openModal(t('delete_selected'),`<p style="margin:0">${t('del_drafts_confirm',{n:UI.dsel.size})}</p>${okCancel('draft-delete-ok','',t('delete_selected'),'danger')}`);},
+  'draft-delete-ok'(){const ids=[...UI.dsel];closeModal();act(()=>api('hv_draft_delete',{p_ids:ids}),t('toast_done'));},
   'mine-tab'(el){UI.mineTab=el.dataset.v;renderMain();},
   'mine-status'(el){UI.mineStatus=el.dataset.v;renderMain();},
   'admin-tab'(el){UI.adminTab=el.dataset.v;renderMain();},
@@ -1178,10 +1292,20 @@ document.addEventListener('input',e=>{
   const el=e.target;
   if(el.dataset.f){UI.filters[el.dataset.f]=el.value;renderResults();return;}
   if(el.id==='sell-text'){UI.sellText=el.value;return;}
-  if(el.dataset.rl!==undefined){UI.sellRows[+el.dataset.rl].rollText=el.value;return;}
-  if(el.dataset.sp!==undefined){const r=UI.sellRows[+el.dataset.sp];r.priceText=el.value;r.priceErr=false;el.classList.remove('err');return;}
-  if(el.dataset.inc!==undefined){UI.sellRows[+el.dataset.inc].include=el.checked;renderSellPreview();return;}
+  if(el.id==='dsel-all'){if(el.checked)(A.drafts||[]).forEach(d=>UI.dsel.add(d.id));else UI.dsel.clear();renderDrafts();return;}
+  if(el.dataset.dsel!==undefined){const id=N(el.dataset.dsel);if(el.checked)UI.dsel.add(id);else UI.dsel.delete(id);renderDrafts();return;}
+  const did=el.dataset.dprice||el.dataset.droll||el.dataset.dname;
+  if(did!==undefined){
+    const d=(A.drafts||[]).find(x=>x.id===N(did));if(!d)return;
+    const v=el.value.trim();
+    if(el.dataset.dprice!==undefined){if(!v){d.price=null;queueDraftSave(d.id,'price',null);}else{const p=parsePrice(v);if(!p){el.classList.add('err');return;}d.price=p;queueDraftSave(d.id,'price',p);}}
+    else if(el.dataset.droll!==undefined){if(!v){d.roll=null;queueDraftSave(d.id,'roll',null);}else{const r=parseFloat(v.replace('%',''));if(!(r>=0&&r<=100)){el.classList.add('err');return;}d.roll=Math.round(r*10)/10;queueDraftSave(d.id,'roll',d.roll);}}
+    else{d.name=v;queueDraftSave(d.id,'name',v);}
+    el.classList.remove('err');updDraftPill(d);return;
+  }
 });
+document.addEventListener('change',e=>{const el=e.target;const did=el.dataset&&(el.dataset.dprice||el.dataset.droll||el.dataset.dname);if(did!==undefined){for(const k of Object.keys(pendingSaves))if(k.startsWith(did+':'))runDraftSave(k);}});
+window.addEventListener('beforeunload',()=>{for(const k of Object.keys(pendingSaves))runDraftSave(k);});
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){back();}
   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&e.target.id&&e.target.id.startsWith('pm-in-')){const b=e.target.parentElement.querySelector('[data-act="pm-send"]');if(b)b.click();}
@@ -1190,7 +1314,7 @@ function route(){
   const h=(location.hash||'#market').slice(1);
   UI.view=['market','sell','mine','inbox','admin'].includes(h)?h:'market';
   UI.notifOpen=false;render();window.scrollTo(0,0);
-  if(UI.view!=='sell')refresh();
+  refresh();
 }
 window.addEventListener('hashchange',route);
 /* keep the bell count fresh, and reload the page's data when the tab comes back into view */
