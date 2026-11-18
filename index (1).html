@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HV Market</title>
+<link rel="icon" href="data:,">
+<style>
+/* HentaiVerse parchment + maroon, so players feel at home. Layout: one column, header nav, tables for scanning. */
+:root{
+  --bg:#E3E0D1;
+  --panel:#EDEBDF;
+  --panel-2:#F7F5EC;
+  --ink:#21160E;
+  --muted:#6B5C4C;
+  --line:#CBBFA3;
+  --accent:#5C0D11;
+  --accent-ink:#FFF8EC;
+  --ok:#2C6A2C; --ok-bg:#DCE8D1;
+  --warn:#8A5600; --warn-bg:#F2E3BD;
+  --bad:#9E1B22; --bad-bg:#F3D6D3;
+  --info-bg:#E4DCC6;
+  --font-body: Verdana, "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+  --font-display: Georgia, "Times New Roman", "Microsoft JhengHei", serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:13px/1.55 var(--font-body)}
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:focus-visible{outline:2px solid #C27C00;outline-offset:1px}
+
+/* demo bar */
+#demo{background:#FFF1BF;border-bottom:1px dashed #B58B00;font-size:12px}
+.drow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:6px 16px}
+.drow .tagp{background:#B58B00;color:#fff;font-weight:700;padding:0 6px;border-radius:2px}
+.drow span.grow{flex:1 1 360px}
+
+/* header */
+#hdr{background:var(--panel);border-bottom:2px solid var(--accent)}
+.hrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;padding-top:8px;padding-bottom:0}
+.brand{display:flex;align-items:baseline;gap:10px;padding-bottom:8px}
+.brand a{font-family:var(--font-display);font-weight:700;font-size:21px;color:var(--accent);text-decoration:none;letter-spacing:.02em}
+.brand .sub{font-size:11px;color:var(--muted)}
+.nav{display:flex;flex-wrap:wrap;align-self:flex-end}
+.navbtn{display:inline-block;padding:7px 12px 8px;color:var(--accent);font-weight:700;text-decoration:none;border-bottom:3px solid transparent}
+.navbtn:hover{background:var(--panel-2)}
+.navbtn.on{border-bottom-color:var(--accent)}
+.cnt{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--line);color:var(--ink);font-size:11px;text-align:center;font-weight:700}
+.navbtn .cnt.hot,.tab .cnt.hot{background:var(--bad);color:#fff}
+.hright{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--accent);border-radius:3px;overflow:hidden}
+.seg button{border:0;background:var(--panel-2);padding:3px 10px;color:var(--accent);cursor:pointer;font:inherit;font-weight:700}
+.seg button + button{border-left:1px solid var(--accent)}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.who{font-weight:700}
+.who small{font-weight:400;color:var(--muted)}
+.bellwrap{position:relative}
+.bell{position:relative;display:inline-flex;align-items:center}
+.bell .badge{position:absolute;top:-7px;right:-8px;background:var(--bad);color:#fff;border-radius:9px;font-size:10px;padding:0 5px;line-height:16px;font-weight:700}
+.dropdown{position:absolute;right:0;top:calc(100% + 6px);width:min(360px,92vw);max-height:440px;overflow:auto;z-index:40;background:var(--panel);border:1px solid var(--accent);border-radius:3px;box-shadow:0 8px 24px rgba(40,20,10,.25)}
+.dd-h{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--line);font-weight:700;color:var(--accent)}
+.nitem{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:8px 10px;font:inherit;cursor:pointer;color:var(--ink)}
+.nitem:hover{background:var(--panel-2)}
+.nitem.unread{background:#FBF3E2;font-weight:700}
+.nitem.admin{border-left:3px solid var(--accent)}
+.nitem time{display:block;font-weight:400;color:var(--muted);font-size:11px}
+
+/* buttons, inputs */
+.btn{display:inline-block;border:1px solid var(--accent);background:var(--panel-2);color:var(--accent);padding:4px 11px;border-radius:3px;cursor:pointer;font:inherit;font-weight:700;text-decoration:none;white-space:nowrap}
+.btn:hover{background:#fff}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{background:#7B171C}
+.btn.small{padding:1px 8px;font-size:12px}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{border:0;background:none;padding:0;color:var(--accent);text-decoration:underline;cursor:pointer;font:inherit}
+input,select,textarea{font:inherit;border:1px solid var(--line);background:#FFFDF7;color:var(--ink);padding:4px 7px;border-radius:3px}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+input.sm{width:72px}
+input.err{border-color:var(--bad);background:var(--bad-bg)}
+textarea{width:100%;resize:vertical}
+.grow{flex:1 1 200px;min-width:160px}
+
+/* layout */
+main{padding:18px 0 40px}
+.mhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:10px}
+h1{font-family:var(--font-display);font-size:22px;color:var(--accent);margin:0;text-wrap:balance}
+h2{font-size:14px;color:var(--accent);margin:0 0 8px}
+.panel{background:var(--panel);border:1px solid var(--accent);border-radius:0 0 3px 3px}
+.panel.pad{padding:14px 16px;border-radius:3px}
+.tabs{display:flex;flex-wrap:wrap;gap:2px}
+.tab{border:1px solid var(--accent);border-bottom:0;background:var(--info-bg);color:var(--accent);padding:6px 14px;border-radius:3px 3px 0 0;cursor:pointer;font:inherit;font-weight:700}
+.tab.on{background:var(--panel)}
+.filters{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+.fgroup{display:inline-flex;align-items:center;gap:4px}
+.fgroup label,.flabel{color:var(--muted);font-size:12px;margin-right:2px}
+.chip{border:1px solid var(--line);background:var(--panel-2);padding:2px 8px;border-radius:3px;cursor:pointer;font:inherit;font-weight:700;color:var(--muted)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip.seller{display:inline-flex;gap:6px;align-items:center}
+.chip.seller button{border:0;background:none;color:inherit;cursor:pointer;font:inherit;padding:0}
+
+/* tables */
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:12px;color:var(--accent);border-bottom:1px solid var(--accent);padding:6px 10px;white-space:nowrap;background:var(--panel)}
+td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--panel-2)}
+.num{text-align:right;white-space:nowrap}
+td .sub{font-size:11px;color:var(--muted)}
+.nm{font-weight:700}
+.ext{text-decoration:none;font-weight:400;margin-left:3px;padding:0 3px;border-radius:2px}
+.ext:hover{background:var(--info-bg)}
+.price{font-weight:700}
+.price small{font-weight:400;color:var(--muted)}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;white-space:nowrap}
+.pill.available{background:var(--ok-bg);color:var(--ok)}
+.pill.in_trade,.pill.active{background:var(--warn-bg);color:var(--warn)}
+.pill.sold,.pill.done{background:var(--info-bg);color:var(--accent)}
+.pill.withdrawn,.pill.archived,.pill.expired,.pill.cancelled{background:#E0DBCF;color:var(--muted)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.lame{background:var(--warn-bg);color:var(--warn);margin-left:2px}
+.rollin{width:58px;text-align:right}
+.wb{display:inline-block;font-size:10px;font-weight:700;border:1px solid var(--line);border-radius:2px;padding:0 4px;color:var(--muted);vertical-align:1px}
+.wb.isk{border-color:#7A5AA8;color:#5B3E88}
+.tag{font-size:11px;color:var(--muted);border:1px dashed var(--line);padding:0 6px;border-radius:2px;white-space:nowrap}
+.attr{display:inline-flex;gap:2px}
+.attr b{display:inline-block;width:17px;text-align:center;font-size:11px;border:1px solid var(--line);background:var(--panel-2);border-radius:2px}
+.avg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.avgbar{width:42px;height:5px;background:#D6CDB7;border-radius:3px;overflow:hidden}
+.avgbar i{display:block;height:100%;background:var(--accent)}
+.avg.hi{font-weight:700}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.acts{white-space:nowrap}
+.acts .btn + .btn{margin-left:4px}
+.warn-t{color:var(--warn)}
+.bad-t{color:var(--bad);font-size:12px}
+
+/* price reference */
+.pref{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--panel-2)}
+.pref-t{font-weight:700;color:var(--accent)}
+.pref-n{display:flex;gap:22px}
+.pref-n div{display:flex;flex-direction:column}
+.pref-n span{font-size:11px;color:var(--muted)}
+.pref-n .price{font-size:16px}
+.hint{padding:8px 12px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px}
+
+/* notices */
+.notice{border-left:3px solid var(--warn);background:var(--warn-bg);padding:8px 11px;font-size:12px;border-radius:0 3px 3px 0}
+.notice.info{border-color:var(--accent);background:var(--info-bg)}
+.notice.bad{border-color:var(--bad);background:var(--bad-bg)}
+.notice.ok{border-color:var(--ok);background:var(--ok-bg)}
+#banner .notice{margin-top:12px}
+
+/* modal */
+.modal-back{position:fixed;inset:0;background:rgba(33,22,14,.5);display:flex;align-items:flex-start;justify-content:center;padding:44px 16px;overflow:auto;z-index:50}
+.modal{background:var(--panel);border:2px solid var(--accent);border-radius:4px;max-width:520px;width:100%;box-shadow:0 12px 34px rgba(0,0,0,.3)}
+.modal.wide{max-width:700px}
+.modal h3{margin:0;padding:9px 12px 9px 16px;background:var(--accent);color:var(--accent-ink);font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.modal h3 .q{color:var(--accent-ink)!important}
+.modal .x{border:0;background:none;color:var(--accent-ink);font-size:20px;line-height:1;cursor:pointer;padding:0 4px}
+.modal .body{padding:14px 16px;display:grid;gap:12px}
+.form{display:grid;gap:6px}
+.form label{font-weight:700;font-size:12px;color:var(--accent);margin-top:4px}
+.form .note{font-size:12px;color:var(--warn);background:var(--warn-bg);padding:5px 8px;border-radius:3px}
+.err{color:var(--bad);margin:0;min-height:1em;font-size:12px}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.dhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dgrid{display:grid;grid-template-columns:max-content 1fr;gap:5px 16px;margin:0}
+.dgrid dt{color:var(--muted);font-size:12px}
+.dgrid dd{margin:0}
+.dact{display:grid;gap:8px}
+.dact .row-btns{display:flex;gap:8px;flex-wrap:wrap}
+.section{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:8px}
+.section h4{margin:0;font-size:12px;color:var(--accent)}
+.thread{display:grid;gap:6px;border:1px solid var(--line);border-radius:3px;padding:8px;background:var(--panel-2)}
+.thread-h{display:flex;justify-content:space-between;font-weight:700;font-size:12px}
+.msg{padding:5px 9px;border-radius:3px;background:#fff;border:1px solid var(--line);max-width:85%;justify-self:start}
+.msg.mine{justify-self:end;background:#F4E6D3}
+.msg time{display:block;font-size:10px;color:var(--muted)}
+.compose{display:flex;gap:6px;align-items:flex-end}
+.compose textarea{min-height:38px}
+.hist{margin:0;padding-left:18px;font-size:12px;color:var(--muted)}
+
+/* sell */
+.sellgrid{display:grid;gap:14px}
+.steps{margin:0 0 8px;padding-left:22px;display:grid;gap:2px}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.badlines{font-family:Consolas,monospace;font-size:11px;background:var(--panel-2);border:1px solid var(--line);padding:6px 8px;white-space:pre-wrap;word-break:break-all;margin:4px 0 0}
+
+/* admin */
+.cards{display:grid;gap:10px;padding:12px}
+.card{border:1px solid var(--line);background:var(--panel-2);border-radius:3px;padding:10px 12px;display:grid;gap:6px}
+.card-h{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.card-a{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.quote{margin:0;padding:6px 10px;border-left:3px solid var(--line);background:#fff}
+.loglist{margin:0;padding:12px 12px 12px 32px;display:grid;gap:4px}
+.pad{padding:12px}
+
+footer{border-top:1px solid var(--line);padding:14px 0 30px;color:var(--muted);font-size:12px}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:9px 16px;border-radius:3px;z-index:70;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+.toast.bad{background:var(--bad)}
+
+@media (max-width:720px){
+  .hide-sm{display:none}
+  .hright{margin-left:0}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+body.busy, body.busy button{cursor:progress}
+</style>
+</head>
+<body>
+<header id="hdr"></header>
+<div id="banner"></div>
+<main class="wrap" id="main"></main>
+<footer><div class="wrap" id="foot"></div></footer>
+<div id="modal-root"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<noscript>HV Market needs JavaScript.</noscript>
+<script>
+/* ====================================================================
+   Settings: paste your Supabase values here (Project Settings → API).
+   url: the Project URL, e.g. https://abcdefgh.supabase.co
+   key: the publishable key (sb_publishable_...) or the legacy anon key.
+   Both are meant to be public; never put the secret / service_role key here.
+   ==================================================================== */
+const CFG={
+  url:"https://josxlmoqtdkucbrtzhfy.supabase.co",
+  key:"sb_publishable_lGHhGSrWTjYwfB3TObgAQw_QB1RJ8Mp",
+};
+const ADMIN_CONTACT='st31118aa', RESET_PW='00000';
+'use strict';
+/* ================= constants ================= */
+const DAY=864e5, HOUR=36e5, EXPIRE_DAYS=30, STALE_DAYS=3, MAX_INTRADE=3;
+const QUALITIES=['Peerless','Legendary','Magnificent','Exquisite','Superior','Average','Fair','Crude','Flimsy'];
+const QCOLOR={Peerless:'#A8127A',Legendary:'#BF5200',Magnificent:'#2457C8',Exquisite:'#237A35',Superior:'#5E5E5E'};
+const CATS=['One-handed Weapon','Two-handed Weapon','Staff','Shield','Cloth Armor','Light Armor','Heavy Armor'];
+const CAT_ZH={'One-handed Weapon':'單手武器','Two-handed Weapon':'雙手武器','Staff':'法杖','Shield':'盾牌','Cloth Armor':'布甲','Light Armor':'輕甲','Heavy Armor':'重甲'};
+const TYPE_TO_CAT={};
+[['One-handed Weapon',['Rapier','Club','Axe','Wakizashi','Dagger','Shortsword']],
+ ['Two-handed Weapon',['Estoc','Longsword','Mace','Great Mace','Katana','Scythe','Swordchucks']],
+ ['Staff',['Oak Staff','Redwood Staff','Willow Staff','Katalox Staff','Ebony Staff']],
+ ['Shield',['Buckler','Kite Shield','Force Shield','Tower Shield']],
+ ['Cloth Armor',['Cotton','Gossamer','Ironsilk','Phase']],
+ ['Light Armor',['Leather','Drakehide','Kevlar','Shade']],
+ ['Heavy Armor',['Plate','Chain','Reactive','Power']]].forEach(([c,ts])=>ts.forEach(x=>TYPE_TO_CAT[x]=c));
+const TYPE_KEYS=Object.keys(TYPE_TO_CAT).sort((a,b)=>b.length-a.length);
+function catOf(type){if(!type)return '';return TYPE_TO_CAT[type]||TYPE_TO_CAT[String(type).split(' ')[0]]||'';}
+const ATTRS=['S','D','E','A','I','W'];
+const ATTR_NAME={S:'Strength',D:'Dexterity',E:'Endurance',A:'Agility',I:'Intelligence',W:'Wisdom'};
+/* base stat ranges per quality (ehwiki, The Armory): ROLL % = (AVG - min) / (max - min) */
+const QRANGE={Legendary:[170,200],Magnificent:[150,180],Exquisite:[120,160],Superior:[90,130],Average:[60,100],Fair:[30,70],Crude:[0,40]};
+function rollFromAvg(q,avg){
+  if(avg==null||!Number.isFinite(avg))return null;
+  if(q==='Peerless')return 100;
+  const r=QRANGE[q];if(!r)return null;
+  const v=(avg-r[0])/(r[1]-r[0])*100;
+  return Math.round(Math.max(0,Math.min(100,v))*10)/10;
+}
+/* cloth armor should carry A, I and W; a missing letter means it is lame */
+function lameOf(cat,attrs){if(cat!=='Cloth Armor'||!attrs)return '';return ['A','I','W'].filter(x=>!attrs.includes(x)).join('');}
+const BAN_DAYS={d1:1,d3:3,d7:7,d30:30,dperm:null};
+const LS_KEY='hvmarket';
+
+/* ================= i18n ================= */
+const T={zh:{
+ loading:"載入中…",
+ refresh:"重新整理",
+ save:"儲存",
+ E_CFG:"網站還沒填 Supabase 的網址和金鑰。請用記事本打開 index.html，在最上面的 CFG 填好 url 和 key。",
+ E_NET:"連不上伺服器，請檢查網路或稍後再試。",
+ E_SERVER:"伺服器發生錯誤，請稍後再試。",
+ E_AUTH:"登入已過期，請重新登入。",
+ E_BANNED:"你的帳號停權中，不能做這個動作。",
+ E_PW_RESET:"請先設定新的密碼。",
+ E_NAME_BAD:"帳號不能包含 < > \" ' & 這些符號。",
+ E_RATE:"嘗試太多次了，請稍後再試。",
+ E_NOT_AVAILABLE:"這件裝備已經不能購買了，可能剛被別人買走，畫面已重新整理。",
+ E_OWN:"不能買自己的裝備。",
+ E_NOT_FOUND:"找不到這件裝備。",
+ E_FORBIDDEN:"沒有權限做這個動作。",
+ E_STATE:"這件裝備的狀態已經改變，畫面已重新整理。",
+ E_PRICE:"價格不正確。",
+ E_BODY:"內容不能空白，也不能太長。",
+ E_BAD:"資料格式不正確。",
+ E_TOO_MANY:"一次最多上架 200 件。",
+ sell_done_dup:"有 {n} 件已經在架上，略過了。",
+ season_set:"季數",
+ season_saved:"已更新季數。",
+ log_set_season:"把 Isekai 季數設為 {s}",
+ pw_pending:"待改密碼",
+ ad_season_confirm_v1:"確定要封存所有 ISK 的上架中與交易中商品，並進入第 {s} 季？這個動作無法復原。",
+ E_NAME_REQ:"請輸入帳號。",
+ E_NAME_LONG:"帳號最多 30 個字元。",
+ E_NAME_TAKEN:"這個帳號已經有人使用。",
+ E_PW_SHORT:"密碼至少要 6 個字元。",
+ E_LOGIN:"帳號或密碼不對。",
+ E_CUR_PW:"目前的密碼不對。",
+ E_RESET_PW:"新密碼不能是 00000。",
+ E_MAX_TRADES:"你同時交易中的裝備已經有 3 件（上限），請先完成或放棄其中一件。",
+ E_DUP:"已經在架上",
+ demo_tag:'原型',demo_note:'資料都是假的，只存在你這台瀏覽器。用右邊切換身分，體驗賣家、買家和管理員看到的畫面。',demo_as:'切換身分',guest:'訪客（未登入）',demo_reset:'重設假資料',demo_reset_done:'假資料已重設。',
+ hint_u0:'管理員，也就是你',hint_u1:'賣家，有一則新私訊',hint_u2:'買家，正在交易一件',hint_u3:'賣家',hint_u4:'新帳號，與 Carol 同 IP',hint_u5:'常常放棄購買',hint_new:'你剛註冊的帳號',
+ site_sub:'HentaiVerse 玩家裝備刊登',nav_market:'市場',nav_sell:'上架',nav_mine:'我的交易',nav_inbox:'私訊',nav_admin:'管理後台',
+ world_main:'主世界',world_isk:'Isekai',login:'登入',register:'註冊',logout:'登出',role_admin:'管理員',suspended:'停權中',
+ notifications:'通知',mark_all_read:'全部標為已讀',no_notifs:'沒有通知。',
+ tab_available:'上架中',tab_in_trade:'交易中',tab_sold:'已售出',
+ f_search:'搜尋裝備名稱',f_cat_all:'全部類型',f_q_all:'全部品質',f_lv:'等級',f_price:'價格',f_attr:'主屬性',f_sort:'排序',
+ sort_new:'最新',sort_price_asc:'價格：低到高',sort_price_desc:'價格：高到低',sort_avg:'ROLL：高到低',sort_lv:'等級：高到低',
+ f_clear:'清除篩選',f_seller:'賣家：{name}',
+ col_equip:'裝備',col_type:'類型',col_lv:'等級',col_attr:'主屬性',col_avg:'ROLL',col_price:'售價',col_sold_price:'成交價',col_seller:'賣家',col_buyer:'買家',col_status:'狀態',col_date:'日期',col_season:'季',col_world:'世界',col_info:'狀況',col_actions:'操作',col_include:'上架',col_role:'身分',col_last:'最後訊息',col_ref:'參考',
+ btn_buy:'購買',yours:'你的商品',empty_results:'沒有符合條件的裝備。',
+ price_ref:'「{q}」的成交紀錄共 {n} 筆',price_min:'最低',price_median:'中位數',price_max:'最高',
+ price_ref_hint:'在搜尋框輸入裝備名稱的一部分，就能看到歷史成交價的最低、中位數和最高，例如 Rapier of Slaughter。',
+ credits_only:'所有價格都是主世界 Credits，ISK 裝備也一樣。',isk_season:'Isekai 第 {n} 季',
+ st_available:'上架中',st_in_trade:'交易中',st_sold:'已售出',st_withdrawn:'已下架',st_archived:'已封存',st_expired:'已過期',
+ open_in_hv:'在 HV 開啟裝備頁',d_listed:'上架日期',d_world:'世界',d_id:'裝備 ID',list_price:'原標價',report_user:'檢舉',
+ login_to_act:'登入後才能購買或私訊賣家。',
+ buy_confirm:'確定要買嗎？按下後商品會變成「交易中」，賣家會收到通知。之後請等賣家用 MoogleMail 以 CoD 寄給你，收信付款就完成交易。',
+ confirm:'確定',cancel:'取消',close:'關閉',
+ you_are_buyer:'你正在跟賣家交易這件裝備，請留意 MoogleMail 的 CoD 信件。',buyer_giveup:'放棄購買',
+ in_trade_other:'這件裝備正在交易中。可以排候補，如果交易取消會通知你。',join_wait:'排候補',leave_wait:'取消候補',on_wait:'你在候補名單第 {n} 位。',
+ your_listing:'這是你的商品。',buyer_is:'買家：{name}',buyer_stats:'近 30 天放棄購買 {n} 次',report_buyer:'檢舉買家',
+ btn_mark_sold:'標記已售出',btn_cancel_trade:'取消交易',btn_edit_price:'改價',btn_withdraw:'下架',btn_renew:'續期',btn_relist:'重新上架',
+ banned_cant:'你的帳號停權中，不能購買或私訊。',too_many_trades:'你同時交易中的裝備已經有 {n} 件（上限），請先完成或放棄其中一件。',
+ sold_on:'{d} 以 {p} 成交。',note_withdrawn:'這件商品已下架。',note_archived:'這件商品已在 Isekai 換季時封存。',note_expired:'這件商品已過期，市場上看不到。',
+ toast_bought:'已通知賣家，請等對方用 MoogleMail 寄出。',toast_done:'完成。',toast_sent:'已送出。',
+ same_item_sales:'這件裝備過去的成交',
+ pm_private_buyer:'只有你和賣家看得到這段對話。',pm_private_seller:'每位買家的留言只有你和那位買家看得到。',pm_threads:'買家私訊',pm_with_seller:'私訊賣家',pm_none:'還沒有人留言。',pm_placeholder:'輸入訊息',pm_send:'送出',pm_empty_thread:'還沒有訊息。可以先問問題或議價。',pm_banned:'停權中無法傳送訊息。',
+ history:'狀態紀錄（只有賣家和管理員看得到）',
+ ev_listed:'上架，售價 {p}',ev_buy:'{u} 按下購買',ev_buyer_cancel:'{u} 放棄購買',ev_seller_cancel:'賣家取消交易：{r}',ev_sold:'已售出，成交價 {p}',ev_price:'改價為 {p}',ev_withdraw:'下架：{r}',ev_renew:'續期',ev_relist:'重新上架',ev_archive:'Isekai 換季封存',
+ r_buyer_gave_up:'買家不買了',r_no_response:'買家一直沒回應',r_seller_changed:'賣家不賣了',r_other:'其他',r_not_selling:'不賣了',r_sold_elsewhere:'在別處賣掉了（不列入成交紀錄）',r_account_deleted:'帳號已刪除',
+ ms_price:'實際成交價',ms_hint:'有議價的話請填實際付款的金額。這個數字會成為其他玩家參考的成交價。',
+ ct_hint:'商品會回到「上架中」，買家會收到通知。原因會記錄下來，只有你和管理員看得到。',reason:'原因',note_optional:'補充說明（可不填）',
+ bg_hint:'商品會回到「上架中」，賣家會收到通知。經常放棄購買可能會被其他玩家檢舉。',
+ price_invalid:'看不懂這個價格，可以寫 1500000、1.5m 或 800k。',price_ph:'例如 1.5m',new_price:'新售價',
+ sell_title:'上架裝備',sell_need_login:'請先登入才能上架。',sell_steps_title:'用 HVUT 產生裝備代碼',
+ sell_step1:'在 HV 進入裝備的「整理」頁面',sell_step2:'先按左側的「可交易的」，只留下可以交易的裝備',sell_step3:'勾選要賣的裝備',sell_step4:'按左側的「裝備代碼」',sell_step5:'把跳出來的文字全部複製，貼到下面的框框',
+ sell_need_hvut:'需要先安裝 HVUT。主世界和 ISK 的裝備可以混在一起貼，網站會自動分開；Soulbound 的裝備會被擋下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 換算的：傳說 170–200、史詩 150–180 對應 0–100%。HVUT 的 AVG 是四捨五入過的整數，所以可能跟實際差 1–2%，需要的話可以直接改。布甲少了 A、I、W 其中一個會自動標成瘸腿。',untrade_note:'記得先按 HVUT 的「可交易的」再勾選。HVUT 代碼不會標出 Untradeable，網站沒辦法替你擋下不可交易的裝備；不可交易的裝備無法用 MoogleMail 寄出，被檢舉會被下架。',lame:'瘸腿',lame_t:'少了 {x} 屬性',
+ sell_paste_ph:'把 HVUT 的裝備代碼貼在這裡',sell_sample:'填入範例',sell_parse:'讀取裝備',sell_preview:'確認並填售價',
+ sell_ok:'可上架',sell_err_dup:'已經在架上',sell_err_duppaste:'重複貼了兩次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
+ sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件裝備。',sell_unread:'下面這幾行讀不懂，已略過：',sell_none:'沒有讀到任何裝備連結。請確認貼上的是 HVUT「裝備代碼」產生的文字。',sell_credits:'售價一律用主世界 Credits，ISK 裝備也一樣。可以寫 1.5m 或 800k。',sell_fix_prices:'有些裝備還沒填售價，或價格格式不對。',sell_nothing:'沒有勾選任何可上架的裝備。',
+ mine_selling:'我賣的',mine_buying:'我買的',mine_all:'全部',mine_closed:'已下架／封存',mine_empty:'這裡還沒有東西。',
+ age_listed:'上架 {d} 天',expires_in:'{d} 天後到期',expired_note:'已過期，市場上看不到，按「續期」重新顯示',trade_days:'交易中 {d} 天',stale_warn:'已超過 {d} 天，請跟買家確認或取消交易',
+ b_active:'交易中',b_done:'已成交',b_cancelled:'已放棄或被取消',sold_date:'{d} 成交',
+ login_needed:'請先登入。',
+ inbox_empty:'還沒有私訊。',inbox_as_seller:'你是賣家',inbox_as_buyer:'你是買家',
+ login_title:'登入',reg_title:'註冊帳號',f_username:'帳號（遊戲 ID）',f_password:'密碼',f_password2:'再輸入一次密碼',
+ reg_name_note:'強烈建議使用與論壇相同的 ID，否則買家想用 MoogleMail 聯絡你會非常麻煩，只能使用網站的私訊功能；如果對方不常開網站，就要等很久。',
+ reg_pw_note:'強烈建議不要使用與論壇或其他網站相同的密碼。',
+ reg_no_email:'本站不使用 Email。忘記密碼時，請用 MoogleMail 聯絡管理員 {admin} 重設。',
+ err_name_req:'請輸入帳號。',err_name_long:'帳號最多 30 個字元。',err_name_taken:'這個帳號已經有人使用。',err_pw_short:'密碼至少要 6 個字元。',err_pw_match:'兩次輸入的密碼不一樣。',err_login:'帳號或密碼不對。',
+ login_demo_hint:'原型：示範帳號 Alice、Bob、Carol、Dave、Eve、Admin 的密碼都是 demo。',
+ no_account:'還沒有帳號？註冊',forgot_pw:'忘記密碼？',forgot_title:'忘記密碼',forgot_body:'請用 MoogleMail 寄信給 {admin}，在信裡寫上你在本站的帳號名稱。管理員重設後，你的密碼會變成 {pw}，用它登入後網站會要求你立刻設定新密碼。',forgot_note:'為了確認是本人，寄件人的遊戲 ID 要跟本站帳號名稱相同；如果你註冊時用了別的名字，請在信裡說明。',back_login:'回到登入',change_pw:'更改密碼',cur_pw:'目前的密碼',new_pw:'新密碼',new_pw2:'再輸入一次新密碼',err_cur_pw:'目前的密碼不對。',err_reset_pw:'新密碼不能是 {pw}。',pw_changed:'密碼已更新。',must_change:'你的密碼剛被管理員重設成 {pw}，請先設定新的密碼才能繼續使用。',have_account:'已經有帳號？登入',reg_done:'註冊完成，已經登入。',welcome:'歡迎，{name}。',
+ banned_banner:'你的帳號停權到 {until}。原因：{reason}。停權期間不能上架、購買或私訊。',banned_banner_perm:'你的帳號已被永久停權。原因：{reason}。',
+ rp_title:'檢舉 {name}',rp_cat:'類型',rc_alt:'開分身炒價格',rc_flake:'亂買又放棄，浪費時間',rc_noship:'沒有依約完成交易',rc_untrade:'上架不能交易的裝備',rc_harass:'騷擾或不當留言',rc_other:'其他',rp_listing:'相關商品',rp_none:'（沒有特定商品）',rp_body:'說明（越具體越好）',rp_submit:'送出檢舉',rp_done:'檢舉已送出，只有管理員看得到。',rp_need_body:'請寫一下發生了什麼事。',rp_private:'檢舉內容只有管理員看得到，被檢舉的人不會知道是誰檢舉的。',
+ ad_reports:'檢舉',ad_users:'使用者',ad_ip:'同 IP 警示',ad_trades:'成交紀錄',ad_season:'Isekai 換季',ad_log:'操作紀錄',ad_open:'待處理',ad_resolved:'已處理',
+ ad_reporter:'{a} 檢舉 {b}',ad_target_stats:'{name}：近 30 天購買 {buy} 次、放棄 {cancel} 次，被檢舉 {rep} 次，註冊 {age} 天',
+ ad_warn:'警告',ad_ban:'停權',ad_unban:'解除停權',ad_resolve:'標記已處理',ad_resolve_note:'處理備註（只有你看得到）',ad_reset_pw:'重設密碼',ad_delete:'刪除帳號',ad_no_reports:'沒有檢舉。',ad_resolved_note:'處理備註：{note}',
+ ad_u_name:'帳號',ad_u_joined:'註冊',ad_u_listing:'上架中',ad_u_sold:'賣出',ad_u_bought:'買到',ad_u_cancel:'放棄（30天）',ad_u_reports:'被檢舉',ad_u_state:'狀態',ad_normal:'正常',ad_banned_until:'停權到 {d}',ad_banned_perm:'永久停權',ad_warned:'警告 {n} 次',ad_ip_with:'與 {names} 同 IP',
+ ad_ip_title:'這些帳號使用同一個註冊 IP',ad_ip_note:'系統只保存 IP 加鹽後的雜湊值，用來比對是否相同，連管理員也看不到原始 IP。同一個家庭、學校、網咖或手機網路可能共用 IP，要不要處理請自行判斷。',ad_ip_dismiss:'確認沒問題',ad_ip_none:'目前沒有共用註冊 IP 的帳號。',ad_ip_dismissed:'已確認沒問題',
+ ad_trade_hint:'買家欄只有你看得到。疑似分身刷價的紀錄可以排除，就不會出現在公開的已售出列表和成交價統計。',ad_exclude:'排除',ad_include:'恢復',ad_excluded:'已排除',ad_included:'列入',
+ ad_season_now:'目前是 Isekai 第 {n} 季',ad_season_btn:'Isekai 換季：封存所有 ISK 商品',ad_season_desc:'所有 ISK 的「上架中」和「交易中」商品會改成「已封存」，賣家會收到通知。成交紀錄會保留並標上季數。',ad_season_confirm:'確定要封存 {n} 件 ISK 商品，並進入第 {s} 季？這個動作無法復原。',ad_season_done:'已封存 {n} 件，現在是 Isekai 第 {s} 季。',
+ ad_log_empty:'還沒有操作紀錄。',
+ warn_title:'警告 {name}',warn_msg:'訊息內容（會出現在對方的通知裡）',warn_need:'請輸入訊息。',
+ ban_title:'停權 {name}',ban_dur:'時間',d1:'1 天',d3:'3 天',d7:'7 天',d30:'30 天',dperm:'永久',ban_reason:'原因（對方會看到）',ban_effect:'停權期間不能上架、購買或私訊，上架中的商品會從市場隱藏。',ban_need:'請輸入原因。',
+ pw_title:'重設 {name} 的密碼',pw_confirm:'把 {name} 的密碼重設成 {pw}？對方下次登入時，網站會要求他立刻改成新密碼。',pw_check:'收到 MoogleMail 時，先確認寄件人的遊戲 ID 跟這個帳號名稱相同，避免有人冒名要求重設別人的密碼。',pw_done:'已重設 {name} 的密碼。',
+ del_title:'刪除 {name} 的帳號',del_desc:'刪除後無法復原。對方上架中的商品會下架，成交紀錄保留。對方可以用同一個名字重新註冊。',del_done:'已刪除 {name} 的帳號。',
+ log_warn:'警告 {name}：{msg}',log_ban:'停權 {name}（{dur}）：{reason}',log_unban:'解除 {name} 的停權',log_pw:'重設 {name} 的密碼',log_del:'刪除帳號 {name}',log_resolve:'處理檢舉 #{id}：{note}',log_ip:'確認同 IP 帳號沒問題：{names}',log_exclude:'排除成交紀錄：{item}',log_include:'恢復成交紀錄：{item}',log_season:'Isekai 換季，封存 {n} 件，進入第 {s} 季',
+ n_buy:'{u} 想買你的 {item}，已變成交易中。請用 MoogleMail 以 CoD 寄給 {u}。',n_msg:'{u} 在 {item} 傳了私訊給你。',n_buyer_cancel:'{u} 放棄購買 {item}，商品已回到上架中。',n_seller_cancel:'賣家取消了 {item} 的交易：{r}。',n_sold:'{item} 交易完成，賣家已標記售出。',n_wait:'你候補的 {item} 又可以購買了。',n_admin_pm:'管理員訊息：{text}',n_ban:'你的帳號已被停權（{dur}）：{reason}',n_unban:'你的帳號已解除停權。',n_archived:'Isekai 換季，你有 {n} 件 ISK 商品已封存。',n_report_done:'你提交的檢舉已處理，謝謝回報。',n_report:'{a} 檢舉了 {b}，請到管理後台查看。',n_ip:'新註冊的 {u} 與 {others} 使用相同 IP，請到管理後台確認。',
+ just_now:'剛剛',hours_ago:'{h} 小時前',days_ago:'{d} 天前',deleted_user:'（已刪除）',
+ footer:'本站只是刊登平台，交易請玩家之間自行用 MoogleMail 以 CoD 完成。只接受遊戲內 Credits，禁止任何現金交易。'
+},
+en:{
+ loading:"Loading…",
+ refresh:"Refresh",
+ save:"Save",
+ E_CFG:"The site has no Supabase URL and key yet. Open index.html in a text editor and fill in url and key in CFG at the top.",
+ E_NET:"Cannot reach the server. Check your connection or try again later.",
+ E_SERVER:"Server error. Please try again later.",
+ E_AUTH:"Your login has expired. Please log in again.",
+ E_BANNED:"Your account is suspended, so you cannot do this.",
+ E_PW_RESET:"Set a new password first.",
+ E_NAME_BAD:"Usernames cannot contain < > \" ' or &.",
+ E_RATE:"Too many attempts. Please try again later.",
+ E_NOT_AVAILABLE:"This item can no longer be bought; someone may have just bought it. The page has been refreshed.",
+ E_OWN:"You cannot buy your own item.",
+ E_NOT_FOUND:"Listing not found.",
+ E_FORBIDDEN:"You are not allowed to do this.",
+ E_STATE:"This listing has changed. The page has been refreshed.",
+ E_PRICE:"The price is not valid.",
+ E_BODY:"The text cannot be empty or too long.",
+ E_BAD:"The data is not valid.",
+ E_TOO_MANY:"You can list at most 200 items at once.",
+ sell_done_dup:"{n} were already listed and were skipped.",
+ season_set:"Season",
+ season_saved:"Season updated.",
+ log_set_season:"Set the Isekai season to {s}",
+ pw_pending:"must change password",
+ ad_season_confirm_v1:"Archive every Isekai listing that is for sale or in trade, and start season {s}? This cannot be undone.",
+ E_NAME_REQ:"Enter a username.",
+ E_NAME_LONG:"Usernames can be at most 30 characters.",
+ E_NAME_TAKEN:"That username is taken.",
+ E_PW_SHORT:"The password must be at least 6 characters.",
+ E_LOGIN:"Wrong username or password.",
+ E_CUR_PW:"The current password is wrong.",
+ E_RESET_PW:"The new password cannot be 00000.",
+ E_MAX_TRADES:"You already have 3 items in trade, which is the limit. Finish or withdraw one first.",
+ E_DUP:"Already listed",
+ demo_tag:'Prototype',demo_note:'All data is fake and stays in this browser. Switch identity on the right to see what sellers, buyers and the admin see.',demo_as:'View as',guest:'Guest (not logged in)',demo_reset:'Reset demo data',demo_reset_done:'Demo data reset.',
+ hint_u0:'admin, that is you',hint_u1:'seller, has a new message',hint_u2:'buyer, one trade in progress',hint_u3:'seller',hint_u4:'new account, same IP as Carol',hint_u5:'often backs out',hint_new:'the account you just made',
+ site_sub:'HentaiVerse player equipment listings',nav_market:'Market',nav_sell:'Sell',nav_mine:'My trades',nav_inbox:'Messages',nav_admin:'Admin',
+ world_main:'Persistent',world_isk:'Isekai',login:'Log in',register:'Sign up',logout:'Log out',role_admin:'admin',suspended:'suspended',
+ notifications:'Notifications',mark_all_read:'Mark all read',no_notifs:'No notifications.',
+ tab_available:'For sale',tab_in_trade:'In trade',tab_sold:'Sold',
+ f_search:'Search equipment name',f_cat_all:'All categories',f_q_all:'All qualities',f_lv:'Level',f_price:'Price',f_attr:'Primary stats',f_sort:'Sort',
+ sort_new:'Newest',sort_price_asc:'Price: low to high',sort_price_desc:'Price: high to low',sort_avg:'ROLL: high to low',sort_lv:'Level: high to low',
+ f_clear:'Clear filters',f_seller:'Seller: {name}',
+ col_equip:'Equipment',col_type:'Type',col_lv:'Level',col_attr:'Stats',col_avg:'ROLL',col_price:'Price',col_sold_price:'Sold for',col_seller:'Seller',col_buyer:'Buyer',col_status:'Status',col_date:'Date',col_season:'Season',col_world:'World',col_info:'Details',col_actions:'Actions',col_include:'List',col_role:'Role',col_last:'Last message',col_ref:'Reference',
+ btn_buy:'Buy',yours:'Your listing',empty_results:'No equipment matches these filters.',
+ price_ref:'{n} sales matching “{q}”',price_min:'Lowest',price_median:'Median',price_max:'Highest',
+ price_ref_hint:'Type part of an equipment name in the search box to see the lowest, median and highest past sale prices, for example Rapier of Slaughter.',
+ credits_only:'All prices are in Persistent Credits, Isekai items included.',isk_season:'Isekai season {n}',
+ st_available:'For sale',st_in_trade:'In trade',st_sold:'Sold',st_withdrawn:'Withdrawn',st_archived:'Archived',st_expired:'Expired',
+ open_in_hv:'Open in HentaiVerse',d_listed:'Listed',d_world:'World',d_id:'Equipment ID',list_price:'listed at',report_user:'Report',
+ login_to_act:'Log in to buy or message the seller.',
+ buy_confirm:'Buy this item? It will switch to In Trade and the seller will be notified. Then wait for the seller to send it by MoogleMail with CoD; paying for the mail completes the trade.',
+ confirm:'Confirm',cancel:'Cancel',close:'Close',
+ you_are_buyer:'You are trading for this item. Watch your MoogleMail for the CoD mail.',buyer_giveup:'Withdraw purchase',
+ in_trade_other:'This item is in trade. Join the waitlist to be notified if the trade falls through.',join_wait:'Join waitlist',leave_wait:'Leave waitlist',on_wait:'You are #{n} on the waitlist.',
+ your_listing:'This is your listing.',buyer_is:'Buyer: {name}',buyer_stats:'withdrew {n} purchases in the last 30 days',report_buyer:'Report buyer',
+ btn_mark_sold:'Mark as sold',btn_cancel_trade:'Cancel trade',btn_edit_price:'Edit price',btn_withdraw:'Withdraw',btn_renew:'Renew',btn_relist:'Relist',
+ banned_cant:'Your account is suspended. You cannot buy or send messages.',too_many_trades:'You already have {n} items in trade, which is the limit. Finish or withdraw one first.',
+ sold_on:'Sold for {p} on {d}.',note_withdrawn:'This listing was withdrawn.',note_archived:'This listing was archived at the end of the Isekai season.',note_expired:'This listing has expired and is hidden from the market.',
+ toast_bought:'The seller has been notified. Wait for them to send it by MoogleMail.',toast_done:'Done.',toast_sent:'Sent.',
+ same_item_sales:'Past sales of this exact item',
+ pm_private_buyer:'Only you and the seller can see this conversation.',pm_private_seller:'Each buyer’s messages are visible only to you and that buyer.',pm_threads:'Buyer messages',pm_with_seller:'Message the seller',pm_none:'No messages yet.',pm_placeholder:'Write a message',pm_send:'Send',pm_empty_thread:'No messages yet. Ask a question or make an offer.',pm_banned:'You cannot send messages while suspended.',
+ history:'History (only the seller and admin can see this)',
+ ev_listed:'Listed at {p}',ev_buy:'{u} clicked Buy',ev_buyer_cancel:'{u} withdrew',ev_seller_cancel:'Seller cancelled the trade: {r}',ev_sold:'Sold for {p}',ev_price:'Price changed to {p}',ev_withdraw:'Withdrawn: {r}',ev_renew:'Renewed',ev_relist:'Relisted',ev_archive:'Archived at Isekai season end',
+ r_buyer_gave_up:'Buyer backed out',r_no_response:'Buyer not responding',r_seller_changed:'Seller changed their mind',r_other:'Other',r_not_selling:'No longer selling',r_sold_elsewhere:'Sold elsewhere (not counted in sale history)',r_account_deleted:'Account deleted',
+ ms_price:'Final price',ms_hint:'If you negotiated, enter the amount actually paid. Other players will see this as the reference price.',
+ ct_hint:'The item goes back to For Sale and the buyer is notified. The reason is kept on record, visible only to you and the admin.',reason:'Reason',note_optional:'Note (optional)',
+ bg_hint:'The item goes back to For Sale and the seller is notified. Backing out often may get you reported by other players.',
+ price_invalid:'Could not read that price. Use 1500000, 1.5m or 800k.',price_ph:'e.g. 1.5m',new_price:'New price',
+ sell_title:'List equipment',sell_need_login:'Log in to list equipment.',sell_steps_title:'Generate equipment code with HVUT',
+ sell_step1:'In HV, open the equipment management page',sell_step2:'First click the tradeable-only filter on the left (可交易的) so only tradeable items are shown',sell_step3:'Tick the equipment you want to sell',sell_step4:'Click “Equipment Code” on the left',sell_step5:'Copy all of the text that appears and paste it into the box below',
+ sell_need_hvut:'Requires HVUT. You can paste Persistent and Isekai equipment together; the site sorts them. Soulbound items are rejected.',roll_from_avg:'ROLL % is converted from HVUT’s AVG: Legendary 170–200 and Magnificent 150–180 map to 0–100%. HVUT rounds AVG to a whole number, so the result can be off by 1–2%; edit it if you need to. Cloth armor missing A, I or W is flagged as lame.',untrade_note:'Remember to click HVUT’s tradeable-only filter before ticking items. The HVUT code does not mark Untradeable items, so the site cannot reject them; an untradeable item cannot be sent by MoogleMail, and reported listings are taken down.',lame:'Lame',lame_t:'missing {x}',
+ sell_paste_ph:'Paste the HVUT equipment code here',sell_sample:'Fill in sample',sell_parse:'Read equipment',sell_preview:'Check and set prices',
+ sell_ok:'Ready',sell_err_dup:'Already listed',sell_err_duppaste:'Pasted twice',sell_err_soul:'Soulbound, cannot be listed',sell_err_untrade:'Untradeable, cannot be listed',
+ sell_submit:'List {n} items',sell_done:'Listed {n} items.',sell_unread:'These lines could not be read and were skipped:',sell_none:'No equipment links found. Make sure you pasted the text from HVUT “Equipment Code”.',sell_credits:'Prices are always in Persistent Credits, Isekai items included. You can write 1.5m or 800k.',sell_fix_prices:'Some items have no price yet or the price could not be read.',sell_nothing:'No listable items are ticked.',
+ mine_selling:'Selling',mine_buying:'Buying',mine_all:'All',mine_closed:'Withdrawn / archived',mine_empty:'Nothing here yet.',
+ age_listed:'listed {d}d ago',expires_in:'expires in {d}d',expired_note:'Expired and hidden from the market. Renew to show it again.',trade_days:'in trade {d}d',stale_warn:'Over {d} days. Check with the buyer or cancel the trade.',
+ b_active:'In trade',b_done:'Completed',b_cancelled:'Withdrawn or cancelled',sold_date:'sold {d}',
+ login_needed:'Please log in first.',
+ inbox_empty:'No messages yet.',inbox_as_seller:'You are selling',inbox_as_buyer:'You are buying',
+ login_title:'Log in',reg_title:'Create account',f_username:'Username (in-game name)',f_password:'Password',f_password2:'Confirm password',
+ reg_name_note:'We strongly recommend using the same name as on the forums. Otherwise buyers cannot reach you by MoogleMail and must use site messages, which can take a long time if you rarely visit.',
+ reg_pw_note:'We strongly recommend not reusing your forum password or a password from any other site.',
+ reg_no_email:'This site does not use email. If you forget your password, MoogleMail the admin {admin} to reset it.',
+ err_name_req:'Enter a username.',err_name_long:'Usernames can be at most 30 characters.',err_name_taken:'That username is taken.',err_pw_short:'The password must be at least 6 characters.',err_pw_match:'The passwords do not match.',err_login:'Wrong username or password.',
+ login_demo_hint:'Prototype: demo accounts Alice, Bob, Carol, Dave, Eve and Admin all use the password demo.',
+ no_account:'No account? Sign up',forgot_pw:'Forgot password?',forgot_title:'Forgot password',forgot_body:'Send a MoogleMail to {admin} with your username on this site. Once the admin resets it, your password will be {pw}; log in with it and the site will ask you to set a new password right away.',forgot_note:'To confirm it is you, the in-game name you mail from must match your username here. If you signed up with a different name, explain in the mail.',back_login:'Back to log in',change_pw:'Change password',cur_pw:'Current password',new_pw:'New password',new_pw2:'Confirm new password',err_cur_pw:'The current password is wrong.',err_reset_pw:'The new password cannot be {pw}.',pw_changed:'Password updated.',must_change:'Your password was reset to {pw} by the admin. Set a new password to continue.',have_account:'Have an account? Log in',reg_done:'Account created. You are logged in.',welcome:'Welcome, {name}.',
+ banned_banner:'Your account is suspended until {until}. Reason: {reason}. While suspended you cannot list, buy or send messages.',banned_banner_perm:'Your account is permanently suspended. Reason: {reason}.',
+ rp_title:'Report {name}',rp_cat:'Type',rc_alt:'Alt accounts / price manipulation',rc_flake:'Keeps buying then backing out',rc_noship:'Did not complete the trade as agreed',rc_untrade:'Listed an item that cannot be traded',rc_harass:'Harassment or abusive messages',rc_other:'Other',rp_listing:'Related listing',rp_none:'(no specific listing)',rp_body:'Details (be as specific as you can)',rp_submit:'Submit report',rp_done:'Report sent. Only the admin can see it.',rp_need_body:'Describe what happened.',rp_private:'Only the admin can see reports. The reported player will not know who reported them.',
+ ad_reports:'Reports',ad_users:'Users',ad_ip:'Same-IP alerts',ad_trades:'Sales',ad_season:'Isekai season',ad_log:'Action log',ad_open:'Open',ad_resolved:'Resolved',
+ ad_reporter:'{a} reported {b}',ad_target_stats:'{name}, last 30 days: {buy} buys, {cancel} withdrawals; reported {rep} times; account {age} days old',
+ ad_warn:'Warn',ad_ban:'Suspend',ad_unban:'Lift suspension',ad_resolve:'Mark resolved',ad_resolve_note:'Resolution note (only you see this)',ad_reset_pw:'Reset password',ad_delete:'Delete account',ad_no_reports:'No reports.',ad_resolved_note:'Resolution note: {note}',
+ ad_u_name:'User',ad_u_joined:'Joined',ad_u_listing:'Listed',ad_u_sold:'Sold',ad_u_bought:'Bought',ad_u_cancel:'Withdrew (30d)',ad_u_reports:'Reported',ad_u_state:'Status',ad_normal:'Active',ad_banned_until:'Suspended until {d}',ad_banned_perm:'Suspended permanently',ad_warned:'{n} warnings',ad_ip_with:'same IP as {names}',
+ ad_ip_title:'These accounts registered from the same IP',ad_ip_note:'Only a salted hash of each IP is stored, used to check for matches; not even the admin can see the actual IP. Households, schools, internet cafés and mobile networks can share an IP, so judge each case yourself.',ad_ip_dismiss:'Mark as OK',ad_ip_none:'No accounts share a registration IP.',ad_ip_dismissed:'Marked OK',
+ ad_trade_hint:'Only you can see the buyer column. Exclude suspected wash trades to keep them out of the public sold list and price stats.',ad_exclude:'Exclude',ad_include:'Restore',ad_excluded:'Excluded',ad_included:'Included',
+ ad_season_now:'Current Isekai season: {n}',ad_season_btn:'End Isekai season: archive all Isekai listings',ad_season_desc:'All Isekai listings that are for sale or in trade become Archived, and their sellers are notified. Sale records are kept and labelled with the season.',ad_season_confirm:'Archive {n} Isekai listings and start season {s}? This cannot be undone.',ad_season_done:'Archived {n} listings. Isekai season {s} has started.',
+ ad_log_empty:'No actions yet.',
+ warn_title:'Warn {name}',warn_msg:'Message (shown in their notifications)',warn_need:'Enter a message.',
+ ban_title:'Suspend {name}',ban_dur:'Duration',d1:'1 day',d3:'3 days',d7:'7 days',d30:'30 days',dperm:'Permanent',ban_reason:'Reason (shown to them)',ban_effect:'While suspended they cannot list, buy or send messages, and their listings are hidden from the market.',ban_need:'Enter a reason.',
+ pw_title:'Reset password for {name}',pw_confirm:'Reset {name}’s password to {pw}? They will be asked to set a new password the next time they log in.',pw_check:'When the MoogleMail arrives, check that the sender’s in-game name matches this username, so nobody can get someone else’s password reset.',pw_done:'Password reset for {name}.',
+ del_title:'Delete {name}’s account',del_desc:'This cannot be undone. Their active listings are withdrawn; sale records are kept. They can sign up again with the same name.',del_done:'Deleted {name}’s account.',
+ log_warn:'Warned {name}: {msg}',log_ban:'Suspended {name} ({dur}): {reason}',log_unban:'Lifted suspension for {name}',log_pw:'Reset password for {name}',log_del:'Deleted account {name}',log_resolve:'Resolved report #{id}: {note}',log_ip:'Marked same-IP accounts as OK: {names}',log_exclude:'Excluded sale: {item}',log_include:'Restored sale: {item}',log_season:'Ended Isekai season, archived {n}, started season {s}',
+ n_buy:'{u} wants to buy your {item}. It is now In Trade. Send it to {u} by MoogleMail with CoD.',n_msg:'{u} sent you a message about {item}.',n_buyer_cancel:'{u} withdrew from buying {item}. It is for sale again.',n_seller_cancel:'The seller cancelled the trade for {item}: {r}.',n_sold:'Trade complete: the seller marked {item} as sold.',n_wait:'{item} from your waitlist is for sale again.',n_admin_pm:'Message from the admin: {text}',n_ban:'Your account was suspended ({dur}): {reason}',n_unban:'Your suspension was lifted.',n_archived:'Isekai season ended. {n} of your Isekai listings were archived.',n_report_done:'Your report has been handled. Thank you.',n_report:'{a} reported {b}. Check the admin panel.',n_ip:'New account {u} shares a registration IP with {others}. Check the admin panel.',
+ just_now:'just now',hours_ago:'{h}h ago',days_ago:'{d}d ago',deleted_user:'(deleted)',
+ footer:'This site only hosts listings. Players complete trades themselves by MoogleMail with CoD. In-game Credits only; real-money trading is not allowed.'
+}};
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function t(k,p){
+  let s=(T[P.lang]&&T[P.lang][k]!==undefined)?T[P.lang][k]:(T.zh[k]!==undefined?T.zh[k]:k);
+  if(p) s=s.replace(/\{(\w+)\}/g,(m,x)=>{const v=p[x];if(v===undefined||v===null)return m;return (typeof v==='object'&&'html' in v)?v.html:esc(v);});
+  return s;
+}
+
+/* ================= state ================= */
+const P={lang:'zh',world:'main',token:''};               // kept in this browser
+function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}}
+function savePrefs(){try{localStorage.setItem(LS_KEY,JSON.stringify(P));}catch(e){}}
+const A={me:null,market:{},mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
+function defaultFilters(){return {q:'',cat:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',attrs:[],sort:'new',seller:''};}
+const UI={view:'market',tab:'available',filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
+  sellText:'',sellRows:null,sellBad:[],notifOpen:false,detailId:null,buyConfirm:null,forcePw:false,busy:false};
+
+/* ================= server ================= */
+class ApiErr extends Error{constructor(code){super(code);this.code=code;}}
+async function rpc(fn,args){
+  if(!CFG.url||!CFG.key)throw new ApiErr('E_CFG');
+  const h={'Content-Type':'application/json','apikey':CFG.key};
+  if(/^eyJ/.test(CFG.key))h.Authorization='Bearer '+CFG.key;   // legacy anon key is a JWT; publishable keys go in apikey only
+  let r;
+  try{r=await fetch(CFG.url.replace(/\/+$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:h,body:JSON.stringify(args||{})});}
+  catch(e){throw new ApiErr('E_NET');}
+  let j=null;try{j=await r.json();}catch(e){}
+  if(!r.ok){const m=(j&&j.message)||'';console.warn(fn,r.status,j);throw new ApiErr(/^E_[A-Z_]+$/.test(m)?m:'E_SERVER');}
+  return j;
+}
+const api=(fn,args)=>rpc(fn,Object.assign({p_token:P.token},args||{}));
+function handleErr(e){
+  const c=(e&&e.code)||'E_SERVER';
+  if(c==='E_AUTH'){P.token='';A.me=null;savePrefs();closeModal();render();toast(t('E_AUTH'),true);return;}
+  if(c==='E_PW_RESET'){mChangePw(true);return;}
+  if(!(e instanceof ApiErr))console.error(e);
+  toast(T.zh[c]!==undefined?t(c):t('E_SERVER'),true);
+  if(c==='E_STATE'||c==='E_NOT_AVAILABLE')after();
+}
+/* run one change at a time; reload what is on screen afterwards */
+async function act(fn,okMsg){
+  if(UI.busy)return false;UI.busy=true;document.body.classList.add('busy');
+  try{await fn();if(okMsg)toast(okMsg);await after();return true;}
+  catch(e){handleErr(e);return false;}
+  finally{UI.busy=false;document.body.classList.remove('busy');}
+}
+async function loadMe(){
+  if(!P.token){A.me=null;return;}
+  const m=await rpc('hv_me',{p_token:P.token});
+  if(!m){P.token='';savePrefs();}
+  A.me=m||null;
+}
+async function loadView(){
+  switch(UI.view){
+    case 'market':A.market[P.world]=await rpc('hv_market',{p_world:P.world});break;
+    case 'mine':A.mine=A.me?await api('hv_mine'):null;break;
+    case 'inbox':A.inbox=A.me?await api('hv_inbox'):null;break;
+    case 'admin':A.admin=isAdmin()?await api('hv_admin_data'):null;break;
+  }
+}
+async function refresh(){
+  try{await loadMe();await loadView();}catch(e){handleErr(e);}
+  render();
+}
+async function after(){
+  try{await loadMe();await loadView();if(UI.detailId)A.detail=await rpc('hv_listing',{p_token:P.token||null,p_id:UI.detailId});}
+  catch(e){if(e.code==='E_NOT_FOUND'){UI.detailId=null;closeModal();}else handleErr(e);}
+  render();
+  if(UI.detailId&&A.detail&&$('#modal-root .detail'))renderDetail();
+  checkForcedPw();
+}
+
+/* ================= helpers ================= */
+const $=s=>document.querySelector(s);
+const ts=x=>x?Date.parse(x):0;
+function me(){return A.me;}
+function isAdmin(){return !!(A.me&&A.me.role==='admin');}
+function isBanned(u){const b=u&&u.banned_until;if(!b)return false;if(b==='infinity')return true;return Date.parse(b)>Date.now();}
+function banText(u){return u.banned_until==='infinity'?t('banned_banner_perm',{reason:u.ban_reason||''}):t('banned_banner',{until:fmtDate(ts(u.banned_until)),reason:u.ban_reason||''});}
+function eqUrl(l){return `https://hentaiverse.org/${l.world==='isekai'?'isekai/':''}equip/${l.equip_id}/${l.equip_key}`;}
+function daysSince(x){return Math.max(0,Math.floor((Date.now()-ts(x))/DAY));}
+function fmtNum(v){return Number(v).toLocaleString('en-US');}
+function trimNum(n){return String(+n.toFixed(2));}
+function fmtPrice(v){v=Math.round(Number(v));if(v>=1e6)return trimNum(v/1e6)+'m';if(v>=1e3)return trimNum(v/1e3)+'k';return String(v);}
+function priceHTML(v){return `<span class="price" title="${fmtNum(Math.round(v))} Credits">${fmtPrice(v)}<small> C</small></span>`;}
+function parsePrice(s){s=String(s||'').trim().toLowerCase().replace(/[,\s]/g,'').replace(/credits?$|c$/,'');const m=s.match(/^(\d+(?:\.\d+)?)([km]?)$/);if(!m)return null;let v=parseFloat(m[1]);if(m[2]==='k')v*=1e3;if(m[2]==='m')v*=1e6;v=Math.round(v);return v>0&&v<1e12?v:null;}
+function fmtDate(ms){const d=new Date(ms);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function ago(x){const diff=Date.now()-ts(x);if(diff<HOUR)return t('just_now');if(diff<DAY)return t('hours_ago',{h:Math.floor(diff/HOUR)});return t('days_ago',{d:Math.floor(diff/DAY)});}
+function catLabel(c){return P.lang==='zh'?(CAT_ZH[c]||c||'—'):(c||'—');}
+function qName(l){const q=l.quality||'';const rest=q&&l.name.startsWith(q+' ')?l.name.slice(q.length+1):l.name;return q?`<span class="q" style="color:${QCOLOR[q]||'var(--ink)'}">${esc(q)}</span> ${esc(rest)}`:esc(rest);}
+function nameCell(l){return `<span class="nm">${qName(l)}</span><a class="ext" href="${esc(eqUrl(l))}" target="_blank" rel="noopener" data-act="noop" title="${t('open_in_hv')}" aria-label="${t('open_in_hv')}">↗</a>`;}
+function worldBadge(l){return l.world==='isekai'?`<span class="wb isk">ISK</span>`:`<span class="wb">${t('world_main')}</span>`;}
+function attrHTML(a){return a?`<span class="attr">${a.split('').map(x=>`<b title="${ATTR_NAME[x]||x}">${x}</b>`).join('')}</span>`:'<span class="muted">—</span>';}
+function lameHTML(l){return l&&l.lame?` <span class="pill lame" title="${t('lame_t',{x:l.lame})}">${t('lame')}</span>`:'';}
+function attrCell(l){return attrHTML(l.attrs)+lameHTML(l);}
+function avgHTML(v){if(v==null||v==='')return '<span class="muted">—</span>';v=Number(v);return `<span class="avg ${v>=80?'hi':''}"><span class="avgbar"><i style="width:${Math.max(0,Math.min(100,v))}%"></i></span>${v.toFixed(1)}%</span>`;}
+function pill(st){return `<span class="pill ${st}">${t('st_'+st)}</span>`;}
+function sellerLink(l){return `<a href="#market" data-act="seller-filter" data-uid="${l.seller_id}" data-name="${esc(l.seller)}">${esc(l.seller)}</a>`;}
+function deriveType(name){for(const k of TYPE_KEYS){if(new RegExp('\\b'+k+'\\b').test(name))return k;}return '';}
+function notifText(n){const p=Object.assign({},n.params);if(p.rk)p.r=t(p.rk);if(p.dk)p.dur=t(p.dk);return t('n_'+n.type,p);}
+
+/* ================= HVUT parser ================= */
+function stripBB(s){return s.replace(/\[\/?(?:size|b|i|u|s|color|font|url)(?:=[^\]]*)?\]/gi,'');}
+function parseHVUT(text){
+  /* [size=3] = category, [size=2] = type, then
+     [316911528] [url=https://hentaiverse.org/equip/316911528/acd6e112b5]Name[/url] (Lv.500, AVG: 186, IW)
+     Soulbound items have "Soulbound" in place of the level. HVUT's AVG is the average base-stat roll. */
+  const items=[],bad=[];let cat='',type='';
+  const catByLower={};CATS.forEach(c=>catByLower[c.toLowerCase()]=c);
+  for(const raw of String(text).split(/\r?\n/)){
+    const line=raw.trim();if(!line)continue;
+    const h=line.match(/^\[size=(\d+)\]\s*\[b\]\s*\[(.+?)\]\s*\[\/b\]\s*\[\/size\]$/i);
+    if(h){const nm=h[2].trim();if(+h[1]>=3){cat=catByLower[nm.toLowerCase()]||nm;type='';}else type=nm;continue;}
+    const m=line.match(/\[url=\s*(?:https?:\/\/)?(?:alt\.)?hentaiverse\.org\/(isekai\/)?equip\/(\d+)\/([0-9a-f]{6,})\/?\s*\]([\s\S]*?)\[\/url\]\s*(?:\(([^()]*)\))?/i);
+    if(!m){bad.push(line);continue;}
+    const world=m[1]?'isekai':'main',equip_id=+m[2],equip_key=m[3].toLowerCase();
+    const name=stripBB(m[4]).replace(/\s+/g,' ').trim();
+    const first=name.split(' ')[0];const quality=QUALITIES.includes(first)?first:'';
+    let level=null,soul=false,untr=false,attrs='',hv_avg=null;
+    for(const part of (m[5]||'').split(',').map(x=>x.trim()).filter(Boolean)){
+      let x;
+      if((x=part.match(/^(?:Lv|Level)\.?\s*(\d{1,4})$/i)))level=+x[1];
+      else if(/^soul\s*bound$/i.test(part))soul=true;
+      else if(/^un\s*trad(?:e)?able$/i.test(part))untr=true;
+      else if((x=part.match(/^AVG\s*[:=]?\s*(\d+(?:\.\d+)?)/i)))hv_avg=Math.round(+x[1]);
+      else if(/^[SDEAIW]{1,6}$/.test(part))attrs=part;
+    }
+    if(/靈魂綁定|灵魂绑定/.test(line))soul=true;
+    let tp=type||deriveType(name);const c=cat&&CATS.includes(cat)?cat:catOf(tp);
+    if(/Armor$/.test(c)&&tp&&!/\s/.test(tp)){const pm=name.match(new RegExp('\\b'+tp+'\\s+([A-Z][a-z]+)\\b'));if(pm&&pm[1]!=='Of')tp=tp+' '+pm[1];}
+    items.push({world,equip_id,equip_key,name,quality,type:tp,cat:c,level,roll:rollFromAvg(quality,hv_avg),hv_avg,attrs,lame:lameOf(c,attrs),soul,untr});
+  }
+  return {items,bad};
+}
+
+/* ================= rendering ================= */
+function render(){
+  renderHeader();renderBanner();renderMain();
+  $('#foot').textContent=t('footer');
+  const n=A.me?A.me.unread:0;document.title=(n?`(${n}) `:'')+'HV Market';
+}
+const BELL='<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a6 6 0 0 0-6 6v3.6l-1.7 2.8A1 1 0 0 0 5.2 17h13.6a1 1 0 0 0 .9-1.6L18 12.6V9a6 6 0 0 0-6-6zm0 19a2.5 2.5 0 0 0 2.4-2H9.6a2.5 2.5 0 0 0 2.4 2z"/></svg>';
+function renderHeader(){
+  const u=A.me,unread=u?u.unread:0;
+  const nav=[['market','nav_market'],['sell','nav_sell'],['mine','nav_mine'],['inbox','nav_inbox']];
+  if(isAdmin())nav.push(['admin','nav_admin']);
+  let right=`<div class="seg" role="group" aria-label="World"><button data-act="world" data-v="main" class="${P.world==='main'?'on':''}" aria-pressed="${P.world==='main'}">${t('world_main')}</button><button data-act="world" data-v="isekai" class="${P.world==='isekai'?'on':''}" aria-pressed="${P.world==='isekai'}">Isekai</button></div>
+  <div class="seg" role="group" aria-label="Language"><button data-act="lang" data-v="zh" class="${P.lang==='zh'?'on':''}" aria-pressed="${P.lang==='zh'}">中文</button><button data-act="lang" data-v="en" class="${P.lang==='en'?'on':''}" aria-pressed="${P.lang==='en'}">EN</button></div>`;
+  if(u){
+    let dd='';
+    if(UI.notifOpen){
+      const list=A.notifs;
+      dd=`<div class="dropdown"><div class="dd-h"><span>${t('notifications')}</span>${unread?`<button class="link small" data-act="notif-all">${t('mark_all_read')}</button>`:''}</div>${!list?`<div class="empty">${t('loading')}</div>`:list.length?list.map(n=>`<button class="nitem ${n.read?'':'unread'} ${n.type==='admin_pm'||n.type==='ban'?'admin':''}" data-act="notif-open" data-id="${n.id}">${notifText(n)}<time>${ago(n.at)}</time></button>`).join(''):`<div class="empty">${t('no_notifs')}</div>`}</div>`;
+    }
+    right+=`<div class="bellwrap"><button class="btn bell" data-act="bell" aria-label="${t('notifications')}" aria-expanded="${UI.notifOpen}">${BELL}${unread?`<span class="badge">${unread}</span>`:''}</button>${dd}</div>
+    <span class="who">${esc(u.name)}${u.role==='admin'?` <small>${t('role_admin')}</small>`:''}${isBanned(u)?` <span class="pill bad">${t('suspended')}</span>`:''}</span><button class="btn small" data-act="change-pw">${t('change_pw')}</button><button class="btn small" data-act="logout">${t('logout')}</button>`;
+  } else {
+    right+=`<button class="btn small" data-act="login">${t('login')}</button><button class="btn small primary" data-act="register">${t('register')}</button>`;
+  }
+  $('#hdr').innerHTML=`<div class="wrap hrow"><div class="brand"><a href="#market">HV Market</a><span class="sub">${t('site_sub')}</span></div>
+  <nav class="nav">${nav.map(([v,k])=>`<a class="navbtn ${UI.view===v?'on':''}" href="#${v}">${t(k)}</a>`).join('')}</nav>
+  <div class="hright">${right}</div></div>`;
+}
+function renderBanner(){
+  const u=A.me,b=$('#banner');
+  if(!CFG.url||!CFG.key)b.innerHTML=`<div class="wrap"><div class="notice bad">${t('E_CFG')}</div></div>`;
+  else if(u&&isBanned(u))b.innerHTML=`<div class="wrap"><div class="notice bad">${banText(u)}</div></div>`;
+  else b.innerHTML='';
+}
+const LOADING=()=>`<div class="panel pad"><div class="empty">${t('loading')}</div></div>`;
+function renderMain(){
+  let h='';
+  switch(UI.view){case 'sell':h=viewSell();break;case 'mine':h=viewMine();break;case 'inbox':h=viewInbox();break;case 'admin':h=viewAdmin();break;default:h=viewMarket();}
+  $('#main').innerHTML=h;
+  if(UI.view==='market'&&A.market[P.world])renderResults();
+}
+function needLogin(k){return `<div class="panel pad"><p>${t(k)}</p><div class="row-btns"><button class="btn primary" data-act="login">${t('login')}</button><button class="btn" data-act="register">${t('register')}</button></div></div>`;}
+
+/* ---- market ---- */
+function viewMarket(){
+  const data=A.market[P.world];
+  const f=UI.filters;
+  const head=`<div class="mhead"><h1>${P.world==='main'?t('world_main'):t('isk_season',{n:data?data.season:'…'})}</h1><span class="muted">${t('credits_only')}</span></div>`;
+  if(!data)return head+LOADING();
+  const counts={available:data.items.filter(l=>l.status==='available').length,in_trade:data.items.filter(l=>l.status==='in_trade').length,sold:data.sold.length};
+  const catOpts=CATS.map(c=>`<option value="${c}" ${f.cat===c?'selected':''}>${esc(catLabel(c))}</option>`).join('');
+  const qOpts=['Peerless','Legendary','Magnificent','Exquisite','Superior'].map(q=>`<option value="${q}" ${f.qual===q?'selected':''}>${q}</option>`).join('');
+  const sorts=['new','price_asc','price_desc','avg','lv'].map(s=>`<option value="${s}" ${f.sort===s?'selected':''}>${t('sort_'+s)}</option>`).join('');
+  return head+`
+  <div class="tabs" role="tablist">${['available','in_trade','sold'].map(k=>`<button class="tab ${UI.tab===k?'on':''}" role="tab" aria-selected="${UI.tab===k}" data-act="tab" data-v="${k}">${t('tab_'+k)} <span class="cnt">${counts[k]}</span></button>`).join('')}</div>
+  <div class="panel">
+    <div class="filters">
+      <label class="sr" for="f-q">${t('f_search')}</label><input id="f-q" class="grow" type="search" data-f="q" placeholder="${t('f_search')}" value="${esc(f.q)}">
+      <label class="sr" for="f-cat">${t('col_type')}</label><select id="f-cat" data-f="cat"><option value="">${t('f_cat_all')}</option>${catOpts}</select>
+      <label class="sr" for="f-qual">Quality</label><select id="f-qual" data-f="qual"><option value="">${t('f_q_all')}</option>${qOpts}</select>
+      <span class="fgroup"><label for="f-lvmin">${t('f_lv')}</label><input id="f-lvmin" class="sm" data-f="lvMin" inputmode="numeric" placeholder="min" value="${esc(f.lvMin)}">–<input id="f-lvmax" class="sm" data-f="lvMax" inputmode="numeric" placeholder="max" value="${esc(f.lvMax)}" aria-label="${t('f_lv')} max"></span>
+      <span class="fgroup"><label for="f-pmin">${t('f_price')}</label><input id="f-pmin" class="sm" data-f="pMin" placeholder="100k" value="${esc(f.pMin)}">–<input id="f-pmax" class="sm" data-f="pMax" placeholder="10m" value="${esc(f.pMax)}" aria-label="${t('f_price')} max"></span>
+      <span class="fgroup" role="group" aria-label="${t('f_attr')}"><span class="flabel">${t('f_attr')}</span>${ATTRS.map(a=>`<button class="chip ${f.attrs.includes(a)?'on':''}" data-act="attr" data-v="${a}" title="${ATTR_NAME[a]}" aria-pressed="${f.attrs.includes(a)}">${a}</button>`).join('')}</span>
+      <label class="sr" for="f-sort">${t('f_sort')}</label><select id="f-sort" data-f="sort">${sorts}</select>
+      ${f.seller?`<span class="chip on seller">${t('f_seller',{name:f.sellerName||''})}<button data-act="clear-seller" aria-label="${t('f_clear')}">×</button></span>`:''}
+      <button class="btn small" data-act="clear-filters">${t('f_clear')}</button>
+      <button class="btn small" data-act="reload">${t('refresh')}</button>
+    </div>
+    <div id="results"></div>
+  </div>`;
+}
+function marketList(){
+  const data=A.market[P.world];if(!data)return [];
+  const f=UI.filters,sold=UI.tab==='sold';
+  let arr=sold?data.sold.slice():data.items.filter(l=>l.status===UI.tab);
+  const pk=sold?'sold_price':'price',tk=sold?'sold_at':'renewed_at';
+  const words=f.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const lvMin=parseInt(f.lvMin)||0,lvMax=parseInt(f.lvMax)||Infinity,pMin=parsePrice(f.pMin)||0,pMax=parsePrice(f.pMax)||Infinity;
+  arr=arr.filter(l=>{
+    const nm=l.name.toLowerCase();
+    if(words.some(w=>!nm.includes(w)))return false;
+    if(f.cat&&l.cat!==f.cat)return false;
+    if(f.qual&&l.quality!==f.qual)return false;
+    const lv=l.level||0;if(lv<lvMin||lv>lvMax)return false;
+    if(l[pk]<pMin||l[pk]>pMax)return false;
+    if(f.attrs.length&&!f.attrs.every(a=>(l.attrs||'').includes(a)))return false;
+    if(f.seller&&String(l.seller_id)!==String(f.seller))return false;
+    return true;
+  });
+  const sorters={new:(a,b)=>ts(b[tk])-ts(a[tk]),price_asc:(a,b)=>a[pk]-b[pk],price_desc:(a,b)=>b[pk]-a[pk],avg:(a,b)=>(b.roll??-1)-(a.roll??-1),lv:(a,b)=>(b.level||0)-(a.level||0)};
+  return arr.sort(sorters[f.sort]||sorters.new);
+}
+function renderResults(){
+  const box=$('#results');if(!box)return;
+  const arr=marketList(),u=A.me,sold=UI.tab==='sold',isk=P.world==='isekai';
+  let h='';
+  if(sold){
+    const q=UI.filters.q.trim();
+    if(q&&arr.length){
+      const v=arr.map(l=>l.sold_price).sort((a,b)=>a-b);const k=v.length;
+      const med=k%2?v[(k-1)/2]:(v[k/2-1]+v[k/2])/2;
+      h+=`<div class="pref"><div class="pref-t">${t('price_ref',{q,n:k})}</div><div class="pref-n"><div><span>${t('price_min')}</span>${priceHTML(v[0])}</div><div><span>${t('price_median')}</span>${priceHTML(med)}</div><div><span>${t('price_max')}</span>${priceHTML(v[k-1])}</div></div></div>`;
+    } else if(!q) h+=`<div class="hint">${t('price_ref_hint')}</div>`;
+  }
+  if(!arr.length){box.innerHTML=h+`<div class="empty">${t('empty_results')}</div>`;return;}
+  if(sold){
+    h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th>${isk?`<th>${t('col_season')}</th>`:''}</tr></thead><tbody>`+
+    arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>S${l.season??'?'}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
+  } else {
+    const it=UI.tab==='in_trade';
+    h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_seller')}</th><th>${it?t('col_status'):''}</th></tr></thead><tbody>`+
+    arr.map(l=>{
+      let a='';
+      if(it)a=pill('in_trade');
+      else if(u&&u.id===l.seller_id)a=`<span class="tag">${t('yours')}</span>`;
+      else a=`<button class="btn small primary" data-act="buy-ask" data-lid="${l.id}">${t('btn_buy')}</button>`;
+      return `<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
+    }).join('')+`</tbody></table></div>`;
+  }
+  box.innerHTML=h;
+}
+
+/* ---- detail ---- */
+async function openDetail(id){
+  id=Number(id);UI.detailId=id;A.detail=null;
+  openModal(t('loading'),`<div class="detail"><div class="empty">${t('loading')}</div></div>`,{wide:true});
+  try{A.detail=await rpc('hv_listing',{p_token:P.token||null,p_id:id});}
+  catch(e){UI.detailId=null;closeModal();handleErr(e);return;}
+  if(UI.detailId===id)renderDetail();
+}
+function renderDetail(){const d=A.detail;if(!d)return;const keep=UI.detailId;openModal(qName(d),`<div class="detail">${detailHTML(d)}</div>`,{wide:true,label:d.name});UI.detailId=keep;}
+function detailHTML(d){
+  const u=A.me,v=d.viewer||{},st=d.status;
+  const priceRow=st==='sold'?[t('col_sold_price'),priceHTML(d.sold_price)+` <span class="muted small">（${t('list_price')} ${fmtPrice(d.price)}）</span>`]:[t('col_price'),priceHTML(d.price)];
+  const rows=[
+    [t('col_type'),`${esc(d.type||'—')} · ${esc(catLabel(d.cat))}`],
+    [t('col_lv'),d.level??'—'],
+    [t('col_attr'),attrCell(d)],
+    [t('col_avg'),avgHTML(d.roll)+(d.hv_avg!=null?` <span class="muted small">（HVUT AVG ${d.hv_avg}）</span>`:'')],
+    priceRow,
+    [t('col_seller'),`${esc(d.seller)}${u&&!v.is_seller&&!d.seller_deleted?` · <button class="link" data-act="report" data-uid="${d.seller_id}" data-name="${esc(d.seller)}" data-lid="${d.id}">${t('report_user')}</button>`:''}`],
+    [t('d_world'),worldBadge(d)+(d.world==='isekai'&&d.season?` ${t('isk_season',{n:d.season})}`:'')],
+    [t('d_listed'),fmtDate(ts(d.created_at))],
+    [t('d_id'),`<a href="${esc(eqUrl(d))}" target="_blank" rel="noopener">${d.equip_id} ↗</a>`],
+  ];
+  const past=d.past||[];
+  return `<div class="dhead">${pill(st)}<a class="btn small" href="${esc(eqUrl(d))}" target="_blank" rel="noopener">${t('open_in_hv')} ↗</a></div>
+  <dl class="dgrid">${rows.map(([k,x])=>`<dt>${k}</dt><dd>${x}</dd>`).join('')}</dl>
+  <div class="dact">${actionArea(d)}</div>
+  ${past.length?`<div class="section"><h4>${t('same_item_sales')}</h4><ul class="hist">${past.map(x=>`<li>${fmtDate(ts(x.sold_at))} · ${fmtPrice(x.sold_price)} · ${esc(x.seller)}</li>`).join('')}</ul></div>`:''}
+  ${pmArea(d)}
+  ${d.history?historyHTML(d):''}`;
+}
+function actionArea(d){
+  const u=A.me,v=d.viewer||{},st=d.status;
+  if(st==='sold')return `<div class="notice info">${t('sold_on',{d:fmtDate(ts(d.sold_at)),p:{html:priceHTML(d.sold_price)}})}</div>`;
+  if(v.is_seller)return sellerActions(d);
+  if(st==='withdrawn')return `<div class="notice info">${t('note_withdrawn')}</div>`;
+  if(st==='archived')return `<div class="notice info">${t('note_archived')}</div>`;
+  if(st==='expired')return `<div class="notice info">${t('note_expired')}</div>`;
+  if(!u)return `<div class="notice info">${t('login_to_act')}</div><div class="row-btns"><button class="btn primary" data-act="login">${t('login')}</button><button class="btn" data-act="register">${t('register')}</button></div>`;
+  if(isBanned(u))return `<div class="notice bad">${t('banned_cant')}</div>`;
+  if(st==='available'){
+    if(UI.buyConfirm===d.id)return `<div class="notice">${t('buy_confirm')}</div><div class="row-btns"><button class="btn primary" data-act="buy-yes" data-lid="${d.id}">${t('confirm')}</button><button class="btn" data-act="buy-no" data-lid="${d.id}">${t('cancel')}</button></div>`;
+    return `<div class="row-btns"><button class="btn primary" data-act="buy" data-lid="${d.id}">${t('btn_buy')} · ${fmtPrice(d.price)} C</button></div>`;
+  }
+  if(st==='in_trade'){
+    if(v.is_buyer)return `<div class="notice ok">${t('you_are_buyer')}</div><div class="row-btns"><button class="btn danger" data-act="giveup" data-lid="${d.id}" data-name="${esc(d.name)}">${t('buyer_giveup')}</button></div>`;
+    const pos=v.wait_pos||0;
+    return `<div class="notice">${t('in_trade_other')}${pos?' '+t('on_wait',{n:pos}):''}</div><div class="row-btns">${pos?`<button class="btn" data-act="wait" data-v="leave" data-lid="${d.id}">${t('leave_wait')}</button>`:`<button class="btn" data-act="wait" data-v="join" data-lid="${d.id}">${t('join_wait')}</button>`}</div>`;
+  }
+  return '';
+}
+function sellerActions(l){
+  const st=l.status;let msg='';
+  if(st==='in_trade'){
+    const dd=daysSince(l.trade_at);
+    msg=`<div class="notice ${dd>=STALE_DAYS?'bad':''}">${t('buyer_is',{name:l.buyer||'?'})}（${t('buyer_stats',{n:l.buyer_cancels30||0})}）· ${t('trade_days',{d:dd})}${dd>=STALE_DAYS?'<br>'+t('stale_warn',{d:STALE_DAYS}):''} · <button class="link" data-act="report" data-uid="${l.buyer_id}" data-name="${esc(l.buyer||'')}" data-lid="${l.id}">${t('report_buyer')}</button></div>`;
+  } else if(st==='expired')msg=`<div class="notice">${t('expired_note')}</div>`;
+  else if(st==='withdrawn')msg=`<div class="notice info">${t('note_withdrawn')}</div>`;
+  else if(st==='archived')msg=`<div class="notice info">${t('note_archived')}</div>`;
+  else msg=`<div class="notice info">${t('your_listing')}</div>`;
+  const b=sellerBtns(l);
+  return msg+(b?`<div class="row-btns">${b}</div>`:'');
+}
+function sellerBtns(l){
+  const st=l.status,out=[];
+  if(isBanned(A.me))return '';
+  const B=(a,k,cls)=>`<button class="btn small ${cls||''}" data-act="${a}" data-lid="${l.id}" data-name="${esc(l.name)}" data-price="${l.price}">${t(k)}</button>`;
+  if(st==='available'){out.push(B('edit-price','btn_edit_price'),B('withdraw','btn_withdraw'));if(daysSince(l.renewed_at)>=EXPIRE_DAYS-7)out.push(B('renew','btn_renew'));}
+  if(st==='expired')out.push(B('renew','btn_renew','primary'),B('withdraw','btn_withdraw'));
+  if(st==='in_trade')out.push(B('mark-sold','btn_mark_sold','primary'),B('cancel-trade','btn_cancel_trade'));
+  if(st==='withdrawn')out.push(B('relist','btn_relist'));
+  return out.join('');
+}
+function threadHTML(lid,th,canSend){
+  const u=A.me;
+  const body=th.msgs.length?th.msgs.map(m=>`<div class="msg ${m.from_id===u.id?'mine':''}">${esc(m.body)}<time>${esc(m.from)} · ${ago(m.at)}</time></div>`).join(''):`<div class="muted small">${t('pm_empty_thread')}</div>`;
+  const comp=canSend?`<div class="compose"><label class="sr" for="pm-in-${th.buyer_id}">${t('pm_placeholder')}</label><textarea id="pm-in-${th.buyer_id}" rows="2" maxlength="1000" placeholder="${t('pm_placeholder')}"></textarea><button class="btn primary" data-act="pm-send" data-lid="${lid}" data-buyer="${th.buyer_id}">${t('pm_send')}</button></div>`:'';
+  return body+comp;
+}
+function pmArea(d){
+  const u=A.me;if(!u)return '';
+  const v=d.viewer||{},st=d.status,threads=(d.threads||[]).slice();
+  const canSend=!isBanned(u)&&!u.pw_reset&&st!=='archived';
+  if(v.is_seller){
+    if(st==='in_trade'&&d.buyer_id&&!threads.some(x=>x.buyer_id===d.buyer_id))threads.unshift({buyer_id:d.buyer_id,buyer:d.buyer,msgs:[]});
+    return `<div class="section"><h4>${t('pm_threads')}</h4><div class="muted small">${t('pm_private_seller')}</div>${threads.length?threads.map(th=>`<div class="thread"><div class="thread-h"><span>${esc(th.buyer)}</span><button class="link small" data-act="report" data-uid="${th.buyer_id}" data-name="${esc(th.buyer)}" data-lid="${d.id}">${t('report_user')}</button></div>${threadHTML(d.id,th,canSend)}</div>`).join(''):`<div class="muted small">${t('pm_none')}</div>`}</div>`;
+  }
+  const mine=threads[0]||{buyer_id:u.id,msgs:[]};
+  if(!mine.msgs.length&&(st==='withdrawn'||st==='archived'||st==='expired'))return '';
+  return `<div class="section"><h4>${t('pm_with_seller')}</h4><div class="muted small">${t('pm_private_buyer')}</div><div class="thread">${threadHTML(d.id,{buyer_id:u.id,msgs:mine.msgs},canSend)}</div>${isBanned(u)?`<div class="muted small">${t('pm_banned')}</div>`:''}</div>`;
+}
+function evText(e){
+  const x=e.data||{};
+  switch(e.type){
+    case 'listed':return t('ev_listed',{p:fmtPrice(x.p)});
+    case 'buy':return t('ev_buy',{u:e.by});
+    case 'buyer_cancel':return t('ev_buyer_cancel',{u:e.by})+(x.note?`：${esc(x.note)}`:'');
+    case 'seller_cancel':return t('ev_seller_cancel',{r:t(x.r)})+(x.note?`（${esc(x.note)}）`:'');
+    case 'sold':return t('ev_sold',{p:fmtPrice(x.p)});
+    case 'price':return t('ev_price',{p:fmtPrice(x.p)});
+    case 'withdraw':return t('ev_withdraw',{r:t(x.r)});
+    case 'renew':return t('ev_renew');
+    case 'relist':return t('ev_relist');
+    case 'archive':return t('ev_archive');
+  }
+  return esc(e.type);
+}
+function historyHTML(d){return `<div class="section"><h4>${t('history')}</h4><ul class="hist">${d.history.map(e=>`<li>${fmtDate(ts(e.at))} · ${evText(e)}</li>`).join('')}</ul></div>`;}
+
+/* ---- sell ---- */
+function viewSell(){
+  const u=A.me;if(!u)return needLogin('sell_need_login');
+  if(isBanned(u))return `<div class="notice bad">${t('banned_cant')}</div>`;
+  return `<div class="mhead"><h1>${t('sell_title')}</h1></div>
+  <div class="sellgrid">
+    <div class="panel pad">
+      <h2>${t('sell_steps_title')}</h2>
+      <ol class="steps"><li>${t('sell_step1')}</li><li><b>${t('sell_step2')}</b></li><li>${t('sell_step3')}</li><li>${t('sell_step4')}</li><li>${t('sell_step5')}</li></ol>
+      <p class="muted small">${t('sell_need_hvut')}</p>
+      <label class="sr" for="sell-text">${t('sell_paste_ph')}</label>
+      <textarea id="sell-text" rows="9" placeholder="${t('sell_paste_ph')}">${esc(UI.sellText)}</textarea>
+      <div class="row-btns"><button class="btn primary" data-act="sell-parse">${t('sell_parse')}</button></div>
+    </div>
+    <div id="sell-preview">${sellPreviewHTML()}</div>
+  </div>`;
+}
+function sellPreviewHTML(){
+  const rows=UI.sellRows;if(!rows)return '';
+  const badBlock=UI.sellBad.length?`<p class="muted small">${t('sell_unread')}</p><pre class="badlines">${esc(UI.sellBad.join('\n'))}</pre>`:'';
+  if(!rows.length)return `<div class="panel pad"><div class="notice bad">${t('sell_none')}</div>${badBlock}</div>`;
+  const n=rows.filter(r=>r.st==='ok'&&r.include).length;
+  const stLabel=r=>r.st==='ok'?`<span class="pill available">${t('sell_ok')}</span>`:`<span class="pill bad">${t({dup:'sell_err_dup',duppaste:'sell_err_duppaste',soul:'sell_err_soul',untrade:'sell_err_untrade'}[r.st])}</span>`;
+  return `<div class="panel pad"><h2>${t('sell_preview')}</h2><p class="muted small">${t('sell_credits')}</p><div class="notice info">${t('roll_from_avg')}</div><div class="notice">${t('untrade_note')}</div>
+  <div class="tablewrap"><table><thead><tr><th>${t('col_include')}</th><th>${t('col_equip')}</th><th>${t('col_world')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')} %</th><th>${t('col_price')}</th><th>${t('col_status')}</th></tr></thead><tbody>
+  ${rows.map((r,i)=>`<tr><td>${r.st==='ok'?`<input type="checkbox" id="inc-${i}" data-inc="${i}" ${r.include?'checked':''} aria-label="${t('col_include')}">`:''}</td>
+    <td>${nameCell(r)}<div class="sub">${esc(r.type||'—')} · ${esc(catLabel(r.cat))}</div></td><td>${worldBadge(r)}</td><td class="num">${r.level??'—'}</td><td>${attrCell(r)}</td>
+    <td>${r.st==='ok'?`<input id="rl-${i}" class="sm rollin" data-rl="${i}" inputmode="decimal" placeholder="—" value="${esc(r.rollText)}" aria-label="ROLL %">`:avgHTML(r.roll)}</td>
+    <td>${r.st==='ok'?`<input id="sp-${i}" class="sm ${r.priceErr?'err':''}" data-sp="${i}" placeholder="${t('price_ph')}" value="${esc(r.priceText)}" aria-label="${t('col_price')}">`:''}</td><td>${stLabel(r)}</td></tr>`).join('')}
+  </tbody></table></div>
+  ${badBlock}
+  <div class="row-btns"><button class="btn primary" data-act="sell-submit" ${n?'':'disabled'}>${t('sell_submit',{n})}</button></div></div>`;
+}
+function renderSellPreview(){const el=$('#sell-preview');if(el)el.innerHTML=sellPreviewHTML();}
+async function doParse(){
+  const {items,bad}=parseHVUT(UI.sellText);
+  /* items already on the market (anyone's) cannot be listed twice */
+  let active=new Set();
+  try{for(const w of new Set(items.map(x=>x.world))){const d=await rpc('hv_market',{p_world:w});A.market[w]=d;d.items.forEach(l=>active.add(w+':'+l.equip_id));}}catch(e){}
+  const seen=new Set();
+  UI.sellRows=items.map(it=>{
+    const k=it.world+':'+it.equip_id;let st='ok';
+    if(it.soul)st='soul';else if(it.untr)st='untrade';else if(seen.has(k))st='duppaste';else if(active.has(k))st='dup';
+    seen.add(k);return Object.assign(it,{st,include:st==='ok',priceText:'',priceErr:false,rollText:it.roll!=null?String(it.roll):''});
+  });
+  UI.sellBad=bad;renderSellPreview();
+}
+async function doSubmitSell(){
+  const rows=(UI.sellRows||[]).filter(r=>r.st==='ok'&&r.include);
+  if(!rows.length){toast(t('sell_nothing'),true);return;}
+  let bad=false;
+  rows.forEach(r=>{r.price=parsePrice(r.priceText);r.priceErr=!r.price;if(r.priceErr)bad=true;const v=parseFloat(String(r.rollText).replace('%',''));r.rollV=Number.isFinite(v)&&v>=0&&v<=100?Math.round(v*10)/10:null;});
+  if(bad){renderSellPreview();toast(t('sell_fix_prices'),true);return;}
+  const items=rows.map(r=>({world:r.world,equip_id:r.equip_id,equip_key:r.equip_key,quality:r.quality,name:r.name,type:r.type,cat:r.cat,level:r.level,attrs:r.attrs,lame:r.lame,roll:r.rollV,hv_avg:r.hv_avg,price:r.price}));
+  let res=null;
+  const ok=await act(async()=>{res=await api('hv_list_items',{p_items:items});});
+  if(!ok||!res)return;
+  toast(t('sell_done',{n:res.listed})+(res.dup&&res.dup.length?' '+t('sell_done_dup',{n:res.dup.length}):''));
+  UI.sellRows=null;UI.sellText='';UI.sellBad=[];UI.mineTab='selling';UI.mineStatus='available';
+  go('mine');
+}
+
+/* ---- mine ---- */
+function viewMine(){
+  const u=A.me;if(!u)return needLogin('login_needed');
+  const data=A.mine;
+  const head=`<div class="mhead"><h1>${t('nav_mine')}</h1><span class="muted">${t('credits_only')}</span></div>`;
+  if(!data)return head+LOADING();
+  const selling=data.selling,buying=data.buying;
+  const tabs=`<div class="tabs">${[['selling','mine_selling',selling.length],['buying','mine_buying',buying.length]].map(([v,k,n])=>`<button class="tab ${UI.mineTab===v?'on':''}" data-act="mine-tab" data-v="${v}">${t(k)} <span class="cnt">${n}</span></button>`).join('')}</div>`;
+  let body='';
+  if(UI.mineTab==='selling'){
+    const G={all:()=>true,available:l=>l.status==='available'||l.status==='expired',in_trade:l=>l.status==='in_trade',sold:l=>l.status==='sold',closed:l=>l.status==='withdrawn'||l.status==='archived'};
+    const chips=[['all','mine_all'],['available','st_available'],['in_trade','st_in_trade'],['sold','st_sold'],['closed','mine_closed']].map(([v,k])=>`<button class="chip ${UI.mineStatus===v?'on':''}" data-act="mine-status" data-v="${v}">${t(k)} ${selling.filter(G[v]).length}</button>`).join('');
+    const rank={in_trade:0,expired:1,available:2,sold:3,withdrawn:4,archived:5};
+    const list=selling.filter(G[UI.mineStatus]||G.all).sort((a,b)=>(rank[a.status]-rank[b.status])||(ts(b.created_at)-ts(a.created_at)));
+    body=`<div class="filters">${chips}<button class="btn small" data-act="reload">${t('refresh')}</button></div>`+(list.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_info')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${priceHTML(l.status==='sold'?l.sold_price:l.price)}</td><td>${pill(l.status)}</td><td class="small">${infoCell(l)}</td><td class="acts">${sellerBtns(l)}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('mine_empty')}</div>`);
+  } else {
+    body=buying.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th>${t('col_seller')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${buying.map(({l,s})=>`<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)} ${worldBadge(l)}</td><td>${esc(l.seller)}</td><td class="num">${priceHTML(s==='done'?l.sold_price:l.price)}</td><td><span class="pill ${s}">${t('b_'+s)}</span>${s==='done'?` <span class="muted small">${fmtDate(ts(l.sold_at))}</span>`:''}</td><td class="acts">${s==='active'&&!isBanned(A.me)?`<button class="btn small danger" data-act="giveup" data-lid="${l.id}" data-name="${esc(l.name)}">${t('buyer_giveup')}</button>`:''}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('mine_empty')}</div>`;
+  }
+  return head+tabs+`<div class="panel">${body}</div>`;
+}
+function infoCell(l){
+  const st=l.status;
+  if(st==='available'){const age=daysSince(l.renewed_at);return t('age_listed',{d:daysSince(l.created_at)})+(age>=EXPIRE_DAYS-7?` · <span class="warn-t">${t('expires_in',{d:Math.max(0,EXPIRE_DAYS-age)})}</span>`:'');}
+  if(st==='expired')return `<span class="warn-t">${t('expired_note')}</span>`;
+  if(st==='in_trade'){const dd=daysSince(l.trade_at);return t('buyer_is',{name:l.buyer||'?'})+' · '+t('trade_days',{d:dd})+(dd>=STALE_DAYS?`<div class="bad-t">${t('stale_warn',{d:STALE_DAYS})}</div>`:'');}
+  if(st==='sold')return t('buyer_is',{name:l.buyer||'?'})+' · '+t('sold_date',{d:fmtDate(ts(l.sold_at))});
+  if(st==='withdrawn')return l.withdraw_reason?t(l.withdraw_reason):'';
+  if(st==='archived')return t('isk_season',{n:l.season??'?'});
+  return '';
+}
+
+/* ---- inbox ---- */
+function viewInbox(){
+  const u=A.me;if(!u)return needLogin('login_needed');
+  const th=A.inbox;
+  const head=`<div class="mhead"><h1>${t('nav_inbox')}</h1></div>`;
+  if(!th)return head+LOADING();
+  const body=th.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th>${t('col_role')}</th><th>${t('col_last')}</th><th></th></tr></thead><tbody>${th.map(x=>`<tr class="row" data-act="open" data-lid="${x.listing.id}"><td>${nameCell(x.listing)} ${worldBadge(x.listing)}</td><td class="small">${t(x.as_seller?'inbox_as_seller':'inbox_as_buyer')} · ${esc(x.other)}</td><td><b>${esc(x.last_from)}：</b>${esc(x.last_body)}</td><td class="muted small">${ago(x.last_at)}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('inbox_empty')}</div>`;
+  return head+`<div class="panel" style="border-radius:3px">${body}</div>`;
+}
+
+/* ---- admin ---- */
+function viewAdmin(){
+  if(!isAdmin())return needLogin('login_needed');
+  const D=A.admin;const head=`<div class="mhead"><h1>${t('nav_admin')}</h1><button class="btn small" data-act="reload">${t('refresh')}</button></div>`;
+  if(!D)return head+LOADING();
+  const openN=D.reports.filter(r=>r.status==='open').length,ipN=D.ip_groups.filter(g=>!g.dismissed).length;
+  const tabs=[['reports','ad_reports',openN],['users','ad_users',0],['ip','ad_ip',ipN],['trades','ad_trades',0],['season','ad_season',0],['log','ad_log',0]];
+  let body='';
+  switch(UI.adminTab){case 'users':body=adUsers(D);break;case 'ip':body=adIp(D);break;case 'trades':body=adTrades(D);break;case 'season':body=adSeason(D);break;case 'log':body=adLogView(D);break;default:body=adReports(D);}
+  return head+`<div class="tabs">${tabs.map(([v,k,n])=>`<button class="tab ${UI.adminTab===v?'on':''}" data-act="admin-tab" data-v="${v}">${t(k)}${n?` <span class="cnt hot">${n}</span>`:''}</button>`).join('')}</div><div class="panel">${body}</div>`;
+}
+const statsText=(name,s)=>t('ad_target_stats',{name,buy:s.buy,cancel:s.cancel,rep:s.rep,age:s.age});
+function modBtns(uid,name,banned){return `<button class="btn small" data-act="ad-warn" data-uid="${uid}" data-name="${esc(name)}">${t('ad_warn')}</button>${banned?`<button class="btn small" data-act="ad-unban" data-uid="${uid}" data-name="${esc(name)}">${t('ad_unban')}</button>`:`<button class="btn small danger" data-act="ad-ban" data-uid="${uid}" data-name="${esc(name)}">${t('ad_ban')}</button>`}`;}
+function adReports(D){
+  const list=D.reports.filter(r=>r.status===UI.repStatus);
+  const seg=`<div class="filters"><div class="seg"><button data-act="rep-status" data-v="open" class="${UI.repStatus==='open'?'on':''}">${t('ad_open')}</button><button data-act="rep-status" data-v="resolved" class="${UI.repStatus==='resolved'?'on':''}">${t('ad_resolved')}</button></div></div>`;
+  if(!list.length)return seg+`<div class="empty">${t('ad_no_reports')}</div>`;
+  return seg+`<div class="cards">${list.map(r=>{
+    const canMod=r.target_role!=='admin'&&!r.target_deleted;
+    return `<div class="card"><div class="card-h"><span class="pill ${r.status==='open'?'in_trade':'sold'}">${t(r.cat)}</span><b>${t('ad_reporter',{a:r.reporter,b:r.target})}</b><span class="muted small">#${r.id} · ${ago(r.at)}</span></div>
+    ${r.listing_id?`<div class="small">${t('rp_listing')}：<button class="link" data-act="open" data-lid="${r.listing_id}">${esc(r.listing_name||('#'+r.listing_id))}</button></div>`:''}
+    <p class="quote">${esc(r.body)}</p>
+    <div class="muted small">${statsText(r.target,r.stats)}</div>
+    ${r.status==='open'?`<div class="card-a"><label class="sr" for="res-${r.id}">${t('ad_resolve_note')}</label><input id="res-${r.id}" class="grow" maxlength="1000" placeholder="${t('ad_resolve_note')}"><button class="btn small primary" data-act="ad-resolve" data-id="${r.id}">${t('ad_resolve')}</button>${canMod?modBtns(r.target_id,r.target,r.target_banned):''}</div>`:`<div class="muted small">${t('ad_resolved_note',{note:r.note||'—'})}</div>`}
+    </div>`;}).join('')}</div>`;
+}
+function adUsers(D){
+  const rows=D.users.map(u=>{
+    const st=isBanned(u)?`<span class="pill bad">${u.banned_until==='infinity'?t('ad_banned_perm'):t('ad_banned_until',{d:fmtDate(ts(u.banned_until))})}</span>`:`<span class="pill available">${t('ad_normal')}</span>`;
+    const isAdm=u.role==='admin';
+    return `<tr><td><b>${esc(u.name)}</b>${isAdm?` <span class="tag">${t('role_admin')}</span>`:''}${u.pw_reset?` <span class="tag">${t('pw_pending')}</span>`:''}${u.ip_with?`<div class="warn-t small">${t('ad_ip_with',{names:u.ip_with})}</div>`:''}</td><td class="num">${fmtDate(ts(u.created_at))}</td><td class="num">${u.listed}</td><td class="num">${u.sold}</td><td class="num">${u.bought}</td><td class="num ${u.cancel30>=3?'bad-t':''}">${u.cancel30}</td><td class="num">${u.reports}</td><td>${st}${u.warnings?` <span class="muted small">${t('ad_warned',{n:u.warnings})}</span>`:''}</td>
+    <td class="acts">${isAdm?'':modBtns(u.id,u.name,isBanned(u))+`<button class="btn small" data-act="ad-pw" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_reset_pw')}</button><button class="btn small danger" data-act="ad-del" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_delete')}</button>`}</td></tr>`;
+  }).join('');
+  return `<div class="tablewrap"><table><thead><tr><th>${t('ad_u_name')}</th><th class="num">${t('ad_u_joined')}</th><th class="num">${t('ad_u_listing')}</th><th class="num">${t('ad_u_sold')}</th><th class="num">${t('ad_u_bought')}</th><th class="num">${t('ad_u_cancel')}</th><th class="num">${t('ad_u_reports')}</th><th>${t('ad_u_state')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function adIp(D){
+  const gs=D.ip_groups;
+  const note=`<div class="pad"><div class="notice info">${t('ad_ip_note')}</div></div>`;
+  if(!gs.length)return note+`<div class="empty">${t('ad_ip_none')}</div>`;
+  return note+`<div class="cards" style="padding-top:0">${gs.map(g=>`<div class="card"><div class="card-h"><b>${t('ad_ip_title')}</b>${g.dismissed?`<span class="pill available">${t('ad_ip_dismissed')}</span>`:`<span class="pill in_trade">!</span>`}</div>
+  <div class="tablewrap"><table><tbody>${g.users.map(u=>`<tr><td><b>${esc(u.name)}</b></td><td class="small">${t('ad_u_joined')} ${fmtDate(ts(u.created_at))}</td><td class="small muted">${statsText(u.name,u.stats)}</td><td class="acts">${u.role==='admin'?'':(u.banned?`<button class="btn small" data-act="ad-unban" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_unban')}</button>`:`<button class="btn small danger" data-act="ad-ban" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_ban')}</button>`)}</td></tr>`).join('')}</tbody></table></div>
+  ${g.dismissed?'':`<div class="card-a"><button class="btn small" data-act="ad-ip-ok" data-key="${esc(g.key)}">${t('ad_ip_dismiss')}</button></div>`}</div>`).join('')}</div>`;
+}
+function adTrades(D){
+  const list=D.trades;
+  if(!list.length)return `<div class="pad"><div class="notice info">${t('ad_trade_hint')}</div></div><div class="empty">${t('mine_empty')}</div>`;
+  return `<div class="pad"><div class="notice info">${t('ad_trade_hint')}</div></div><div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th><th>${t('col_buyer')}</th><th>${t('col_ref')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)} ${worldBadge(l)}${l.world==='isekai'?` <span class="muted small">S${l.season??'?'}</span>`:''}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${esc(l.seller)}</td><td>${esc(l.buyer)}</td><td class="acts">${l.excluded?`<span class="pill bad">${t('ad_excluded')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_include')}</button>`:`<span class="pill available">${t('ad_included')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_exclude')}</button>`}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function adSeason(D){
+  return `<div class="pad" style="display:grid;gap:12px;max-width:640px"><h2>${t('ad_season_now',{n:D.season})}</h2>
+  <div class="card-a"><label for="season-n">${t('season_set')}</label><input id="season-n" class="sm" inputmode="numeric" value="${D.season}"><button class="btn small" data-act="season-set">${t('save')}</button></div>
+  <p class="muted" style="margin:0">${t('ad_season_desc')}</p><div><button class="btn danger" data-act="season">${t('ad_season_btn')}</button></div></div>`;
+}
+function adLogView(D){
+  if(!D.log.length)return `<div class="empty">${t('ad_log_empty')}</div>`;
+  return `<ol class="loglist" reversed>${D.log.map(e=>{const p=Object.assign({},e.params);if(p.dk)p.dur=t(p.dk);if(e.kind==='exclude'||e.kind==='include')p.item=(p.item||'')+' · '+fmtPrice(p.p||0);const d=new Date(ts(e.at));return `<li><span class="muted small">${fmtDate(d)} ${d.toTimeString().slice(0,5)}</span> · ${t('log_'+e.kind,p)}</li>`;}).join('')}</ol>`;
+}
+
+/* ================= modals ================= */
+function openModal(titleHTML,body,opts){
+  opts=opts||{};
+  $('#modal-root').innerHTML=`<div class="modal-back" data-act="modal-back"><div class="modal ${opts.wide?'wide':''}" role="dialog" aria-modal="true" aria-label="${esc(opts.label||titleHTML.replace(/<[^>]+>/g,''))}"><h3><span>${titleHTML}</span>${opts.noClose?'':`<button class="x" data-act="close" aria-label="${t('close')}">×</button>`}</h3><div class="body">${body}</div></div></div>`;
+  const f=$('#modal-root [autofocus]');if(f)f.focus();
+}
+function closeModal(){$('#modal-root').innerHTML='';UI.detailId=null;UI.buyConfirm=null;UI.forcePw=false;}
+function back(){if(UI.detailId&&A.detail)renderDetail();else closeModal();}
+function okCancel(a,attrs,label,cls){return `<div class="mbtns"><button class="btn" data-act="sub-cancel">${t('cancel')}</button><button class="btn ${cls||'primary'}" data-act="${a}" ${attrs}>${label||t('confirm')}</button></div>`;}
+const nm=el=>esc(el.dataset.name||'');
+function mMarkSold(el){openModal(t('btn_mark_sold'),`<div class="form"><b>${nm(el)}</b><label for="m-price">${t('ms_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="muted small" style="margin:0">${t('ms_hint')}</p><p class="err" id="m-err"></p></div>${okCancel('ms-ok',`data-lid="${el.dataset.lid}"`)}`);}
+function mCancelTrade(el){openModal(t('btn_cancel_trade'),`<div class="form"><b>${nm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_buyer_gave_up','r_no_response','r_seller_changed','r_other'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('ct_hint')}</p></div>${okCancel('ct-ok',`data-lid="${el.dataset.lid}"`,t('btn_cancel_trade'),'danger')}`);}
+function mEditPrice(el){openModal(t('btn_edit_price'),`<div class="form"><b>${nm(el)}</b><label for="m-price">${t('new_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="err" id="m-err"></p></div>${okCancel('ep-ok',`data-lid="${el.dataset.lid}"`)}`);}
+function mWithdraw(el){openModal(t('btn_withdraw'),`<div class="form"><b>${nm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_not_selling','r_sold_elsewhere'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select></div>${okCancel('wd-ok',`data-lid="${el.dataset.lid}"`,t('btn_withdraw'),'danger')}`);}
+function mGiveup(el){openModal(t('buyer_giveup'),`<div class="form"><b>${nm(el)}</b><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('bg_hint')}</p></div>${okCancel('giveup-ok',`data-lid="${el.dataset.lid}"`,t('buyer_giveup'),'danger')}`);}
+function mReport(el){
+  const lid=el.dataset.lid||'';const lname=A.detail&&String(A.detail.id)===lid?A.detail.name:'';
+  openModal(t('rp_title',{name:el.dataset.name||''}),`<div class="form"><label for="m-cat">${t('rp_cat')}</label><select id="m-cat">${['rc_alt','rc_flake','rc_noship','rc_untrade','rc_harass','rc_other'].map(c=>`<option value="${c}">${t(c)}</option>`).join('')}</select><label for="m-lid">${t('rp_listing')}</label><select id="m-lid"><option value="">${t('rp_none')}</option>${lid?`<option value="${lid}" selected>${esc(lname||('#'+lid))}</option>`:''}</select><label for="m-body">${t('rp_body')}</label><textarea id="m-body" rows="4" maxlength="2000" autofocus></textarea><p class="muted small" style="margin:0">${t('rp_private')}</p><p class="err" id="m-err"></p></div>${okCancel('rp-ok',`data-uid="${el.dataset.uid}"`,t('rp_submit'))}`);
+}
+function mLogin(){
+  UI.detailId=null;
+  openModal(t('login_title'),`<form class="form" data-form="login"><label for="m-user">${t('f_username')}</label><input id="m-user" autocomplete="username" autofocus><label for="m-pw">${t('f_password')}</label><input id="m-pw" type="password" autocomplete="current-password"><p class="err" id="m-err"></p><div class="mbtns"><button type="submit" class="btn primary">${t('login')}</button></div><p class="muted small" style="margin:0">${t('reg_no_email',{admin:ADMIN_CONTACT})}</p><div class="mbtns" style="justify-content:space-between"><button type="button" class="link" data-act="forgot">${t('forgot_pw')}</button><button type="button" class="link" data-act="register">${t('no_account')}</button></div></form>`);
+}
+function mRegister(){
+  UI.detailId=null;
+  openModal(t('reg_title'),`<form class="form" data-form="reg"><label for="m-user">${t('f_username')}</label><input id="m-user" autocomplete="username" maxlength="30" autofocus><div class="note">${t('reg_name_note')}</div><label for="m-pw">${t('f_password')}</label><input id="m-pw" type="password" autocomplete="new-password"><label for="m-pw2">${t('f_password2')}</label><input id="m-pw2" type="password" autocomplete="new-password"><div class="note">${t('reg_pw_note')}</div><p class="err" id="m-err"></p><div class="mbtns"><button type="submit" class="btn primary">${t('register')}</button></div><p class="muted small" style="margin:0">${t('reg_no_email',{admin:ADMIN_CONTACT})}</p><div><button type="button" class="link" data-act="login">${t('have_account')}</button></div></form>`);
+}
+function mForgot(){
+  openModal(t('forgot_title'),`<p style="margin:0">${t('forgot_body',{admin:{html:'<b>'+esc(ADMIN_CONTACT)+'</b>'},pw:{html:'<b>'+esc(RESET_PW)+'</b>'}})}</p><div class="notice info">${t('forgot_note')}</div><div class="mbtns"><button class="btn" data-act="login">${t('back_login')}</button></div>`);
+}
+function mChangePw(forced){
+  UI.forcePw=!!forced;UI.detailId=null;
+  openModal(t('change_pw'),`<form class="form" data-form="chpw">${forced?`<div class="notice">${t('must_change',{pw:RESET_PW})}</div>`:`<label for="m-cur">${t('cur_pw')}</label><input id="m-cur" type="password" autocomplete="current-password" autofocus>`}
+  <label for="m-pw">${t('new_pw')}</label><input id="m-pw" type="password" autocomplete="new-password" ${forced?'autofocus':''}>
+  <label for="m-pw2">${t('new_pw2')}</label><input id="m-pw2" type="password" autocomplete="new-password">
+  <div class="note">${t('reg_pw_note')}</div><p class="err" id="m-err"></p>
+  <div class="mbtns">${forced?`<button type="button" class="btn" data-act="logout">${t('logout')}</button>`:`<button type="button" class="btn" data-act="sub-cancel">${t('cancel')}</button>`}<button type="submit" class="btn primary">${t('change_pw')}</button></div></form>`,{noClose:forced});
+}
+function checkForcedPw(){if(A.me&&A.me.pw_reset&&!UI.forcePw)mChangePw(true);}
+function mWarn(el){openModal(t('warn_title',{name:el.dataset.name}),`<div class="form"><label for="m-body">${t('warn_msg')}</label><textarea id="m-body" rows="3" maxlength="1000" autofocus></textarea><p class="err" id="m-err"></p></div>${okCancel('warn-ok',`data-uid="${el.dataset.uid}"`,t('ad_warn'))}`);}
+function mBan(el){openModal(t('ban_title',{name:el.dataset.name}),`<div class="form"><label for="m-dur">${t('ban_dur')}</label><select id="m-dur">${Object.keys(BAN_DAYS).map(k=>`<option value="${k}" ${k==='d7'?'selected':''}>${t(k)}</option>`).join('')}</select><label for="m-body">${t('ban_reason')}</label><textarea id="m-body" rows="2" maxlength="500" autofocus></textarea><p class="muted small" style="margin:0">${t('ban_effect')}</p><p class="err" id="m-err"></p></div>${okCancel('ban-ok',`data-uid="${el.dataset.uid}"`,t('ad_ban'),'danger')}`);}
+function mResetPw(el){openModal(t('pw_title',{name:el.dataset.name}),`<p style="margin:0">${t('pw_confirm',{name:el.dataset.name,pw:RESET_PW})}</p><div class="notice">${t('pw_check')}</div>${okCancel('pw-ok',`data-uid="${el.dataset.uid}" data-name="${nm(el)}"`,t('ad_reset_pw'),'danger')}`);}
+function mDelete(el){openModal(t('del_title',{name:el.dataset.name}),`<p style="margin:0">${t('del_desc')}</p>${okCancel('del-ok',`data-uid="${el.dataset.uid}" data-name="${nm(el)}"`,t('ad_delete'),'danger')}`);}
+function mSeason(){openModal(t('ad_season'),`<p style="margin:0">${t('ad_season_confirm_v1',{s:(A.admin?A.admin.season:0)+1})}</p>${okCancel('season-ok','',t('confirm'),'danger')}`);}
+function val(id){const el=document.getElementById(id);return el?el.value:'';}
+function setErr(k){const el=$('#m-err');if(el)el.innerHTML=t(k);}
+
+/* ================= events ================= */
+let toastTimer;
+function toast(msg,bad){const el=$('#toast');el.innerHTML=msg;el.className='toast show'+(bad?' bad':'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.className='toast';},3200);}
+function go(view){if(location.hash==='#'+view)route();else location.hash='#'+view;}
+const N=x=>Number(x);
+const H={
+  noop(){},
+  close(){closeModal();},
+  'modal-back'(el,e){if(e.target===el&&!UI.forcePw)closeModal();},
+  'sub-cancel'(){back();},
+  world(el){P.world=el.dataset.v;savePrefs();UI.filters.seller='';if(UI.view!=='market')go('market');else{render();refresh();}},
+  lang(el){P.lang=el.dataset.v;document.documentElement.lang=P.lang==='zh'?'zh-Hant':'en';savePrefs();const keep=UI.detailId;render();if(keep&&A.detail)renderDetail();else if(!UI.forcePw)closeModal();},
+  reload(){refresh();},
+  tab(el){UI.tab=el.dataset.v;renderMain();},
+  attr(el){const a=el.dataset.v,arr=UI.filters.attrs,i=arr.indexOf(a);if(i>=0)arr.splice(i,1);else arr.push(a);renderMain();},
+  'clear-filters'(){UI.filters=defaultFilters();renderMain();},
+  'clear-seller'(){UI.filters.seller='';renderMain();},
+  'seller-filter'(el,e){e.preventDefault();UI.filters=defaultFilters();UI.filters.seller=el.dataset.uid;UI.filters.sellerName=el.dataset.name;if(UI.tab!=='sold')UI.tab='available';closeModal();if(UI.view!=='market')go('market');else renderMain();},
+  open(el){UI.buyConfirm=null;openDetail(el.dataset.lid);},
+  'buy-ask'(el){if(!A.me){mLogin();return;}UI.buyConfirm=N(el.dataset.lid);openDetail(el.dataset.lid);},
+  buy(el){UI.buyConfirm=N(el.dataset.lid);renderDetail();},
+  'buy-yes'(el){const id=N(el.dataset.lid);UI.buyConfirm=null;act(()=>api('hv_buy',{p_id:id}),t('toast_bought'));},
+  'buy-no'(){UI.buyConfirm=null;renderDetail();},
+  wait(el){act(()=>api('hv_wait',{p_id:N(el.dataset.lid),p_join:el.dataset.v==='join'}));},
+  giveup(el){mGiveup(el);},
+  'giveup-ok'(el){const id=N(el.dataset.lid),note=val('m-note').trim();back();act(()=>api('hv_buyer_cancel',{p_id:id,p_note:note}),t('toast_done'));},
+  'mark-sold'(el){mMarkSold(el);},
+  'ms-ok'(el){const p=parsePrice(val('m-price'));if(!p){setErr('price_invalid');return;}const id=N(el.dataset.lid);back();act(()=>api('hv_mark_sold',{p_id:id,p_price:p}),t('toast_done'));},
+  'cancel-trade'(el){mCancelTrade(el);},
+  'ct-ok'(el){const id=N(el.dataset.lid),r=val('m-reason'),note=val('m-note').trim();back();act(()=>api('hv_seller_cancel',{p_id:id,p_reason:r,p_note:note}),t('toast_done'));},
+  'edit-price'(el){mEditPrice(el);},
+  'ep-ok'(el){const p=parsePrice(val('m-price'));if(!p){setErr('price_invalid');return;}const id=N(el.dataset.lid);back();act(()=>api('hv_edit_price',{p_id:id,p_price:p}),t('toast_done'));},
+  withdraw(el){mWithdraw(el);},
+  'wd-ok'(el){const id=N(el.dataset.lid),r=val('m-reason');back();act(()=>api('hv_withdraw',{p_id:id,p_reason:r}),t('toast_done'));},
+  renew(el){act(()=>api('hv_renew',{p_id:N(el.dataset.lid)}),t('toast_done'));},
+  relist(el){act(()=>api('hv_relist',{p_id:N(el.dataset.lid)}),t('toast_done'));},
+  'pm-send'(el){const b=N(el.dataset.buyer);const body=val('pm-in-'+b).trim();if(!body)return;act(()=>api('hv_send_msg',{p_listing:N(el.dataset.lid),p_buyer:b,p_body:body}),t('toast_sent'));},
+  report(el){if(!A.me){mLogin();return;}mReport(el);},
+  'rp-ok'(el){const body=val('m-body').trim();if(!body){setErr('rp_need_body');return;}const uid=N(el.dataset.uid),lid=val('m-lid')?N(val('m-lid')):null,cat=val('m-cat');back();act(()=>api('hv_report',{p_target:uid,p_listing:lid,p_cat:cat,p_body:body}),t('rp_done'));},
+  async bell(){UI.notifOpen=!UI.notifOpen;if(UI.notifOpen){A.notifs=null;renderHeader();try{A.notifs=await api('hv_notifs');}catch(e){UI.notifOpen=false;handleErr(e);}}renderHeader();},
+  async 'notif-all'(){try{A.me=await api('hv_notif_read',{p_id:null});A.notifs=await api('hv_notifs');}catch(e){handleErr(e);}UI.notifOpen=true;render();},
+  async 'notif-open'(el){
+    const n=(A.notifs||[]).find(x=>String(x.id)===el.dataset.id);if(!n)return;
+    UI.notifOpen=false;
+    try{if(!n.read)A.me=await api('hv_notif_read',{p_id:n.id});}catch(e){}
+    renderHeader();
+    if(n.listing_id)openDetail(n.listing_id);
+    else if(n.view){if(n.tab)UI.adminTab=n.tab;go(n.view);}
+  },
+  login(){mLogin();},
+  register(){mRegister();},
+  forgot(){mForgot();},
+  'change-pw'(){mChangePw(false);},
+  async logout(){const tok=P.token;P.token='';A.me=null;savePrefs();UI.notifOpen=false;UI.forcePw=false;closeModal();try{await rpc('hv_logout',{p_token:tok});}catch(e){}if(UI.view==='admin')go('market');else render();},
+  'sell-parse'(){UI.sellText=val('sell-text');doParse();},
+  'sell-submit'(){doSubmitSell();},
+  'mine-tab'(el){UI.mineTab=el.dataset.v;renderMain();},
+  'mine-status'(el){UI.mineStatus=el.dataset.v;renderMain();},
+  'admin-tab'(el){UI.adminTab=el.dataset.v;renderMain();},
+  'rep-status'(el){UI.repStatus=el.dataset.v;renderMain();},
+  'ad-warn'(el){mWarn(el);},
+  'warn-ok'(el){const m=val('m-body').trim();if(!m){setErr('warn_need');return;}const uid=N(el.dataset.uid);back();act(()=>api('hv_admin_warn',{p_user:uid,p_msg:m}),t('toast_done'));},
+  'ad-ban'(el){mBan(el);},
+  'ban-ok'(el){const r=val('m-body').trim();if(!r){setErr('ban_need');return;}const uid=N(el.dataset.uid),days=BAN_DAYS[val('m-dur')];back();act(()=>api('hv_admin_ban',{p_user:uid,p_days:days,p_reason:r}),t('toast_done'));},
+  'ad-unban'(el){act(()=>api('hv_admin_unban',{p_user:N(el.dataset.uid)}),t('toast_done'));},
+  'ad-pw'(el){mResetPw(el);},
+  'pw-ok'(el){const uid=N(el.dataset.uid),name=el.dataset.name;back();act(()=>api('hv_admin_reset_pw',{p_user:uid}),t('pw_done',{name}));},
+  'ad-del'(el){mDelete(el);},
+  'del-ok'(el){const uid=N(el.dataset.uid),name=el.dataset.name;closeModal();act(()=>api('hv_admin_delete',{p_user:uid}),t('del_done',{name}));},
+  'ad-resolve'(el){const id=N(el.dataset.id);act(()=>api('hv_admin_resolve',{p_report:id,p_note:val('res-'+id).trim()}),t('toast_done'));},
+  'ad-ip-ok'(el){act(()=>api('hv_admin_ip_ok',{p_key:el.dataset.key}),t('toast_done'));},
+  'ad-excl'(el){act(()=>api('hv_admin_exclude',{p_id:N(el.dataset.lid)}));},
+  'season-set'(){const n=parseInt(val('season-n'),10);if(!(n>=1)){toast(t('E_BAD'),true);return;}act(()=>api('hv_admin_set_season',{p_season:n}),t('season_saved'));},
+  season(){mSeason();},
+  'season-ok'(){closeModal();let r=null;act(async()=>{r=await api('hv_admin_season_end');}).then(ok=>{if(ok&&r)toast(t('ad_season_done',{n:r.n,s:r.s}));});},
+};
+async function doLogin(){
+  const name=val('m-user').trim(),pw=val('m-pw');
+  if(!name){setErr('err_name_req');return;}
+  try{
+    const r=await rpc('hv_login',{p_name:name,p_pw:pw});
+    if(r.error){setErr(r.error);return;}
+    P.token=r.token;A.me=r.me;savePrefs();closeModal();toast(t('welcome',{name:r.me.name}));await refresh();checkForcedPw();
+  }catch(e){if(e.code&&T.zh[e.code]!==undefined)setErr(e.code);else handleErr(e);}
+}
+async function doRegister(){
+  const name=val('m-user').trim(),pw=val('m-pw'),pw2=val('m-pw2');
+  if(!name){setErr('err_name_req');return;}
+  if(name.length>30){setErr('err_name_long');return;}
+  if(pw.length<6){setErr('err_pw_short');return;}
+  if(pw!==pw2){setErr('err_pw_match');return;}
+  try{
+    const r=await rpc('hv_register',{p_name:name,p_pw:pw});
+    P.token=r.token;A.me=r.me;savePrefs();closeModal();toast(t('reg_done'));await refresh();
+  }catch(e){if(e.code&&T.zh[e.code]!==undefined&&e.code!=='E_NET'&&e.code!=='E_CFG'&&e.code!=='E_SERVER')setErr(e.code);else handleErr(e);}
+}
+async function doChangePw(){
+  const forced=!!(A.me&&A.me.pw_reset);
+  const pw=val('m-pw'),pw2=val('m-pw2');
+  if(pw===RESET_PW){const el=$('#m-err');if(el)el.textContent=t('err_reset_pw',{pw:RESET_PW});return;}
+  if(pw.length<6){setErr('err_pw_short');return;}
+  if(pw!==pw2){setErr('err_pw_match');return;}
+  try{
+    A.me=await api('hv_change_pw',{p_cur:forced?'':val('m-cur'),p_new:pw});
+    UI.forcePw=false;closeModal();toast(t('pw_changed'));await refresh();
+  }catch(e){if(e.code==='E_CUR_PW'||e.code==='E_PW_SHORT'||e.code==='E_RESET_PW')setErr(e.code);else handleErr(e);}
+}
+
+document.addEventListener('click',e=>{
+  if(UI.notifOpen&&!e.target.closest('.bellwrap')){UI.notifOpen=false;const dd=$('.dropdown');if(dd)dd.remove();const b=$('.bell');if(b)b.setAttribute('aria-expanded','false');}
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const fn=H[el.dataset.act];if(fn)fn(el,e);
+});
+document.addEventListener('submit',e=>{e.preventDefault();const f=e.target.dataset.form;if(f==='login')doLogin();if(f==='reg')doRegister();if(f==='chpw')doChangePw();});
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset.f){UI.filters[el.dataset.f]=el.value;renderResults();return;}
+  if(el.id==='sell-text'){UI.sellText=el.value;return;}
+  if(el.dataset.rl!==undefined){UI.sellRows[+el.dataset.rl].rollText=el.value;return;}
+  if(el.dataset.sp!==undefined){const r=UI.sellRows[+el.dataset.sp];r.priceText=el.value;r.priceErr=false;el.classList.remove('err');return;}
+  if(el.dataset.inc!==undefined){UI.sellRows[+el.dataset.inc].include=el.checked;renderSellPreview();return;}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){back();}
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&e.target.id&&e.target.id.startsWith('pm-in-')){const b=e.target.parentElement.querySelector('[data-act="pm-send"]');if(b)b.click();}
+});
+function route(){
+  const h=(location.hash||'#market').slice(1);
+  UI.view=['market','sell','mine','inbox','admin'].includes(h)?h:'market';
+  UI.notifOpen=false;render();window.scrollTo(0,0);
+  if(UI.view!=='sell')refresh();
+}
+window.addEventListener('hashchange',route);
+/* keep the bell count fresh, and reload the page's data when the tab comes back into view */
+setInterval(async()=>{if(!P.token||document.hidden)return;try{await loadMe();renderHeader();}catch(e){}},60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!$('#modal-root').innerHTML&&!UI.busy)refresh();});
+
+loadPrefs();
+document.documentElement.lang=P.lang==='zh'?'zh-Hant':'en';
+(async()=>{
+  try{await loadMe();}catch(e){}
+  route();
+  checkForcedPw();
+})();
+
+</script>
+</body>
+</html>
