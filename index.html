@@ -218,6 +218,30 @@ body.busy, body.busy button{cursor:progress}
 .bulk{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:4px}
 .bulk label{display:inline-flex;gap:5px;align-items:center}
 #results.stale{opacity:.5;transition:opacity .15s}
+.filters{position:relative}
+.eqf-n{display:inline-block;min-width:17px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-size:11px;line-height:16px;text-align:center}
+.btn.primary .eqf-n{background:var(--accent-ink);color:var(--accent)}
+.eqf-pop{position:absolute;left:12px;right:12px;top:calc(100% - 4px);z-index:30;background:var(--panel-2);border:1px solid var(--accent);border-radius:4px;box-shadow:0 10px 30px rgba(33,22,14,.25);max-height:min(70vh,640px);display:flex;flex-direction:column}
+.eqf-pop[hidden]{display:none}
+.eqf-body{overflow:auto;padding:4px 14px 8px}
+.eqf-sec{padding:10px 0;border-bottom:1px solid var(--line)}
+.eqf-sec:last-child{border-bottom:0}
+.eqf-sec h3{margin:0 0 6px;font-size:13px}
+.eqf-sec h3 small{font-weight:400;color:var(--muted);margin-left:8px}
+.eqf-grp{display:flex;gap:6px;align-items:baseline;margin:4px 0}
+.eqf-cs{display:flex;flex-wrap:wrap;gap:5px;flex:1}
+.eqf-gl{color:var(--muted);font-size:11px;width:84px;flex:none}
+.eqf-none{color:var(--muted);font-style:italic}
+.chip .en{font-weight:400;opacity:.75;margin-left:3px}
+.eqf-foot{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:8px 14px;border-top:1px solid var(--line);background:var(--panel)}
+.eqf-foot .eqf-cnt{font-weight:700}
+.eqf-foot .eqf-rule{flex:1}
+.eqf-sel{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.eqf-sel:empty{display:none}
+.eqf-sel .chip{display:inline-flex;gap:6px;align-items:center;cursor:default}
+.eqf-sel .chip b{font-weight:400;opacity:.7}
+.eqf-sel .chip button{border:0;background:none;color:inherit;cursor:pointer;font:inherit;padding:0 2px}
+@media (max-width:640px){.eqf-pop{position:fixed;left:6px;right:6px;top:56px;max-height:calc(100vh - 70px)}.eqf-grp{flex-direction:column;align-items:stretch;gap:3px}.eqf-gl{width:auto}.eqf-gl:empty{display:none}.eqf-foot .eqf-rule{display:none}}
 .rsum{color:var(--muted);font-size:12px;padding:8px 2px 4px}
 .pager{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;padding:14px 0 6px}
 .pager .btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -305,11 +329,37 @@ const T={zh:{
  E_BAD:"資料格式不正確。",
  E_TOO_MANY:"一次最多上架 200 件。",
  sell_done_dup:"有 {n} 件已經在架上，略過了。",
- season_set:"季數",
- season_saved:"已更新季數。",
- log_set_season:"把 Isekai 季數設為 {s}",
+ season_set:"賽季名稱",
+ season_saved:"已更新賽季。",
+ log_set_season:"把 Isekai 賽季改為 {s}",
  pw_pending:"待改密碼",
  ad_season_confirm_v1:"確定要封存所有 ISK 的上架中與交易中商品，並進入第 {s} 季？這個動作無法復原。",
+ eqf_open:"裝備篩選",
+ eqf_done:"完成",
+ eqf_s_cat:"類別",
+ eqf_s_type:"種類",
+ eqf_s_slot:"部位",
+ eqf_s_pre:"前綴",
+ eqf_s_suf:"後綴",
+ eqf_multi:"可複選",
+ eqf_slot_hint:"只有防具有部位",
+ eqf_g_pre_w:"武器・法杖",
+ eqf_g_pre_a:"防具・盾",
+ eqf_g_pre_gem:"寶石",
+ eqf_g_suf_w:"武器",
+ eqf_g_suf_s:"法杖・法術",
+ eqf_g_suf_d:"防禦",
+ eqf_g_suf_r:"元素抗性",
+ eqf_none_pre:"無前綴",
+ eqf_none_suf:"無後綴",
+ eqf_nothing:"（目前沒有可選的）",
+ eqf_match:"符合 {n} 件",
+ eqf_rule:"同一區選多個＝符合任一個；不同區要同時符合",
+ f_roll:"ROLL %",
+ ad_season_confirm_v2:"確定要封存所有 ISK 的上架中與交易中商品，並換到新賽季？這個動作無法復原。",
+ season_next:"新賽季名稱",
+ season_fmt:"例如 2026-2（2026 年第 2 季）。只能用英文字母、數字和 . - _，最多 20 字。",
+ E_SEASON:"賽季名稱只能用英文字母、數字和 . - _，最多 20 字，例如 2026-2。",
  res_total:"共 {n} 件",
  pg_of:"第 {p} / {n} 頁",
  pg_prev:"上一頁",
@@ -355,11 +405,11 @@ const T={zh:{
  f_search:'搜尋裝備名稱',f_cat_all:'全部類型',f_q_all:'全部品質',f_lv:'等級',f_price:'價格',f_attr:'主屬性',f_sort:'排序',
  sort_new:'最新',sort_price_asc:'價格：低到高',sort_price_desc:'價格：高到低',sort_avg:'ROLL：高到低',sort_lv:'等級：高到低',
  f_clear:'清除篩選',f_seller:'賣家：{name}',
- col_equip:'裝備',col_type:'類型',col_lv:'等級',col_attr:'主屬性',col_avg:'ROLL',col_price:'售價',col_sold_price:'成交價',col_seller:'賣家',col_buyer:'買家',col_status:'狀態',col_date:'日期',col_season:'季',col_world:'世界',col_info:'狀況',col_actions:'操作',col_include:'上架',col_role:'身分',col_last:'最後訊息',col_ref:'參考',
+ col_equip:'裝備',col_type:'類型',col_lv:'等級',col_attr:'主屬性',col_avg:'ROLL',col_price:'售價',col_sold_price:'成交價',col_seller:'賣家',col_buyer:'買家',col_status:'狀態',col_date:'日期',col_season:"賽季",col_world:'世界',col_info:'狀況',col_actions:'操作',col_include:'上架',col_role:'身分',col_last:'最後訊息',col_ref:'參考',
  btn_buy:'購買',yours:'你的商品',empty_results:'沒有符合條件的裝備。',
  price_ref:'「{q}」的成交紀錄共 {n} 筆',price_min:'最低',price_median:'中位數',price_max:'最高',
- price_ref_hint:'在搜尋框輸入裝備名稱的一部分，就能看到歷史成交價的最低、中位數和最高，例如 Rapier of Slaughter。',
- credits_only:'所有價格都是主世界 Credits，ISK 裝備也一樣。',isk_season:'Isekai 第 {n} 季',
+ price_ref_hint:"在搜尋框輸入裝備名稱的一部分，或用「裝備篩選」選條件，就能看到歷史成交價的最低、中位數和最高，例如 Rapier of Slaughter。",
+ credits_only:'所有價格都是主世界 Credits，ISK 裝備也一樣。',isk_season:"Isekai 賽季 {n}",
  st_available:'上架中',st_in_trade:'交易中',st_sold:'已售出',st_withdrawn:'已下架',st_archived:'已封存',st_expired:'已過期',
  open_in_hv:'在 HV 開啟裝備頁',d_listed:'上架日期',d_world:'世界',d_id:'裝備 ID',list_price:'原標價',report_user:'檢舉',
  login_to_act:'登入後才能購買或私訊賣家。',
@@ -407,13 +457,13 @@ const T={zh:{
  ad_u_name:'帳號',ad_u_joined:'註冊',ad_u_listing:'上架中',ad_u_sold:'賣出',ad_u_bought:'買到',ad_u_cancel:'放棄（30天）',ad_u_reports:'被檢舉',ad_u_state:'狀態',ad_normal:'正常',ad_banned_until:'停權到 {d}',ad_banned_perm:'永久停權',ad_warned:'警告 {n} 次',ad_ip_with:'與 {names} 同 IP',
  ad_ip_title:'這些帳號使用同一個註冊 IP',ad_ip_note:'系統只保存 IP 加鹽後的雜湊值，用來比對是否相同，連管理員也看不到原始 IP。同一個家庭、學校、網咖或手機網路可能共用 IP，要不要處理請自行判斷。',ad_ip_dismiss:'確認沒問題',ad_ip_none:'目前沒有共用註冊 IP 的帳號。',ad_ip_dismissed:'已確認沒問題',
  ad_trade_hint:'買家欄只有你看得到。疑似分身刷價的紀錄可以排除，就不會出現在公開的已售出列表和成交價統計。',ad_exclude:'排除',ad_include:'恢復',ad_excluded:'已排除',ad_included:'列入',
- ad_season_now:'目前是 Isekai 第 {n} 季',ad_season_btn:'Isekai 換季：封存所有 ISK 商品',ad_season_desc:'所有 ISK 的「上架中」和「交易中」商品會改成「已封存」，賣家會收到通知。成交紀錄會保留並標上季數。',ad_season_confirm:'確定要封存 {n} 件 ISK 商品，並進入第 {s} 季？這個動作無法復原。',ad_season_done:'已封存 {n} 件，現在是 Isekai 第 {s} 季。',
+ ad_season_now:"目前 Isekai 賽季：{n}",ad_season_btn:'Isekai 換季：封存所有 ISK 商品',ad_season_desc:"所有 ISK 的「上架中」和「交易中」商品會改成「已封存」，賣家會收到通知。成交紀錄會保留並標上賽季。",ad_season_confirm:'確定要封存 {n} 件 ISK 商品，並進入第 {s} 季？這個動作無法復原。',ad_season_done:"已封存 {n} 件，現在是 Isekai 賽季 {s}。",
  ad_log_empty:'還沒有操作紀錄。',
  warn_title:'警告 {name}',warn_msg:'訊息內容（會出現在對方的通知裡）',warn_need:'請輸入訊息。',
  ban_title:'停權 {name}',ban_dur:'時間',d1:'1 天',d3:'3 天',d7:'7 天',d30:'30 天',dperm:'永久',ban_reason:'原因（對方會看到）',ban_effect:'停權期間不能上架、購買或私訊，上架中的商品會從市場隱藏。',ban_need:'請輸入原因。',
  pw_title:'重設 {name} 的密碼',pw_confirm:'把 {name} 的密碼重設成 {pw}？對方下次登入時，網站會要求他立刻改成新密碼。',pw_check:'收到 MoogleMail 時，先確認寄件人的遊戲 ID 跟這個帳號名稱相同，避免有人冒名要求重設別人的密碼。',pw_done:'已重設 {name} 的密碼。',
  del_title:'刪除 {name} 的帳號',del_desc:'刪除後無法復原。對方上架中的商品會下架，成交紀錄保留。對方可以用同一個名字重新註冊。',del_done:'已刪除 {name} 的帳號。',
- log_warn:'警告 {name}：{msg}',log_ban:'停權 {name}（{dur}）：{reason}',log_unban:'解除 {name} 的停權',log_pw:'重設 {name} 的密碼',log_del:'刪除帳號 {name}',log_resolve:'處理檢舉 #{id}：{note}',log_ip:'確認同 IP 帳號沒問題：{names}',log_exclude:'排除成交紀錄：{item}',log_include:'恢復成交紀錄：{item}',log_season:'Isekai 換季，封存 {n} 件，進入第 {s} 季',
+ log_warn:'警告 {name}：{msg}',log_ban:'停權 {name}（{dur}）：{reason}',log_unban:'解除 {name} 的停權',log_pw:'重設 {name} 的密碼',log_del:'刪除帳號 {name}',log_resolve:'處理檢舉 #{id}：{note}',log_ip:'確認同 IP 帳號沒問題：{names}',log_exclude:'排除成交紀錄：{item}',log_include:'恢復成交紀錄：{item}',log_season:"Isekai 換季，封存 {n} 件，進入賽季 {s}",
  n_buy:'{u} 想買你的 {item}，已變成交易中。請用 MoogleMail 以 CoD 寄給 {u}。',n_msg:'{u} 在 {item} 傳了私訊給你。',n_buyer_cancel:'{u} 放棄購買 {item}，商品已回到上架中。',n_seller_cancel:'賣家取消了 {item} 的交易：{r}。',n_sold:'{item} 交易完成，賣家已標記售出。',n_wait:'你候補的 {item} 又可以購買了。',n_admin_pm:'管理員訊息：{text}',n_ban:'你的帳號已被停權（{dur}）：{reason}',n_unban:'你的帳號已解除停權。',n_archived:'Isekai 換季，你有 {n} 件 ISK 商品已封存。',n_report_done:'你提交的檢舉已處理，謝謝回報。',n_report:'{a} 檢舉了 {b}，請到管理後台查看。',n_ip:'新註冊的 {u} 與 {others} 使用相同 IP，請到管理後台確認。',
  just_now:'剛剛',hours_ago:'{h} 小時前',days_ago:'{d} 天前',deleted_user:'（已刪除）',
  footer:'本站只是刊登平台，交易請玩家之間自行用 MoogleMail 以 CoD 完成。只接受遊戲內 Credits，禁止任何現金交易。'
@@ -445,11 +495,37 @@ en:{
  E_BAD:"The data is not valid.",
  E_TOO_MANY:"You can list at most 200 items at once.",
  sell_done_dup:"{n} were already listed and were skipped.",
- season_set:"Season",
+ season_set:"Season name",
  season_saved:"Season updated.",
- log_set_season:"Set the Isekai season to {s}",
+ log_set_season:"Renamed the Isekai season to {s}",
  pw_pending:"must change password",
  ad_season_confirm_v1:"Archive every Isekai listing that is for sale or in trade, and start season {s}? This cannot be undone.",
+ eqf_open:"Equipment filter",
+ eqf_done:"Done",
+ eqf_s_cat:"Category",
+ eqf_s_type:"Type",
+ eqf_s_slot:"Slot",
+ eqf_s_pre:"Prefix",
+ eqf_s_suf:"Suffix",
+ eqf_multi:"pick any",
+ eqf_slot_hint:"armor only",
+ eqf_g_pre_w:"Weapon / staff",
+ eqf_g_pre_a:"Armor / shield",
+ eqf_g_pre_gem:"Gem",
+ eqf_g_suf_w:"Weapon",
+ eqf_g_suf_s:"Staff / magic",
+ eqf_g_suf_d:"Defence",
+ eqf_g_suf_r:"Element resist",
+ eqf_none_pre:"No prefix",
+ eqf_none_suf:"No suffix",
+ eqf_nothing:"(nothing left to pick)",
+ eqf_match:"{n} match",
+ eqf_rule:"Several in one section = any of them; different sections must all match",
+ f_roll:"ROLL %",
+ ad_season_confirm_v2:"Archive every Isekai listing that is for sale or in trade and switch to a new season? This cannot be undone.",
+ season_next:"New season name",
+ season_fmt:"e.g. 2026-2 (2026, season 2). Letters, digits and . - _ only, up to 20 characters.",
+ E_SEASON:"Season names use letters, digits and . - _ only, up to 20 characters, e.g. 2026-2.",
  res_total:"{n} items",
  pg_of:"page {p} of {n}",
  pg_prev:"Prev",
@@ -495,11 +571,11 @@ en:{
  f_search:'Search equipment name',f_cat_all:'All categories',f_q_all:'All qualities',f_lv:'Level',f_price:'Price',f_attr:'Primary stats',f_sort:'Sort',
  sort_new:'Newest',sort_price_asc:'Price: low to high',sort_price_desc:'Price: high to low',sort_avg:'ROLL: high to low',sort_lv:'Level: high to low',
  f_clear:'Clear filters',f_seller:'Seller: {name}',
- col_equip:'Equipment',col_type:'Type',col_lv:'Level',col_attr:'Stats',col_avg:'ROLL',col_price:'Price',col_sold_price:'Sold for',col_seller:'Seller',col_buyer:'Buyer',col_status:'Status',col_date:'Date',col_season:'Season',col_world:'World',col_info:'Details',col_actions:'Actions',col_include:'List',col_role:'Role',col_last:'Last message',col_ref:'Reference',
+ col_equip:'Equipment',col_type:'Type',col_lv:'Level',col_attr:'Stats',col_avg:'ROLL',col_price:'Price',col_sold_price:'Sold for',col_seller:'Seller',col_buyer:'Buyer',col_status:'Status',col_date:'Date',col_season:"Season",col_world:'World',col_info:'Details',col_actions:'Actions',col_include:'List',col_role:'Role',col_last:'Last message',col_ref:'Reference',
  btn_buy:'Buy',yours:'Your listing',empty_results:'No equipment matches these filters.',
  price_ref:'{n} sales matching “{q}”',price_min:'Lowest',price_median:'Median',price_max:'Highest',
- price_ref_hint:'Type part of an equipment name in the search box to see the lowest, median and highest past sale prices, for example Rapier of Slaughter.',
- credits_only:'All prices are in Persistent Credits, Isekai items included.',isk_season:'Isekai season {n}',
+ price_ref_hint:"Type part of an equipment name in the search box, or pick options in \"Equipment filter\", to see the lowest, median and highest past sale prices, for example Rapier of Slaughter.",
+ credits_only:'All prices are in Persistent Credits, Isekai items included.',isk_season:"Isekai season {n}",
  st_available:'For sale',st_in_trade:'In trade',st_sold:'Sold',st_withdrawn:'Withdrawn',st_archived:'Archived',st_expired:'Expired',
  open_in_hv:'Open in HentaiVerse',d_listed:'Listed',d_world:'World',d_id:'Equipment ID',list_price:'listed at',report_user:'Report',
  login_to_act:'Log in to buy or message the seller.',
@@ -547,13 +623,13 @@ en:{
  ad_u_name:'User',ad_u_joined:'Joined',ad_u_listing:'Listed',ad_u_sold:'Sold',ad_u_bought:'Bought',ad_u_cancel:'Withdrew (30d)',ad_u_reports:'Reported',ad_u_state:'Status',ad_normal:'Active',ad_banned_until:'Suspended until {d}',ad_banned_perm:'Suspended permanently',ad_warned:'{n} warnings',ad_ip_with:'same IP as {names}',
  ad_ip_title:'These accounts registered from the same IP',ad_ip_note:'Only a salted hash of each IP is stored, used to check for matches; not even the admin can see the actual IP. Households, schools, internet cafés and mobile networks can share an IP, so judge each case yourself.',ad_ip_dismiss:'Mark as OK',ad_ip_none:'No accounts share a registration IP.',ad_ip_dismissed:'Marked OK',
  ad_trade_hint:'Only you can see the buyer column. Exclude suspected wash trades to keep them out of the public sold list and price stats.',ad_exclude:'Exclude',ad_include:'Restore',ad_excluded:'Excluded',ad_included:'Included',
- ad_season_now:'Current Isekai season: {n}',ad_season_btn:'End Isekai season: archive all Isekai listings',ad_season_desc:'All Isekai listings that are for sale or in trade become Archived, and their sellers are notified. Sale records are kept and labelled with the season.',ad_season_confirm:'Archive {n} Isekai listings and start season {s}? This cannot be undone.',ad_season_done:'Archived {n} listings. Isekai season {s} has started.',
+ ad_season_now:"Current Isekai season: {n}",ad_season_btn:'End Isekai season: archive all Isekai listings',ad_season_desc:"All Isekai listings that are for sale or in trade become Archived, and their sellers are notified. Sale records are kept and labelled with the season.",ad_season_confirm:'Archive {n} Isekai listings and start season {s}? This cannot be undone.',ad_season_done:"Archived {n} listings. Isekai season {s} has started.",
  ad_log_empty:'No actions yet.',
  warn_title:'Warn {name}',warn_msg:'Message (shown in their notifications)',warn_need:'Enter a message.',
  ban_title:'Suspend {name}',ban_dur:'Duration',d1:'1 day',d3:'3 days',d7:'7 days',d30:'30 days',dperm:'Permanent',ban_reason:'Reason (shown to them)',ban_effect:'While suspended they cannot list, buy or send messages, and their listings are hidden from the market.',ban_need:'Enter a reason.',
  pw_title:'Reset password for {name}',pw_confirm:'Reset {name}’s password to {pw}? They will be asked to set a new password the next time they log in.',pw_check:'When the MoogleMail arrives, check that the sender’s in-game name matches this username, so nobody can get someone else’s password reset.',pw_done:'Password reset for {name}.',
  del_title:'Delete {name}’s account',del_desc:'This cannot be undone. Their active listings are withdrawn; sale records are kept. They can sign up again with the same name.',del_done:'Deleted {name}’s account.',
- log_warn:'Warned {name}: {msg}',log_ban:'Suspended {name} ({dur}): {reason}',log_unban:'Lifted suspension for {name}',log_pw:'Reset password for {name}',log_del:'Deleted account {name}',log_resolve:'Resolved report #{id}: {note}',log_ip:'Marked same-IP accounts as OK: {names}',log_exclude:'Excluded sale: {item}',log_include:'Restored sale: {item}',log_season:'Ended Isekai season, archived {n}, started season {s}',
+ log_warn:'Warned {name}: {msg}',log_ban:'Suspended {name} ({dur}): {reason}',log_unban:'Lifted suspension for {name}',log_pw:'Reset password for {name}',log_del:'Deleted account {name}',log_resolve:'Resolved report #{id}: {note}',log_ip:'Marked same-IP accounts as OK: {names}',log_exclude:'Excluded sale: {item}',log_include:'Restored sale: {item}',log_season:"Ended Isekai season, archived {n}, started season {s}",
  n_buy:'{u} wants to buy your {item}. It is now In Trade. Send it to {u} by MoogleMail with CoD.',n_msg:'{u} sent you a message about {item}.',n_buyer_cancel:'{u} withdrew from buying {item}. It is for sale again.',n_seller_cancel:'The seller cancelled the trade for {item}: {r}.',n_sold:'Trade complete: the seller marked {item} as sold.',n_wait:'{item} from your waitlist is for sale again.',n_admin_pm:'Message from the admin: {text}',n_ban:'Your account was suspended ({dur}): {reason}',n_unban:'Your suspension was lifted.',n_archived:'Isekai season ended. {n} of your Isekai listings were archived.',n_report_done:'Your report has been handled. Thank you.',n_report:'{a} reported {b}. Check the admin panel.',n_ip:'New account {u} shares a registration IP with {others}. Check the admin panel.',
  just_now:'just now',hours_ago:'{h}h ago',days_ago:'{d}d ago',deleted_user:'(deleted)',
  footer:'This site only hosts listings. Players complete trades themselves by MoogleMail with CoD. In-game Credits only; real-money trading is not allowed.'
@@ -570,8 +646,8 @@ const P={lang:'zh',world:'main',token:''};               // kept in this browser
 function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}}
 function savePrefs(){try{localStorage.setItem(LS_KEY,JSON.stringify(P));}catch(e){}}
 const A={me:null,market:null,mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
-function defaultFilters(){return {q:'',cat:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',attrs:[],sort:'new',seller:''};}
-const UI={view:'market',tab:'available',page:1,filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
+function defaultFilters(){return {q:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',rMin:'',rMax:'',attrs:[],sort:'new',seller:'',eq:{cat:[],type:[],slot:[],pre:[],suf:[]}};}
+const UI={view:'market',tab:'available',page:1,eqOpen:false,filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
   sellText:'',sellBad:[],importMsg:'',dsel:new Set(),notifOpen:false,detailId:null,buyConfirm:null,forcePw:false,busy:false};
 
 /* ================= server ================= */
@@ -763,15 +839,152 @@ function renderMain(){
 }
 function needLogin(k){return `<div class="panel pad"><p>${t(k)}</p><div class="row-btns"><button class="btn primary" data-act="login">${t('login')}</button><button class="btn" data-act="register">${t('register')}</button></div></div>`;}
 
+/* ================= equipment filter window =================
+   Which prefixes and suffixes each type can roll, from ehwiki (Equipment Basics, Detailed Equip Characteristics).
+   Within a section any picked option may match; different sections must all match. Picking an option hides every
+   option that can no longer match together with what is already picked; picked options always stay visible. */
+const EQ_W7=['Ethereal','Fiery','Arctic','Shocking','Tempestuous','Hallowed','Demonic'];
+const EQ_GEM=['Ruby','Cobalt','Amber','Jade','Zircon','Onyx'];
+const EQ_EM=['the Fire-eater','the Frost-born','the Thunder-child','the Wind-waker','the Thrice-blessed','the Spirit-ward'];
+const EQ_PROF=['the Elementalist','the Heaven-sent','the Demon-fiend','the Earth-walker','the Curse-weaver'];
+const EQ_ELEM=['Surtr','Niflheim','Mjolnir','Freyr','Heimdall','Fenrir'];
+const EQ_MIT=['Protection','Warding','Dampening','Deflection','Stoneskin'];
+const EQ_TYPES=[
+ ['Axe','One-handed Weapon',EQ_W7,['Slaughter','Balance','the Battlecaster','the Vampire','the Illithid','the Banshee','the Ox','the Raccoon']],
+ ['Club','One-handed Weapon',EQ_W7,['Slaughter','Balance','Swiftness','the Nimble','the Battlecaster','the Vampire','the Illithid','the Banshee','the Raccoon','the Cheetah']],
+ ['Dagger','One-handed Weapon',EQ_W7,['Slaughter','Balance','the Nimble','Swiftness','the Battlecaster','Focus','the Raccoon','the Cheetah']],
+ ['Rapier','One-handed Weapon',EQ_W7,['Slaughter','Balance','the Nimble','Swiftness','the Battlecaster','the Vampire','the Illithid','the Banshee','the Raccoon','the Cheetah']],
+ ['Shortsword','One-handed Weapon',EQ_W7,['Slaughter','Balance','Swiftness','the Battlecaster','Focus','the Vampire','the Illithid','the Banshee','the Ox','the Raccoon']],
+ ['Wakizashi','One-handed Weapon',EQ_W7,['Slaughter','Balance','the Nimble','Swiftness','the Battlecaster','the Raccoon','the Cheetah']],
+ ['Estoc','Two-handed Weapon',EQ_W7,['Slaughter','Balance','the Battlecaster','the Vampire','the Illithid','the Banshee','the Ox']],
+ ['Katana','Two-handed Weapon',EQ_W7,['Slaughter','Balance','the Battlecaster','the Ox']],
+ ['Longsword','Two-handed Weapon',EQ_W7,['Slaughter','Balance','the Battlecaster','the Vampire','the Illithid','the Banshee','the Ox']],
+ ['Mace','Two-handed Weapon',EQ_W7,['Slaughter','Balance','the Battlecaster','the Vampire','the Illithid','the Banshee','the Ox']],
+ ['Scythe','Two-handed Weapon',EQ_W7,['Slaughter','Balance','the Battlecaster','the Ox']],
+ ['Swordchucks','Two-handed Weapon',EQ_W7,['Slaughter','the Ox','the Raccoon']],
+ ['Oak','Staff',EQ_W7,['Destruction','Focus','Heimdall','the Earth-walker','the Fox','the Owl']],
+ ['Redwood','Staff',EQ_W7,['Destruction','Focus','Surtr','Niflheim','Mjolnir','Freyr','the Elementalist','the Fox','the Owl']],
+ ['Willow','Staff',EQ_W7,['Destruction','Focus','Fenrir','the Curse-weaver','the Fox','the Owl']],
+ ['Katalox','Staff',EQ_W7,['Destruction','Focus','Heimdall','Fenrir','the Heaven-sent','the Demon-fiend','the Fox','the Owl']],
+ ['Ebony','Staff',EQ_W7,['Destruction','Focus',...EQ_ELEM,'the Elementalist','the Heaven-sent','the Demon-fiend','the Fox','the Owl']],
+ ['Buckler','Shield',['Reinforced','Agile','Mithril'],['the Barrier','the Nimble','the Battlecaster','the Fleet','Protection','Warding','the Turtle']],
+ ['Kite','Shield',['Reinforced','Agile','Mithril'],['the Barrier','the Battlecaster',...EQ_MIT,'the Turtle']],
+ ['Tower','Shield',['Reinforced','Mithril'],['the Barrier',...EQ_MIT,'the Turtle']],
+ ['Force','Shield',EQ_GEM,[...EQ_MIT,'the Turtle']],
+ ['Cotton','Cloth Armor',['Charged','Frugal',...EQ_GEM],['Protection','Warding',...EQ_PROF,...EQ_EM]],
+ ['Gossamer','Cloth Armor',EQ_GEM,[...EQ_PROF,'the Fox','the Owl']],
+ ['Ironsilk','Cloth Armor',['Reinforced',...EQ_GEM],['Protection','Warding','the Fleet','the Raccoon','the Cheetah']],
+ ['Phase','Cloth Armor',['Charged','Frugal','Radiant','Mystic',...EQ_GEM],[...EQ_PROF,'the Raccoon','the Cheetah','the Fox','the Owl',...EQ_ELEM]],
+ ['Leather','Light Armor',['Reinforced','Agile',...EQ_GEM],[...EQ_MIT,'Negation',...EQ_EM]],
+ ['Drakehide','Light Armor',EQ_GEM,['Protection','Warding','the Battlecaster','Dampening','Deflection','Stoneskin','Negation',...EQ_EM]],
+ ['Kevlar','Light Armor',['Reinforced',...EQ_GEM],['Protection','Warding','the Battlecaster','Dampening','Deflection','Stoneskin','Negation',...EQ_EM]],
+ ['Shade','Light Armor',['Savage','Agile',...EQ_GEM],['the Shadowdancer','the Arcanist','the Fleet','Negation']],
+ ['Plate','Heavy Armor',['Mithril','Shielding',...EQ_GEM],[...EQ_MIT,...EQ_EM]],
+ ['Chain','Heavy Armor',['Mithril','Reinforced',...EQ_GEM],[...EQ_MIT,...EQ_EM]],
+ ['Reactive','Heavy Armor',['Mithril',...EQ_GEM],['the Barrier',...EQ_MIT,...EQ_EM]],
+ ['Power','Heavy Armor',['Mithril','Savage',...EQ_GEM],['Slaughter','Balance','Protection','Warding']],
+].map(([key,cat,pre,suf])=>({key,cat,pre,suf,armor:/Armor$/.test(cat)}));
+const EQ_SLOTS=['head','body','hands','legs','feet'],EQ_SLOT_EN={head:'Head',body:'Body',hands:'Hands',legs:'Legs',feet:'Feet'};
+const EQ_PRE_GROUPS=[['eqf_g_pre_w',EQ_W7],['eqf_g_pre_a',['Radiant','Charged','Mystic','Frugal','Reinforced','Agile','Savage','Mithril','Shielding']],['eqf_g_pre_gem',EQ_GEM],['',['-']]];
+const EQ_SUF_GROUPS=[['eqf_g_suf_w',['Slaughter','Balance','Swiftness','the Nimble','the Battlecaster','the Vampire','the Illithid','the Banshee','the Ox','the Raccoon','the Cheetah']],
+  ['eqf_g_suf_s',['Destruction','Focus',...EQ_ELEM,...EQ_PROF,'the Fox','the Owl']],
+  ['eqf_g_suf_d',[...EQ_MIT,'Negation','the Barrier','the Fleet','the Shadowdancer','the Arcanist','the Turtle']],
+  ['eqf_g_suf_r',EQ_EM],['',['-']]];
+/* Chinese names shown beside the English ones */
+const EQ_ZH={
+ 'One-handed Weapon':'單手武器','Two-handed Weapon':'雙手武器','Staff':'法杖','Shield':'盾牌','Cloth Armor':'布甲','Light Armor':'輕甲','Heavy Armor':'重甲',
+ Axe:'斧',Club:'棍棒',Dagger:'匕首',Rapier:'西洋劍',Shortsword:'短劍',Wakizashi:'脇差',Estoc:'刺劍',Katana:'太刀',Longsword:'長劍',Mace:'錘',Scythe:'鐮刀',Swordchucks:'劍節棍',
+ Oak:'橡木',Redwood:'紅木',Willow:'柳木',Katalox:'鐵木',Ebony:'烏木',Buckler:'圓盾',Kite:'鳶盾',Tower:'塔盾',Force:'力場盾',
+ Cotton:'棉',Gossamer:'薄紗',Ironsilk:'鐵絲',Phase:'相位',Leather:'皮革',Drakehide:'龍皮',Kevlar:'凱夫拉',Shade:'暗影',Plate:'板甲',Chain:'鎖甲',Reactive:'反應',Power:'動力',
+ head:'頭',body:'身',hands:'手',legs:'腿',feet:'腳',
+ Ethereal:'虛空',Fiery:'火焰',Arctic:'冰霜',Shocking:'閃電',Tempestuous:'風暴',Hallowed:'神聖',Demonic:'黑暗',
+ Radiant:'魔光',Charged:'充能',Mystic:'神秘',Frugal:'節能',Reinforced:'加固',Agile:'敏捷',Savage:'野蠻',Mithril:'秘銀',Shielding:'防護',
+ Ruby:'紅寶石',Cobalt:'鈷藍',Amber:'琥珀',Jade:'翡翠',Zircon:'鋯石',Onyx:'瑪瑙',
+ Slaughter:'屠戮',Balance:'平衡',Swiftness:'迅捷','the Nimble':'靈巧','the Battlecaster':'戰法','the Vampire':'吸血鬼','the Illithid':'奪心魔','the Banshee':'女妖','the Ox':'公牛','the Raccoon':'浣熊','the Cheetah':'獵豹',
+ Destruction:'毀滅',Focus:'專注',Surtr:'火',Niflheim:'冰',Mjolnir:'雷',Freyr:'風',Heimdall:'聖',Fenrir:'暗',
+ 'the Elementalist':'元素','the Heaven-sent':'天堂','the Demon-fiend':'惡魔','the Earth-walker':'大地','the Curse-weaver':'詛咒','the Fox':'狐狸','the Owl':'貓頭鷹',
+ Protection:'保護',Warding:'守護',Dampening:'抑制',Deflection:'偏轉',Stoneskin:'石膚',Negation:'否定','the Barrier':'屏障','the Fleet':'迅速','the Shadowdancer':'影舞者','the Arcanist':'秘法師','the Turtle':'烏龜',
+ 'the Fire-eater':'抗火','the Frost-born':'抗冰','the Thunder-child':'抗雷','the Wind-waker':'抗風','the Thrice-blessed':'抗聖','the Spirit-ward':'抗暗',
+};
+const EQ_SECS=['cat','type','slot','pre','suf'];
+const eqPicked=(sec,opt)=>UI.filters.eq[sec].includes(opt);
+const eqAnyIn=(arr,list)=>arr.some(v=>v==='-'||list.includes(v));
+/* does this type fit every section except `skip`? */
+function eqTypeFits(ty,skip){
+  const e=UI.filters.eq;
+  if(skip!=='cat'&&e.cat.length&&!e.cat.includes(ty.cat))return false;
+  if(skip!=='type'&&e.type.length&&!e.type.includes(ty.key))return false;
+  if(skip!=='slot'&&e.slot.length&&!ty.armor)return false;
+  if(skip!=='pre'&&e.pre.length&&!eqAnyIn(e.pre,ty.pre))return false;
+  if(skip!=='suf'&&e.suf.length&&!eqAnyIn(e.suf,ty.suf))return false;
+  return true;
+}
+function eqSupports(ty,sec,opt){
+  switch(sec){case 'cat':return ty.cat===opt;case 'type':return ty.key===opt;case 'slot':return ty.armor;
+    case 'pre':return opt==='-'||ty.pre.includes(opt);default:return opt==='-'||ty.suf.includes(opt);}
+}
+const eqVisible=(sec,opt)=>eqPicked(sec,opt)||EQ_TYPES.some(ty=>eqTypeFits(ty,sec)&&eqSupports(ty,sec,opt));
+function eqText(sec,opt){
+  if(opt==='-')return t(sec==='pre'?'eqf_none_pre':'eqf_none_suf');
+  const en=sec==='slot'?EQ_SLOT_EN[opt]:opt;
+  return P.lang==='zh'?(EQ_ZH[opt]||en):en;
+}
+function eqLabel(sec,opt){
+  if(opt==='-')return esc(eqText(sec,opt));
+  const en=sec==='slot'?EQ_SLOT_EN[opt]:opt;
+  return P.lang==='zh'?`${esc(EQ_ZH[opt]||en)}<span class="en">${esc(en)}</span>`:esc(en);
+}
+const eqChip=(sec,opt)=>`<button type="button" class="chip ${eqPicked(sec,opt)?'on':''}" data-act="eqf" data-sec="${sec}" data-opt="${esc(opt)}" aria-pressed="${eqPicked(sec,opt)}">${eqLabel(sec,opt)}</button>`;
+function eqRows(sec,groups,labelOf){
+  let h='',n=0;
+  for(const [g,opts] of groups){
+    const vis=opts.filter(o=>eqVisible(sec,o));if(!vis.length)continue;n+=vis.length;
+    h+=`<div class="eqf-grp"><span class="eqf-gl">${esc(labelOf(g))}</span><div class="eqf-cs">${vis.map(o=>eqChip(sec,o)).join('')}</div></div>`;
+  }
+  return n?h:`<div class="eqf-none">${esc(t('eqf_nothing'))}</div>`;
+}
+function eqBodyHTML(){
+  const cats=CATS.filter(c=>eqVisible('cat',c));
+  const typeRows=eqRows('type',CATS.map(c=>[c,EQ_TYPES.filter(ty=>ty.cat===c).map(ty=>ty.key)]),c=>P.lang==='zh'?EQ_ZH[c]:c);
+  const slotVis=EQ_SLOTS.some(k=>eqVisible('slot',k));
+  const sec=(k,body,small)=>`<div class="eqf-sec"><h3>${t('eqf_s_'+k)}<small>${small||t('eqf_multi')}</small></h3>${body}</div>`;
+  return sec('cat',cats.length?`<div class="eqf-grp"><div class="eqf-cs">${cats.map(c=>eqChip('cat',c)).join('')}</div></div>`:`<div class="eqf-none">${t('eqf_nothing')}</div>`)
+    +sec('type',typeRows)
+    +(slotVis?sec('slot',`<div class="eqf-grp"><div class="eqf-cs">${EQ_SLOTS.map(k=>eqChip('slot',k)).join('')}</div></div>`,t('eqf_slot_hint')):'')
+    +sec('pre',eqRows('pre',EQ_PRE_GROUPS,g=>g?t(g):''))
+    +sec('suf',eqRows('suf',EQ_SUF_GROUPS,g=>g?t(g):''));
+}
+const eqCount=()=>EQ_SECS.reduce((n,k)=>n+UI.filters.eq[k].length,0);
+function eqBtnHTML(){const n=eqCount();return `${esc(t('eqf_open'))} ▾${n?`<span class="eqf-n">${n}</span>`:''}`;}
+function eqSelHTML(){
+  return EQ_SECS.flatMap(sec=>UI.filters.eq[sec].map(o=>`<span class="chip on"><b>${esc(t('eqf_s_'+sec))}</b>${eqLabel(sec,o)}<button type="button" data-act="eqf-x" data-sec="${sec}" data-opt="${esc(o)}" aria-label="${esc(t('f_clear'))} ${esc(eqText(sec,o))}">×</button></span>`)).join('');
+}
+/* plain-text summary of the picks, used as the title of the price reference */
+function eqSummary(){return EQ_SECS.map(sec=>UI.filters.eq[sec].map(o=>eqText(sec,o)).join('／')).filter(Boolean).join(' + ');}
+function eqCntText(){const d=A.market;return d&&d.tab===UI.tab&&d.world===P.world&&!$('#results.stale')?t('eqf_match',{n:d.total.toLocaleString()}):'…';}
+function renderEqf(){
+  const b=$('#eqf-btn'),pop=$('#eqf-pop'),body=$('#eqf-body'),sel=$('#eqf-sel'),cnt=$('#eqf-cnt');
+  if(b){b.innerHTML=eqBtnHTML();b.classList.toggle('primary',UI.eqOpen);b.setAttribute('aria-expanded',UI.eqOpen);}
+  if(pop)pop.hidden=!UI.eqOpen;
+  if(body&&UI.eqOpen)body.innerHTML=eqBodyHTML();
+  if(sel)sel.innerHTML=eqSelHTML();
+  if(cnt)cnt.textContent=eqCntText();
+}
+function eqClose(focusBtn){UI.eqOpen=false;renderEqf();if(focusBtn){const b=$('#eqf-btn');if(b)b.focus();}}
+
 /* ---- market ----
    Filtering, sorting and paging happen in the database (hv_market_search), so a visit downloads one page of 50
    items however big the market grows. Text boxes search shortly after typing stops; lists and buttons at once. */
 function searchArgs(){
   const f=UI.filters;
-  return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_f:{q:f.q.trim(),cat:f.cat,qual:f.qual,
+  return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_f:{q:f.q.trim(),qual:f.qual,
+    cats:f.eq.cat,types:f.eq.type,slots:f.eq.slot,pres:f.eq.pre,sufs:f.eq.suf,
     lv_min:parseInt(f.lvMin)||null,lv_max:parseInt(f.lvMax)||null,p_min:parsePrice(f.pMin)||null,p_max:parsePrice(f.pMax)||null,
+    r_min:pct(f.rMin),r_max:pct(f.rMax),
     attrs:f.attrs.join(''),seller:f.seller?Number(f.seller):null,sort:f.sort}};
 }
+/* a ROLL % box: '', '50', '64.4' or '64.4%'; anything outside 0–100 is ignored */
+function pct(v){v=String(v||'').replace('%','').trim();if(!v)return null;const n=Math.round(parseFloat(v)*100)/100;return n>=0&&n<=100?n:null;}
 let mkSeq=0,mkTimer=null;
 /* only the newest request may update the page, so a slow answer never overwrites a newer one */
 async function loadMarket(){
@@ -787,6 +1000,7 @@ async function runSearch(){
 function searchSoon(delay){
   UI.page=1;clearTimeout(mkTimer);
   const box=$('#results');if(box)box.classList.add('stale');
+  const cnt=$('#eqf-cnt');if(cnt)cnt.textContent='…';
   mkTimer=setTimeout(runSearch,delay);
 }
 function mkTitle(){const d=A.market;return P.world==='main'?t('world_main'):t('isk_season',{n:d?d.season:'…'});}
@@ -798,7 +1012,6 @@ function renderMarketHead(){const h=$('#mk-title'),tb=$('#mtabs');if(h)h.textCon
 function viewMarket(){
   const f=UI.filters;
   const head=`<div class="mhead"><h1 id="mk-title">${esc(mkTitle())}</h1><span class="muted">${t('credits_only')}</span></div>`;
-  const catOpts=CATS.map(c=>`<option value="${c}" ${f.cat===c?'selected':''}>${esc(catLabel(c))}</option>`).join('');
   const qOpts=['Peerless','Legendary','Magnificent','Exquisite','Superior'].map(q=>`<option value="${q}" ${f.qual===q?'selected':''}>${q}</option>`).join('');
   const sorts=['new','price_asc','price_desc','avg','lv'].map(s=>`<option value="${s}" ${f.sort===s?'selected':''}>${t('sort_'+s)}</option>`).join('');
   return head+`
@@ -806,16 +1019,22 @@ function viewMarket(){
   <div class="panel">
     <div class="filters">
       <label class="sr" for="f-q">${t('f_search')}</label><input id="f-q" class="grow" type="search" data-f="q" placeholder="${t('f_search')}" value="${esc(f.q)}">
-      <label class="sr" for="f-cat">${t('col_type')}</label><select id="f-cat" data-f="cat"><option value="">${t('f_cat_all')}</option>${catOpts}</select>
+      <button type="button" class="btn small eqf-btn ${UI.eqOpen?'primary':''}" id="eqf-btn" data-act="eqf-open" aria-haspopup="dialog" aria-expanded="${UI.eqOpen}" aria-controls="eqf-pop">${eqBtnHTML()}</button>
       <label class="sr" for="f-qual">Quality</label><select id="f-qual" data-f="qual"><option value="">${t('f_q_all')}</option>${qOpts}</select>
       <span class="fgroup"><label for="f-lvmin">${t('f_lv')}</label><input id="f-lvmin" class="sm" data-f="lvMin" inputmode="numeric" placeholder="min" value="${esc(f.lvMin)}">–<input id="f-lvmax" class="sm" data-f="lvMax" inputmode="numeric" placeholder="max" value="${esc(f.lvMax)}" aria-label="${t('f_lv')} max"></span>
       <span class="fgroup"><label for="f-pmin">${t('f_price')}</label><input id="f-pmin" class="sm" data-f="pMin" placeholder="100k" value="${esc(f.pMin)}">–<input id="f-pmax" class="sm" data-f="pMax" placeholder="10m" value="${esc(f.pMax)}" aria-label="${t('f_price')} max"></span>
+      <span class="fgroup"><label for="f-rmin">${t('f_roll')}</label><input id="f-rmin" class="sm" data-f="rMin" inputmode="decimal" placeholder="0" value="${esc(f.rMin)}">–<input id="f-rmax" class="sm" data-f="rMax" inputmode="decimal" placeholder="100" value="${esc(f.rMax)}" aria-label="${t('f_roll')} max"></span>
       <span class="fgroup" role="group" aria-label="${t('f_attr')}"><span class="flabel">${t('f_attr')}</span>${ATTRS.map(a=>`<button class="chip ${f.attrs.includes(a)?'on':''}" data-act="attr" data-v="${a}" title="${ATTR_NAME[a]}" aria-pressed="${f.attrs.includes(a)}">${a}</button>`).join('')}</span>
       <label class="sr" for="f-sort">${t('f_sort')}</label><select id="f-sort" data-f="sort">${sorts}</select>
       ${f.seller?`<span class="chip on seller">${t('f_seller',{name:f.sellerName||''})}<button data-act="clear-seller" aria-label="${t('f_clear')}">×</button></span>`:''}
       <button class="btn small" data-act="clear-filters">${t('f_clear')}</button>
       <button class="btn small" data-act="reload">${t('refresh')}</button>
+      <div class="eqf-pop" id="eqf-pop" role="dialog" aria-label="${t('eqf_open')}" ${UI.eqOpen?'':'hidden'}>
+        <div class="eqf-body" id="eqf-body">${UI.eqOpen?eqBodyHTML():''}</div>
+        <div class="eqf-foot"><span class="eqf-cnt" id="eqf-cnt" aria-live="polite">${eqCntText()}</span><span class="muted small eqf-rule">${t('eqf_rule')}</span><button type="button" class="btn small" data-act="eqf-clear">${t('f_clear')}</button><button type="button" class="btn small primary" data-act="eqf-done">${t('eqf_done')}</button></div>
+      </div>
     </div>
+    <div class="eqf-sel" id="eqf-sel">${eqSelHTML()}</div>
     <div id="results">${A.market?'':`<div class="empty">${t('loading')}</div>`}</div>
   </div>`;
 }
@@ -831,21 +1050,22 @@ function renderResults(){
   const box=$('#results');if(!box)return;
   const d=A.market,u=A.me,sold=UI.tab==='sold',isk=P.world==='isekai';
   box.classList.remove('stale');
+  const cnt=$('#eqf-cnt');if(cnt)cnt.textContent=eqCntText();
   if(!d||d.tab!==UI.tab||d.world!==P.world){box.innerHTML=`<div class="empty">${t('loading')}</div>`;return;}
   const arr=d.items;
   let h='';
   if(sold){
-    const q=UI.filters.q.trim(),st=d.stats;
-    if(q&&st&&st.n){
-      h+=`<div class="pref"><div class="pref-t">${t('price_ref',{q,n:st.n})}</div><div class="pref-n"><div><span>${t('price_min')}</span>${priceHTML(st.min)}</div><div><span>${t('price_median')}</span>${priceHTML(Math.round(st.median))}</div><div><span>${t('price_max')}</span>${priceHTML(st.max)}</div></div></div>`;
-    } else if(!q) h+=`<div class="hint">${t('price_ref_hint')}</div>`;
+    const q=UI.filters.q.trim(),st=d.stats,ref=[q,eqSummary()].filter(Boolean).join(' + ');
+    if(ref&&st&&st.n){
+      h+=`<div class="pref"><div class="pref-t">${t('price_ref',{q:esc(ref),n:st.n})}</div><div class="pref-n"><div><span>${t('price_min')}</span>${priceHTML(st.min)}</div><div><span>${t('price_median')}</span>${priceHTML(Math.round(st.median))}</div><div><span>${t('price_max')}</span>${priceHTML(st.max)}</div></div></div>`;
+    } else if(!ref) h+=`<div class="hint">${t('price_ref_hint')}</div>`;
   }
   if(!arr.length){box.innerHTML=h+`<div class="empty">${t('empty_results')}</div>`;return;}
   const pages=Math.max(1,Math.ceil(d.total/d.per));
   h+=`<div class="rsum">${t('res_total',{n:d.total.toLocaleString()})}${pages>1?' · '+t('pg_of',{p:d.page,n:pages}):''}</div>`;
   if(sold){
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th>${isk?`<th>${t('col_season')}</th>`:''}</tr></thead><tbody>`+
-    arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>S${l.season??'?'}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
+    arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(l.type)}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>${esc(l.season??'?')}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
   } else {
     const it=UI.tab==='in_trade';
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_seller')}</th><th>${it?t('col_status'):''}</th></tr></thead><tbody>`+
@@ -1140,11 +1360,11 @@ function adIp(D){
 function adTrades(D){
   const list=D.trades;
   if(!list.length)return `<div class="pad"><div class="notice info">${t('ad_trade_hint')}</div></div><div class="empty">${t('mine_empty')}</div>`;
-  return `<div class="pad"><div class="notice info">${t('ad_trade_hint')}</div></div><div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th><th>${t('col_buyer')}</th><th>${t('col_ref')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)} ${worldBadge(l)}${l.world==='isekai'?` <span class="muted small">S${l.season??'?'}</span>`:''}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${esc(l.seller)}</td><td>${esc(l.buyer)}</td><td class="acts">${l.excluded?`<span class="pill bad">${t('ad_excluded')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_include')}</button>`:`<span class="pill available">${t('ad_included')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_exclude')}</button>`}</td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="pad"><div class="notice info">${t('ad_trade_hint')}</div></div><div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th><th>${t('col_buyer')}</th><th>${t('col_ref')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)} ${worldBadge(l)}${l.world==='isekai'?` <span class="muted small">${esc(l.season??'?')}</span>`:''}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${esc(l.seller)}</td><td>${esc(l.buyer)}</td><td class="acts">${l.excluded?`<span class="pill bad">${t('ad_excluded')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_include')}</button>`:`<span class="pill available">${t('ad_included')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_exclude')}</button>`}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function adSeason(D){
   return `<div class="pad" style="display:grid;gap:12px;max-width:640px"><h2>${t('ad_season_now',{n:D.season})}</h2>
-  <div class="card-a"><label for="season-n">${t('season_set')}</label><input id="season-n" class="sm" inputmode="numeric" value="${D.season}"><button class="btn small" data-act="season-set">${t('save')}</button></div>
+  <div class="card-a"><label for="season-n">${t('season_set')}</label><input id="season-n" class="sm" style="width:110px" maxlength="20" placeholder="2026-2" value="${esc(D.season)}"><button class="btn small" data-act="season-set">${t('save')}</button></div>
   <p class="muted" style="margin:0">${t('ad_season_desc')}</p><div><button class="btn danger" data-act="season">${t('ad_season_btn')}</button></div></div>`;
 }
 function adLogView(D){
@@ -1195,7 +1415,12 @@ function mWarn(el){openModal(t('warn_title',{name:el.dataset.name}),`<div class=
 function mBan(el){openModal(t('ban_title',{name:el.dataset.name}),`<div class="form"><label for="m-dur">${t('ban_dur')}</label><select id="m-dur">${Object.keys(BAN_DAYS).map(k=>`<option value="${k}" ${k==='d7'?'selected':''}>${t(k)}</option>`).join('')}</select><label for="m-body">${t('ban_reason')}</label><textarea id="m-body" rows="2" maxlength="500" autofocus></textarea><p class="muted small" style="margin:0">${t('ban_effect')}</p><p class="err" id="m-err"></p></div>${okCancel('ban-ok',`data-uid="${el.dataset.uid}"`,t('ad_ban'),'danger')}`);}
 function mResetPw(el){openModal(t('pw_title',{name:el.dataset.name}),`<p style="margin:0">${t('pw_confirm',{name:el.dataset.name,pw:RESET_PW})}</p><div class="notice">${t('pw_check')}</div>${okCancel('pw-ok',`data-uid="${el.dataset.uid}" data-name="${nm(el)}"`,t('ad_reset_pw'),'danger')}`);}
 function mDelete(el){openModal(t('del_title',{name:el.dataset.name}),`<p style="margin:0">${t('del_desc')}</p>${okCancel('del-ok',`data-uid="${el.dataset.uid}" data-name="${nm(el)}"`,t('ad_delete'),'danger')}`);}
-function mSeason(){openModal(t('ad_season'),`<p style="margin:0">${t('ad_season_confirm_v1',{s:(A.admin?A.admin.season:0)+1})}</p>${okCancel('season-ok','',t('confirm'),'danger')}`);}
+/* suggest the next label by counting up the last number: 2026-2 → 2026-3, 7 → 8 */
+function nextSeason(s){s=String(s??'');const m=s.match(/^(.*?)(\d+)$/);return m?m[1]+(Number(m[2])+1):'';}
+const SEASON_RE=/^[0-9A-Za-z][0-9A-Za-z._-]{0,19}$/;
+function mSeason(){openModal(t('ad_season'),`<p style="margin:0 0 10px">${t('ad_season_confirm_v2')}</p>
+  <label for="season-next">${t('season_next')}</label> <input id="season-next" class="sm" style="width:110px" maxlength="20" placeholder="2026-2" value="${esc(nextSeason(A.admin?A.admin.season:''))}">
+  <p class="muted small" style="margin:4px 0 0">${t('season_fmt')}</p>${okCancel('season-ok','',t('confirm'),'danger')}`);}
 function val(id){const el=document.getElementById(id);return el?el.value:'';}
 function setErr(k){const el=$('#m-err');if(el)el.innerHTML=t(k);}
 
@@ -1215,6 +1440,12 @@ const H={
   tab(el){UI.tab=el.dataset.v;UI.page=1;renderMarketHead();renderResults();runSearch();},
   page(el){UI.page=Math.max(1,Number(el.dataset.v)||1);const r=$('#results');if(r){r.classList.add('stale');r.scrollIntoView({block:'start'});}runSearch();},
   attr(el){const a=el.dataset.v,arr=UI.filters.attrs,i=arr.indexOf(a);if(i>=0)arr.splice(i,1);else arr.push(a);renderMain();searchSoon(0);},
+  'eqf-open'(){UI.eqOpen=!UI.eqOpen;renderEqf();if(UI.eqOpen){const c=$('#eqf-pop .chip');if(c)c.focus();}},
+  'eqf-done'(){eqClose(true);},
+  eqf(el){const sec=el.dataset.sec,o=el.dataset.opt,arr=UI.filters.eq[sec],i=arr.indexOf(o);if(i>=0)arr.splice(i,1);else arr.push(o);
+    renderEqf();const again=document.querySelector(`#eqf-pop [data-sec="${sec}"][data-opt="${CSS.escape(o)}"]`);if(again)again.focus();searchSoon(300);},
+  'eqf-x'(el){const arr=UI.filters.eq[el.dataset.sec],i=arr.indexOf(el.dataset.opt);if(i>=0)arr.splice(i,1);renderEqf();searchSoon(0);},
+  'eqf-clear'(){EQ_SECS.forEach(k=>UI.filters.eq[k]=[]);renderEqf();searchSoon(0);},
   'clear-filters'(){UI.filters=defaultFilters();renderMain();searchSoon(0);},
   'clear-seller'(){UI.filters.seller='';renderMain();searchSoon(0);},
   'seller-filter'(el,e){e.preventDefault();UI.filters=defaultFilters();UI.filters.seller=el.dataset.uid;UI.filters.sellerName=el.dataset.name;if(UI.tab!=='sold')UI.tab='available';UI.page=1;closeModal();if(UI.view!=='market')go('market');else{renderMain();searchSoon(0);}},
@@ -1277,9 +1508,9 @@ const H={
   'ad-resolve'(el){const id=N(el.dataset.id);act(()=>api('hv_admin_resolve',{p_report:id,p_note:val('res-'+id).trim()}),t('toast_done'));},
   'ad-ip-ok'(el){act(()=>api('hv_admin_ip_ok',{p_key:el.dataset.key}),t('toast_done'));},
   'ad-excl'(el){act(()=>api('hv_admin_exclude',{p_id:N(el.dataset.lid)}));},
-  'season-set'(){const n=parseInt(val('season-n'),10);if(!(n>=1)){toast(t('E_BAD'),true);return;}act(()=>api('hv_admin_set_season',{p_season:n}),t('season_saved'));},
+  'season-set'(){const v=val('season-n').trim();if(!SEASON_RE.test(v)){toast(t('E_SEASON'),true);return;}act(()=>api('hv_admin_set_season',{p_season:v}),t('season_saved'));},
   season(){mSeason();},
-  'season-ok'(){closeModal();let r=null;act(async()=>{r=await api('hv_admin_season_end');}).then(ok=>{if(ok&&r)toast(t('ad_season_done',{n:r.n,s:r.s}));});},
+  'season-ok'(){const v=val('season-next').trim();if(!SEASON_RE.test(v)){toast(t('E_SEASON'),true);return;}closeModal();let r=null;act(async()=>{r=await api('hv_admin_season_end',{p_next:v});}).then(ok=>{if(ok&&r)toast(t('ad_season_done',{n:r.n,s:r.s}));});},
 };
 async function doLogin(){
   const name=val('m-user').trim(),pw=val('m-pw');
@@ -1314,6 +1545,7 @@ async function doChangePw(){
 }
 
 document.addEventListener('click',e=>{
+  if(UI.eqOpen&&!e.target.closest('#eqf-pop,#eqf-btn,#eqf-sel'))eqClose(false);
   if(UI.notifOpen&&!e.target.closest('.bellwrap')){UI.notifOpen=false;const dd=$('.dropdown');if(dd)dd.remove();const b=$('.bell');if(b)b.setAttribute('aria-expanded','false');}
   const el=e.target.closest('[data-act]');if(!el)return;
   const fn=H[el.dataset.act];if(fn)fn(el,e);
@@ -1338,6 +1570,7 @@ document.addEventListener('input',e=>{
 document.addEventListener('change',e=>{const el=e.target;const did=el.dataset&&(el.dataset.dprice||el.dataset.droll||el.dataset.dname);if(did!==undefined){for(const k of Object.keys(pendingSaves))if(k.startsWith(did+':'))runDraftSave(k);}});
 window.addEventListener('beforeunload',()=>{for(const k of Object.keys(pendingSaves))runDraftSave(k);});
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&UI.eqOpen&&!$('#modal-root').innerHTML){eqClose(true);return;}
   if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){back();}
   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&e.target.id&&e.target.id.startsWith('pm-in-')){const b=e.target.parentElement.querySelector('[data-act="pm-send"]');if(b)b.click();}
 });
