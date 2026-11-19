@@ -1070,12 +1070,17 @@ async function act(fn,okMsg){
   finally{UI.busy=false;document.body.classList.remove('busy');}
 }
 async function loadMe(){
-  if(!P.token){A.me=null;return;}
+  if(!P.token){A.me=null;lastMe=Date.now();return;}
   const m=await rpc('hv_me',{p_token:P.token});
   if(!m){P.token='';savePrefs();}
-  A.me=m||null;
+  A.me=m||null;lastMe=Date.now();
 }
 async function loadView(){
+  const v=UI.view;
+  await loadViewData();
+  viewAt[v]=Date.now();
+}
+async function loadViewData(){
   switch(UI.view){
     case 'market':await loadMarket();break;
     case 'mine':if(A.me){[A.mine,A.blocks]=await Promise.all([api('hv_mine'),api('hv_blocks')]);}else{A.mine=null;A.blocks=null;}break;
@@ -1087,11 +1092,24 @@ async function loadView(){
       break;
   }
 }
-async function refresh(){
-  try{await loadMe();await loadView();}catch(e){handleErr(e);}
+/* Data a view loaded less than a minute ago is reused when you come back to it (switching pages or browser
+   tabs), so the site does not ask the server again for the same thing. Your own actions, logging in, changing
+   world and the Refresh button always load fresh data. */
+const FRESH_MS=60000;
+let lastMe=0;const viewAt={};
+function viewFresh(){
+  const now=Date.now();
+  if(now-(viewAt[UI.view]||0)>=FRESH_MS||now-lastMe>=FRESH_MS)return false;
+  return UI.view!=='market'||!!(A.market&&A.market.world===P.world&&A.market.tab===UI.tab);
+}
+async function refresh(force){
+  if(force)clearCaches();
+  else if(viewFresh()){render();return;}
+  try{if(Date.now()-lastMe>3000)await loadMe();await loadView();}catch(e){handleErr(e);}   /* the account was just loaded at start-up */
   render();
 }
 async function after(){
+  clearCaches();   /* an action can change what every page shows */
   try{await loadMe();await loadView();if(UI.detailId)A.detail=await rpc('hv_listing',{p_token:P.token||null,p_id:UI.detailId});}
   catch(e){if(e.code==='E_NOT_FOUND'){UI.detailId=null;closeModal();}else handleErr(e);}
   render();
@@ -1434,11 +1452,20 @@ function searchArgs(){
 function pct(v){v=String(v||'').replace('%','').trim();if(!v)return null;const n=Math.round(parseFloat(v)*100)/100;return n>=0&&n<=100?n:null;}
 let mkSeq=0,mkTimer=null;
 /* only the newest request may update the page, so a slow answer never overwrites a newer one */
+/* pages of results seen in the last minute (tab, page, filters) are reused instead of asked for again */
+const mkCache=new Map();
+function clearCaches(){for(const k in viewAt)delete viewAt[k];mkCache.clear();}
 async function loadMarket(){
-  const seq=++mkSeq,args=searchArgs();
-  const d=await rpc('hv_market_search',args);
+  const seq=++mkSeq,args=searchArgs(),key=JSON.stringify(args),hit=mkCache.get(key);
+  let d;
+  if(hit&&Date.now()-hit.at<FRESH_MS)d=hit.d;
+  else{
+    d=await rpc('hv_market_search',args);
+    mkCache.set(key,{at:Date.now(),d});
+    if(mkCache.size>40)mkCache.delete(mkCache.keys().next().value);
+  }
   if(seq!==mkSeq)return false;
-  d.world=args.p_world;A.market=d;return true;
+  d.world=args.p_world;A.market=d;viewAt.market=Date.now();return true;
 }
 async function runSearch(){
   clearTimeout(mkTimer);
@@ -1928,9 +1955,9 @@ const H={
   close(){closeModal();},
   'modal-back'(el,e){if(e.target===el&&!UI.forcePw)closeModal();},
   'sub-cancel'(){back();},
-  world(el){P.world=el.dataset.v;savePrefs();UI.filters.seller='';UI.page=1;A.market=null;if(UI.view!=='market')go('market');else{render();refresh();}},
+  world(el){P.world=el.dataset.v;savePrefs();UI.filters.seller='';UI.page=1;A.market=null;if(UI.view!=='market')go('market');else{render();refresh(true);}},
   lang(el){P.lang=el.dataset.v;P.langSet=true;document.documentElement.lang=htmlLang();savePrefs();const keep=UI.detailId;render();if(keep&&A.detail)renderDetail();else if(!UI.forcePw)closeModal();},
-  reload(){refresh();},
+  reload(){refresh(true);},
   tab(el){UI.tab=el.dataset.v;UI.page=1;renderMarketHead();renderResults();runSearch();},
   page(el){UI.page=Math.max(1,Number(el.dataset.v)||1);const r=$('#results');if(r){r.classList.add('stale');r.scrollIntoView({block:'start'});}runSearch();},
   attr(el){const a=el.dataset.v,arr=UI.filters.attrs,i=arr.indexOf(a);if(i>=0)arr.splice(i,1);else arr.push(a);renderMain();searchSoon(0);},
@@ -1980,7 +2007,7 @@ const H={
   register(){mRegister();},
   forgot(){mForgot();},
   'change-pw'(){mChangePw(false);},
-  async logout(){const tok=P.token;P.token='';A.me=null;savePrefs();UI.notifOpen=false;UI.forcePw=false;closeModal();try{await rpc('hv_logout',{p_token:tok});}catch(e){}if(UI.view==='admin')go('market');else render();},
+  async logout(){const tok=P.token;P.token='';A.me=null;clearCaches();savePrefs();UI.notifOpen=false;UI.forcePw=false;closeModal();try{await rpc('hv_logout',{p_token:tok});}catch(e){}if(UI.view==='admin')go('market');else refresh(true);},
   'copy-fmt'(){const done=()=>toast(t('copied'));
     if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(HVUT_FMT).then(done,()=>{fallbackCopy(HVUT_FMT);done();});else{fallbackCopy(HVUT_FMT);done();}},
   'sell-import'(){UI.sellText=val('sell-text');doImport();},
@@ -2019,7 +2046,7 @@ async function doLogin(){
   try{
     const r=await rpc('hv_login',{p_name:name,p_pw:pw});
     if(r.error){setErr(r.error);return;}
-    P.token=r.token;A.me=r.me;savePrefs();closeModal();toast(t('welcome',{name:r.me.name}));await refresh();checkForcedPw();
+    P.token=r.token;A.me=r.me;savePrefs();closeModal();toast(t('welcome',{name:r.me.name}));await refresh(true);checkForcedPw();
   }catch(e){if(e.code&&T.zh[e.code]!==undefined)setErr(e.code);else handleErr(e);}
 }
 async function doRegister(){
@@ -2030,7 +2057,7 @@ async function doRegister(){
   if(pw!==pw2){setErr('err_pw_match');return;}
   try{
     const r=await rpc('hv_register',{p_name:name,p_pw:pw});
-    P.token=r.token;A.me=r.me;savePrefs();closeModal();toast(t('reg_done'));await refresh();
+    P.token=r.token;A.me=r.me;savePrefs();closeModal();toast(t('reg_done'));await refresh(true);
   }catch(e){if(e.code&&T.zh[e.code]!==undefined&&e.code!=='E_NET'&&e.code!=='E_CFG'&&e.code!=='E_SERVER')setErr(e.code);else handleErr(e);}
 }
 async function doChangePw(){
@@ -2041,7 +2068,7 @@ async function doChangePw(){
   if(pw!==pw2){setErr('err_pw_match');return;}
   try{
     A.me=await api('hv_change_pw',{p_cur:forced?'':val('m-cur'),p_new:pw});
-    UI.forcePw=false;closeModal();toast(t('pw_changed'));await refresh();
+    UI.forcePw=false;closeModal();toast(t('pw_changed'));await refresh(true);
   }catch(e){if(e.code==='E_CUR_PW'||e.code==='E_PW_SHORT'||e.code==='E_RESET_PW')setErr(e.code);else handleErr(e);}
 }
 
@@ -2086,7 +2113,7 @@ function route(){
 }
 window.addEventListener('hashchange',route);
 /* keep the bell count fresh, and reload the page's data when the tab comes back into view */
-setInterval(async()=>{if(!P.token||document.hidden)return;try{await loadMe();renderHeader();}catch(e){}},60000);
+setInterval(async()=>{if(!P.token||document.hidden||Date.now()-lastMe<55000)return;try{await loadMe();renderHeader();}catch(e){}},60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!$('#modal-root').innerHTML&&!UI.busy)refresh();});
 
 loadPrefs();
