@@ -218,6 +218,8 @@ body.busy, body.busy button{cursor:progress}
 .bulk{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:4px}
 .bulk label{display:inline-flex;gap:5px;align-items:center}
 #bulk-price,input[data-dprice]{width:96px}
+.bl-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.bl-add input{min-width:220px}
 #results.stale{opacity:.5;transition:opacity .15s}
 .hvut-update{border:2px solid var(--bad);background:var(--bad-bg);padding:12px 14px;border-radius:4px;margin:0 0 16px}
 .hvut-update .big{color:var(--bad);font-size:19px;font-weight:700;line-height:1.45;margin:0 0 6px}
@@ -413,6 +415,28 @@ const T={zh:{
  log_set_season:"把 Isekai 賽季改為 {s}",
  pw_pending:"待改密碼",
  ad_season_confirm_v1:"確定要封存所有 ISK 的上架中與交易中商品，並進入第 {s} 季？這個動作無法復原。",
+ mine_blocks:"黑名單",
+ col_account:"帳號",
+ col_level:"程度",
+ col_added:"加入日期",
+ bl_intro:"加進黑名單的帳號，會依你選的程度隱藏。對方不會收到通知，也看不到自己在誰的黑名單裡。",
+ bl_level_1:"主頁不顯示對方的裝備（搜尋或篩選時仍會出現）",
+ bl_level_2:"搜尋和篩選結果也不顯示對方的裝備",
+ bl_level_3:"再加上：對方也看不到你的裝備，也不能購買你的裝備或對你的裝備留言",
+ bl_lv_1:"1．主頁不顯示",
+ bl_lv_2:"2．搜尋也不顯示",
+ bl_lv_3:"3．互相看不到",
+ bl_name_ph:"對方的帳號（ID）",
+ bl_add:"加入黑名單",
+ bl_remove:"移除",
+ bl_added:"已加入黑名單。",
+ bl_removed:"已從黑名單移除。",
+ bl_updated:"已更新。",
+ bl_empty:"黑名單是空的。",
+ bl_note3:"第 3 級是在對方登入時生效：對方登出後仍能用訪客身分看到你的裝備，但訪客不能購買或留言。已經在交易中的那一筆不受影響，可以照常完成。",
+ E_NO_USER:"找不到這個帳號。",
+ E_SELF:"不能把自己加進黑名單。",
+ E_BL_FULL:"黑名單最多 200 人。",
  btn_delete_listing:"刪除",
  del_listing_title:"刪除這筆下架紀錄",
  toast_deleted:"已刪除。",
@@ -600,6 +624,28 @@ hans:{
  log_set_season:"把 Isekai 赛季改为 {s}",
  pw_pending:"待改密码",
  ad_season_confirm_v1:"确定要封存所有 ISK 的上架中与交易中商品，并进入第 {s} 季？这个动作无法复原。",
+ mine_blocks:"黑名单",
+ col_account:"账号",
+ col_level:"程度",
+ col_added:"加入日期",
+ bl_intro:"加进黑名单的账号，会依你选的程度隐藏。对方不会收到通知，也看不到自己在谁的黑名单里。",
+ bl_level_1:"主页不显示对方的装备（搜索或筛选时仍会出现）",
+ bl_level_2:"搜索和筛选结果也不显示对方的装备",
+ bl_level_3:"再加上：对方也看不到你的装备，也不能购买你的装备或对你的装备留言",
+ bl_lv_1:"1．主页不显示",
+ bl_lv_2:"2．搜索也不显示",
+ bl_lv_3:"3．互相看不到",
+ bl_name_ph:"对方的账号（ID）",
+ bl_add:"加入黑名单",
+ bl_remove:"移除",
+ bl_added:"已加入黑名单。",
+ bl_removed:"已从黑名单移除。",
+ bl_updated:"已更新。",
+ bl_empty:"黑名单是空的。",
+ bl_note3:"第 3 级是在对方登录时生效：对方登出后仍能用访客身份看到你的装备，但访客不能购买或留言。已经在交易中的那一笔不受影响，可以照常完成。",
+ E_NO_USER:"找不到这个账号。",
+ E_SELF:"不能把自己加进黑名单。",
+ E_BL_FULL:"黑名单最多 200 人。",
  btn_delete_listing:"删除",
  del_listing_title:"删除这笔下架纪录",
  toast_deleted:"已删除。",
@@ -787,6 +833,28 @@ en:{
  log_set_season:"Renamed the Isekai season to {s}",
  pw_pending:"must change password",
  ad_season_confirm_v1:"Archive every Isekai listing that is for sale or in trade, and start season {s}? This cannot be undone.",
+ mine_blocks:"Blacklist",
+ col_account:"Account",
+ col_level:"Level",
+ col_added:"Added",
+ bl_intro:"Accounts on your blacklist are hidden as far as the level you pick. They are not told, and cannot see whose list they are on.",
+ bl_level_1:"Their items are hidden on the market's default view (they still show up when you search or filter)",
+ bl_level_2:"Their items are hidden from search and filter results too",
+ bl_level_3:"And also: they cannot see your items, buy them, or message you about them",
+ bl_lv_1:"1. Hide on default view",
+ bl_lv_2:"2. Hide everywhere",
+ bl_lv_3:"3. Hide both ways",
+ bl_name_ph:"Their account name (ID)",
+ bl_add:"Add to blacklist",
+ bl_remove:"Remove",
+ bl_added:"Added to your blacklist.",
+ bl_removed:"Removed from your blacklist.",
+ bl_updated:"Updated.",
+ bl_empty:"Your blacklist is empty.",
+ bl_note3:"Level 3 works while they are logged in: logged out they can still see your items as a guest, but guests cannot buy or message. A trade already in progress is not affected and can be finished.",
+ E_NO_USER:"No account with that name.",
+ E_SELF:"You cannot blacklist yourself.",
+ E_BL_FULL:"Your blacklist can hold up to 200 accounts.",
  btn_delete_listing:"Delete",
  del_listing_title:"Delete this withdrawn listing",
  toast_deleted:"Deleted.",
@@ -1010,7 +1078,7 @@ async function loadMe(){
 async function loadView(){
   switch(UI.view){
     case 'market':await loadMarket();break;
-    case 'mine':A.mine=A.me?await api('hv_mine'):null;break;
+    case 'mine':if(A.me){[A.mine,A.blocks]=await Promise.all([api('hv_mine'),api('hv_blocks')]);}else{A.mine=null;A.blocks=null;}break;
     case 'inbox':A.inbox=A.me?await api('hv_inbox'):null;break;
     case 'admin':A.admin=isAdmin()?await api('hv_admin_data'):null;break;
     case 'sell':
@@ -1356,7 +1424,7 @@ function eqClose(focusBtn){UI.eqOpen=false;renderEqf();if(focusBtn){const b=$('#
    items however big the market grows. Text boxes search shortly after typing stops; lists and buttons at once. */
 function searchArgs(){
   const f=UI.filters;
-  return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_f:{q:f.q.trim(),qa:queryGroups(f.q),qual:f.qual,
+  return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_token:P.token||null,p_f:{q:f.q.trim(),qa:queryGroups(f.q),qual:f.qual,
     cats:f.eq.cat,types:f.eq.type,slots:f.eq.slot,pres:f.eq.pre,sufs:f.eq.suf,
     lv_min:parseInt(f.lvMin)||null,lv_max:parseInt(f.lvMax)||null,p_min:parsePrice(f.pMin)||null,p_max:parsePrice(f.pMax)||null,
     r_min:pct(f.rMin),r_max:pct(f.rMax),
@@ -1686,9 +1754,11 @@ function viewMine(){
   const head=`<div class="mhead"><h1>${t('nav_mine')}</h1><span class="muted">${t('credits_only')}</span></div>`;
   if(!data)return head+LOADING();
   const selling=data.selling,buying=data.buying;
-  const tabs=`<div class="tabs">${[['selling','mine_selling',selling.length],['buying','mine_buying',buying.length]].map(([v,k,n])=>`<button class="tab ${UI.mineTab===v?'on':''}" data-act="mine-tab" data-v="${v}">${t(k)} <span class="cnt">${n}</span></button>`).join('')}</div>`;
+  const tabs=`<div class="tabs">${[['selling','mine_selling',selling.length],['buying','mine_buying',buying.length],['blocks','mine_blocks',(A.blocks||[]).length]].map(([v,k,n])=>`<button class="tab ${UI.mineTab===v?'on':''}" data-act="mine-tab" data-v="${v}">${t(k)} <span class="cnt">${n}</span></button>`).join('')}</div>`;
   let body='';
-  if(UI.mineTab==='selling'){
+  if(UI.mineTab==='blocks'){
+    body=blocksHTML();
+  } else if(UI.mineTab==='selling'){
     const G={all:()=>true,available:l=>l.status==='available'||l.status==='expired',in_trade:l=>l.status==='in_trade',sold:l=>l.status==='sold',closed:l=>l.status==='withdrawn'||l.status==='archived'};
     const chips=[['all','mine_all'],['available','st_available'],['in_trade','st_in_trade'],['sold','st_sold'],['closed','mine_closed']].map(([v,k])=>`<button class="chip ${UI.mineStatus===v?'on':''}" data-act="mine-status" data-v="${v}">${t(k)} ${selling.filter(G[v]).length}</button>`).join('');
     const rank={in_trade:0,expired:1,available:2,sold:3,withdrawn:4,archived:5};
@@ -1698,6 +1768,22 @@ function viewMine(){
     body=buying.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th>${t('col_seller')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${buying.map(({l,s})=>`<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td>${esc(l.seller)}</td><td class="num">${priceHTML(s==='done'?l.sold_price:l.price)}</td><td><span class="pill ${s}">${t('b_'+s)}</span>${s==='done'?` <span class="muted small">${fmtDate(ts(l.sold_at))}</span>`:''}</td><td class="acts">${s==='active'&&!isBanned(A.me)?`<button class="btn small danger" data-act="giveup" data-lid="${l.id}" data-name="${esc(l.name)}">${t('buyer_giveup')}</button>`:''}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('mine_empty')}</div>`;
   }
   return head+tabs+`<div class="panel">${body}</div>`;
+}
+/* ---- blacklist (a tab of My trades) ---- */
+function blocksHTML(){
+  const list=A.blocks||[];
+  const opts=lv=>[1,2,3].map(n=>`<option value="${n}" ${lv===n?'selected':''}>${t('bl_lv_'+n)}</option>`).join('');
+  return `<div class="pad">
+    <p class="muted small" style="margin:0 0 6px">${t('bl_intro')}</p>
+    <ol class="steps small" style="margin:0 0 10px"><li>${t('bl_level_1')}</li><li>${t('bl_level_2')}</li><li>${t('bl_level_3')}</li></ol>
+    <div class="bl-add">
+      <label class="sr" for="bl-name">${t('bl_name_ph')}</label><input id="bl-name" placeholder="${t('bl_name_ph')}" maxlength="40" autocomplete="off">
+      <label class="sr" for="bl-level">${t('col_level')}</label><select id="bl-level">${opts(2)}</select>
+      <button class="btn small primary" data-act="bl-add">${t('bl_add')}</button>
+    </div>
+    ${list.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_account')}</th><th>${t('col_level')}</th><th>${t('col_added')}</th><th></th></tr></thead><tbody>${list.map(b=>`<tr><td><b>${esc(b.name)}</b></td><td><select data-bl-level="${esc(b.name)}" aria-label="${t('col_level')} ${esc(b.name)}">${opts(b.level)}</select></td><td class="muted small">${fmtDate(ts(b.at))}</td><td class="acts"><button class="btn small danger" data-act="bl-remove" data-name="${esc(b.name)}">${t('bl_remove')}</button></td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('bl_empty')}</div>`}
+    <p class="muted small" style="margin:10px 0 0">${t('bl_note3')}</p>
+  </div>`;
 }
 function infoCell(l){
   const st=l.status;
@@ -1905,6 +1991,9 @@ const H={
   'draft-delete'(){openModal(t('delete_selected'),`<p style="margin:0">${t('del_drafts_confirm',{n:UI.dsel.size})}</p>${okCancel('draft-delete-ok','',t('delete_selected'),'danger')}`);},
   'draft-delete-ok'(){const ids=[...UI.dsel];closeModal();act(()=>api('hv_draft_delete',{p_ids:ids}),t('toast_done'));},
   'mine-tab'(el){UI.mineTab=el.dataset.v;renderMain();},
+  'bl-add'(){const n=val('bl-name').trim();if(!n){toast(t('E_NO_USER'),true);return;}
+    act(()=>api('hv_block',{p_name:n,p_level:Number(val('bl-level'))}),t('bl_added')).then(ok=>{if(ok)A.market=null;});},
+  'bl-remove'(el){act(()=>api('hv_unblock',{p_name:el.dataset.name}),t('bl_removed')).then(ok=>{if(ok)A.market=null;});},
   'mine-status'(el){UI.mineStatus=el.dataset.v;renderMain();},
   'admin-tab'(el){UI.adminTab=el.dataset.v;renderMain();},
   'rep-status'(el){UI.repStatus=el.dataset.v;renderMain();},
@@ -1979,9 +2068,12 @@ document.addEventListener('input',e=>{
     el.classList.remove('err');updDraftPill(d);return;
   }
 });
-document.addEventListener('change',e=>{const el=e.target;const did=el.dataset&&(el.dataset.dprice||el.dataset.droll||el.dataset.dname);if(did!==undefined){for(const k of Object.keys(pendingSaves))if(k.startsWith(did+':'))runDraftSave(k);}});
+document.addEventListener('change',e=>{const el=e.target;
+  if(el.dataset&&el.dataset.blLevel!==undefined){act(()=>api('hv_block',{p_name:el.dataset.blLevel,p_level:Number(el.value)}),t('bl_updated')).then(ok=>{if(ok)A.market=null;});return;}
+const did=el.dataset&&(el.dataset.dprice||el.dataset.droll||el.dataset.dname);if(did!==undefined){for(const k of Object.keys(pendingSaves))if(k.startsWith(did+':'))runDraftSave(k);}});
 window.addEventListener('beforeunload',()=>{for(const k of Object.keys(pendingSaves))runDraftSave(k);});
 document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target&&e.target.id==='bl-name'){e.preventDefault();H['bl-add']();return;}
   if(e.key==='Escape'&&UI.eqOpen&&!$('#modal-root').innerHTML){eqClose(true);return;}
   if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){if($('#modal-root .detail'))closeModal();else back();}
   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&e.target.id&&e.target.id.startsWith('pm-in-')){const b=e.target.parentElement.querySelector('[data-act="pm-send"]');if(b)b.click();}
