@@ -412,6 +412,11 @@ const T={zh:{
  log_set_season:"把 Isekai 賽季改為 {s}",
  pw_pending:"待改密碼",
  ad_season_confirm_v1:"確定要封存所有 ISK 的上架中與交易中商品，並進入第 {s} 季？這個動作無法復原。",
+ btn_delete_listing:"刪除",
+ del_listing_title:"刪除這筆下架紀錄",
+ toast_deleted:"已刪除。",
+ ev_hidden:"賣家刪除了這筆下架紀錄",
+ del_listing_confirm:"要從你的清單刪除這件嗎？刪除後就不能再按「重新上架」，之後想賣的話重新匯入就可以。跟買家的私訊紀錄會保留。",
  hvut_update:"請更新 HVUT 到最新版，請更新到最新版，請更新到最新版！！否則會導致 ROLL 甚至等級、主屬性等資料缺失。",
  hvut_link:"HVUT 中文版（論壇下載頁）",
  hvut_fmt_q:"更新後 ROLL 還是讀不到？",
@@ -594,6 +599,11 @@ hans:{
  log_set_season:"把 Isekai 赛季改为 {s}",
  pw_pending:"待改密码",
  ad_season_confirm_v1:"确定要封存所有 ISK 的上架中与交易中商品，并进入第 {s} 季？这个动作无法复原。",
+ btn_delete_listing:"删除",
+ del_listing_title:"删除这笔下架纪录",
+ toast_deleted:"已删除。",
+ ev_hidden:"卖家删除了这笔下架纪录",
+ del_listing_confirm:"要从你的清单删除这件吗？删除后就不能再按「重新上架」，之后想卖的话重新导入就可以。跟买家的私信纪录会保留。",
  hvut_update:"请更新 HVUT 到最新版，请更新到最新版，请更新到最新版！！否则会导致 ROLL 甚至等级、主属性等数据缺失。",
  hvut_link:"HVUT 中文版（论坛下载页）",
  hvut_fmt_q:"更新后 ROLL 还是读不到？",
@@ -776,6 +786,11 @@ en:{
  log_set_season:"Renamed the Isekai season to {s}",
  pw_pending:"must change password",
  ad_season_confirm_v1:"Archive every Isekai listing that is for sale or in trade, and start season {s}? This cannot be undone.",
+ btn_delete_listing:"Delete",
+ del_listing_title:"Delete this withdrawn listing",
+ toast_deleted:"Deleted.",
+ ev_hidden:"Seller deleted this withdrawn listing",
+ del_listing_confirm:"Remove this item from your list? You will not be able to relist it from here; to sell it again, import it again. Messages with buyers are kept.",
  hvut_update:"Please update HVUT to the latest version. Please update to the latest version. Please update to the latest version!! Otherwise ROLL, and even level and primary stats, can go missing.",
  hvut_link:"HVUT (forum thread)",
  hvut_fmt_q:"Still no ROLL after updating?",
@@ -1505,7 +1520,7 @@ function sellerBtns(l){
   if(st==='available'){out.push(B('edit-price','btn_edit_price'),B('withdraw','btn_withdraw'));if(daysSince(l.renewed_at)>=EXPIRE_DAYS-7)out.push(B('renew','btn_renew'));}
   if(st==='expired')out.push(B('renew','btn_renew','primary'),B('withdraw','btn_withdraw'));
   if(st==='in_trade')out.push(B('mark-sold','btn_mark_sold','primary'),B('cancel-trade','btn_cancel_trade'));
-  if(st==='withdrawn')out.push(B('relist','btn_relist'));
+  if(st==='withdrawn')out.push(B('relist','btn_relist'),B('hide-listing','btn_delete_listing','danger'));
   return out.join('');
 }
 function threadHTML(lid,th,canSend){
@@ -1540,6 +1555,7 @@ function evText(e){
     case 'relist':return t('ev_relist');
     case 'archive':return t('ev_archive');
     case 'details':return t('ev_details');
+    case 'hidden':return t('ev_hidden');
   }
   return esc(e.type);
 }
@@ -1765,6 +1781,7 @@ const eqNm=el=>eqZhHTML(el.dataset.name||'');
 function mMarkSold(el){openModal(t('btn_mark_sold'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('ms_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="muted small" style="margin:0">${t('ms_hint')}</p><p class="err" id="m-err"></p></div>${okCancel('ms-ok',`data-lid="${el.dataset.lid}"`)}`);}
 function mCancelTrade(el){openModal(t('btn_cancel_trade'),`<div class="form"><b>${eqNm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_buyer_gave_up','r_no_response','r_seller_changed','r_other'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('ct_hint')}</p></div>${okCancel('ct-ok',`data-lid="${el.dataset.lid}"`,t('btn_cancel_trade'),'danger')}`);}
 function mEditPrice(el){openModal(t('btn_edit_price'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('new_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="err" id="m-err"></p></div>${okCancel('ep-ok',`data-lid="${el.dataset.lid}"`)}`);}
+function mHideListing(el){openModal(t('del_listing_title'),`<p style="margin:0 0 6px"><b>${eqNm(el)}</b></p><p style="margin:0">${t('del_listing_confirm')}</p>${okCancel('hide-ok',`data-lid="${el.dataset.lid}"`,t('btn_delete_listing'),'danger')}`);}
 function mWithdraw(el){openModal(t('btn_withdraw'),`<div class="form"><b>${eqNm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_not_selling','r_sold_elsewhere'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select></div>${okCancel('wd-ok',`data-lid="${el.dataset.lid}"`,t('btn_withdraw'),'danger')}`);}
 function mGiveup(el){openModal(t('buyer_giveup'),`<div class="form"><b>${eqNm(el)}</b><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('bg_hint')}</p></div>${okCancel('giveup-ok',`data-lid="${el.dataset.lid}"`,t('buyer_giveup'),'danger')}`);}
 function mReport(el){
@@ -1844,6 +1861,8 @@ const H={
   'edit-price'(el){mEditPrice(el);},
   'ep-ok'(el){const p=parsePrice(val('m-price'));if(!p){setErr('price_invalid');return;}const id=N(el.dataset.lid);back();act(()=>api('hv_edit_price',{p_id:id,p_price:p}),t('toast_done'));},
   withdraw(el){mWithdraw(el);},
+  'hide-listing'(el){mHideListing(el);},
+  'hide-ok'(el){const id=N(el.dataset.lid);closeModal();if(UI.detailId===id){UI.detailId=null;A.detail=null;}act(()=>api('hv_hide_listing',{p_id:id}),t('toast_deleted'));},
   'wd-ok'(el){const id=N(el.dataset.lid),r=val('m-reason');back();act(()=>api('hv_withdraw',{p_id:id,p_reason:r}),t('toast_done'));},
   renew(el){act(()=>api('hv_renew',{p_id:N(el.dataset.lid)}),t('toast_done'));},
   relist(el){act(()=>api('hv_relist',{p_id:N(el.dataset.lid)}),t('toast_done'));},
