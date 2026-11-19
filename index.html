@@ -968,7 +968,7 @@ const isZh=()=>P.lang!=='en';
 const htmlLang=()=>(LANGS.find(l=>l[0]===P.lang)||LANGS[0])[3];
 function savePrefs(){try{localStorage.setItem(LS_KEY,JSON.stringify(P));}catch(e){}}
 const A={me:null,market:null,mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
-function defaultFilters(){return {q:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',rMin:'',rMax:'',attrs:[],sort:'new',seller:'',eq:{cat:[],type:[],slot:[],pre:[],suf:[]}};}
+function defaultFilters(){return {q:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',rMin:'',rMax:'',attrs:[],sort:'price_desc',seller:'',eq:{cat:[],type:[],slot:[],pre:[],suf:[]}};}
 const UI={view:'market',tab:'available',page:1,eqOpen:false,filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
   sellText:'',sellBad:[],importMsg:'',importWarn:null,dsel:new Set(),notifOpen:false,detailId:null,buyConfirm:null,forcePw:false,busy:false};
 
