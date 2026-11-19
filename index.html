@@ -423,7 +423,7 @@ const T={zh:{
  copied:"已複製。",
  import_warn_roll:"有 {n} 件沒有讀到 ROLL（AVG）。",
  import_warn_lv:"有 {n} 件沒有讀到等級。",
- import_warn_tail:"如果是用 HVUT 匯出的，代表 HVUT 或它的匯出格式太舊。請照下面的方法更新後重新匯出，再貼一次；已經上架的裝備重新貼一次，就會自動補上資料。",
+ import_warn_tail:"只貼網址或論壇連結不會有等級、主屬性和 ROLL，請改用最新版 HVUT 的「裝備代碼」匯出後再貼一次。如果已經是用 HVUT 匯出的，代表它的匯出格式太舊，請照下面修改。已經上架的裝備重新貼一次，就會自動補上資料。",
  import_filled:"已替你上架中的 {n} 件裝備補上缺少的等級／主屬性／ROLL。",
  import_skip_active:"已經在架上的 {n} 件已略過。",
  ev_details:"補上等級／主屬性／ROLL",
@@ -605,7 +605,7 @@ hans:{
  copied:"已复制。",
  import_warn_roll:"有 {n} 件没有读到 ROLL（AVG）。",
  import_warn_lv:"有 {n} 件没有读到等级。",
- import_warn_tail:"如果是用 HVUT 导出的，代表 HVUT 或它的导出格式太旧。请照下面的方法更新后重新导出，再贴一次；已经上架的装备重新贴一次，就会自动补上数据。",
+ import_warn_tail:"只贴网址或论坛链接不会有等级、主属性和 ROLL，请改用最新版 HVUT 的「装备代码」导出后再贴一次。如果已经是用 HVUT 导出的，代表它的导出格式太旧，请照下面修改。已经上架的装备重新贴一次，就会自动补上数据。",
  import_filled:"已替你上架中的 {n} 件装备补上缺少的等级／主属性／ROLL。",
  import_skip_active:"已经在架上的 {n} 件已略过。",
  ev_details:"补上等级／主属性／ROLL",
@@ -787,7 +787,7 @@ en:{
  copied:"Copied.",
  import_warn_roll:"{n} items have no ROLL (AVG).",
  import_warn_lv:"{n} items have no level.",
- import_warn_tail:"If you exported them with HVUT, your HVUT or its export format is out of date. Fix it as below, export again and paste again; pasting an item you have already listed fills in its missing details.",
+ import_warn_tail:"Plain links and forum links carry no level, stats or ROLL: export with the latest HVUT \"Equip Code\" and paste again. If you already used HVUT, its export format is out of date; fix it as below. Pasting an item you have already listed fills in its missing details.",
  import_filled:"Filled in the missing level / stats / ROLL on {n} of your listed items.",
  import_skip_active:"{n} already listed, skipped.",
  ev_details:"Filled in level / stats / ROLL",
@@ -1646,8 +1646,8 @@ async function doImport(){
   if(onMarket)parts.push(t('import_skip_active',{n:onMarket}));
   if(struck)parts.push(t('import_skip_struck',{n:struck}));
   UI.importMsg=parts.join(' ');UI.sellText='';
-  /* [url] lines without AVG or level usually mean an old HVUT or an old saved export format */
-  const noRoll=todo.filter(x=>x.fromTag&&x.roll==null).length,noLv=todo.filter(x=>x.fromTag&&x.level==null&&!x.unas).length;
+  /* items without ROLL or level: pasted as plain links / forum links, or exported by an old HVUT format */
+  const noRoll=todo.filter(x=>x.roll==null).length,noLv=todo.filter(x=>x.level==null&&!x.unas).length;
   UI.importWarn=(noRoll||noLv)?{noRoll,noLv}:null;
   render();
 }
