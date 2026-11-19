@@ -950,8 +950,18 @@ function t(k,p){
 }
 
 /* ================= state ================= */
-const P={lang:'zh',world:'main',token:''};               // kept in this browser
-function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}if(!LANGS.some(l=>l[0]===P.lang))P.lang='zh';}
+const P={lang:'zh',world:'main',token:'',langSet:false}; // kept in this browser; langSet = the visitor picked a language
+function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}if(!LANGS.some(l=>l[0]===P.lang))P.lang='zh';if(!P.langSet)P.lang=browserLang();}
+/* until the visitor picks a language, follow the browser: the first of its languages the site has.
+   zh-TW / zh-HK / zh-MO / zh-Hant → 繁中, any other Chinese → 简中, English or nothing usable → English */
+function browserLang(){
+  const list=[...(navigator.languages||[]),navigator.language,navigator.userLanguage].filter(Boolean).map(x=>String(x).toLowerCase());
+  for(const l of list){
+    if(/^zh\b/.test(l))return /hant|-(tw|hk|mo)\b/.test(l)?'zh':'hans';
+    if(/^en\b/.test(l))return 'en';
+  }
+  return 'en';
+}
 /* interface languages: [code, button, full name, html lang] — the Simplified text is converted from the Traditional at build time */
 const LANGS=[['zh','繁中','繁體中文','zh-Hant'],['hans','简中','简体中文','zh-Hans'],['en','EN','English','en']];
 const isZh=()=>P.lang!=='en';
@@ -1833,7 +1843,7 @@ const H={
   'modal-back'(el,e){if(e.target===el&&!UI.forcePw)closeModal();},
   'sub-cancel'(){back();},
   world(el){P.world=el.dataset.v;savePrefs();UI.filters.seller='';UI.page=1;A.market=null;if(UI.view!=='market')go('market');else{render();refresh();}},
-  lang(el){P.lang=el.dataset.v;document.documentElement.lang=htmlLang();savePrefs();const keep=UI.detailId;render();if(keep&&A.detail)renderDetail();else if(!UI.forcePw)closeModal();},
+  lang(el){P.lang=el.dataset.v;P.langSet=true;document.documentElement.lang=htmlLang();savePrefs();const keep=UI.detailId;render();if(keep&&A.detail)renderDetail();else if(!UI.forcePw)closeModal();},
   reload(){refresh();},
   tab(el){UI.tab=el.dataset.v;UI.page=1;renderMarketHead();renderResults();runSearch();},
   page(el){UI.page=Math.max(1,Number(el.dataset.v)||1);const r=$('#results');if(r){r.classList.add('stale');r.scrollIntoView({block:'start'});}runSearch();},
