@@ -305,6 +305,11 @@ html[data-theme=dark] .modal h3 .q,html[data-theme=dark] .modal .x{color:#E6E4D9
 .pill.paused{background:transparent;color:var(--warn);box-shadow:inset 0 0 0 1px currentColor}
 .backtag{color:var(--accent-tx,var(--accent));font-weight:700;cursor:help;white-space:nowrap}
 
+.offerbox{display:grid;gap:6px;margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:4px;background:var(--panel-2);margin-bottom:6px}
+.offerbox p{margin:0}.offer-h b{font-size:13px;color:var(--accent-tx,var(--accent))}
+.offer-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.offerbox .hist.offers{margin:0;padding-left:0;list-style:none}
+
 /* equipment name colours from HV综合汉化 (DDD) */
 @font-face {
 font-family: 'HV Ultimate Star Wheel';
@@ -632,7 +637,7 @@ const T={zh:{
  rng_price:"第 {i} 個區間的價格",
  rng_del:"刪除第 {i} 個區間",
  offer_title:"匿名出價",
- offer_hint:"只能填金額。賣家只看得到金額，看不到你是誰；賣家同意或婉拒都會通知你，同意後 3 天內可以用這個價格購買。",
+ offer_hint:"只填金額：直接打數字代表 k（77 = 77k），也可以寫 1.5m。跟私訊分開，賣家只看得到金額、看不到你是誰；同意或婉拒都會通知你，同意後 3 天內可以用這個價格購買。",
  offer_amount:"出價金額",
  offer_send:"送出出價",
  offer_raise:"提高出價",
@@ -695,6 +700,9 @@ const T={zh:{
  draft_back:"從市場移回",
  draft_back_tip:"上架後會回到原本的刊登，連結、我的最愛、出價和私訊都會保留",
  del_drafts_back:"其中 {n} 件是從市場移回的，刪除就等於下架，收藏的人會收到下架通知。",
+ offer_ph:"金額，例如 77 或 1.5m",
+ offer_prev_bad:"看不懂這個金額",
+ pm_empty_offer:"還沒有訊息。私訊會顯示你的帳號；想匿名議價，請用上面的「匿名出價」。",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -730,7 +738,7 @@ const T={zh:{
  sold_on:'{d} 以 {p} 成交。',note_withdrawn:'這件商品已下架。',note_archived:'這件商品已在 Isekai 換季時封存。',note_expired:'這件商品已過期，市場上看不到。',
  toast_bought:'已通知賣家，請等對方用 MoogleMail 寄出。',toast_done:'完成。',toast_sent:'已送出。',
  same_item_sales:'這件裝備過去的成交',
- pm_private_buyer:'只有你和賣家看得到這段對話。',pm_private_seller:'每位買家的留言只有你和那位買家看得到。',pm_threads:'買家私訊',pm_with_seller:'私訊賣家',pm_none:'還沒有人留言。',pm_placeholder:'輸入訊息',pm_send:'送出',pm_empty_thread:'還沒有訊息。可以先問問題或議價。',pm_banned:'停權中無法傳送訊息。',
+ pm_private_buyer:'只有你和賣家看得到這段對話。',pm_private_seller:'每位買家的留言只有你和那位買家看得到。',pm_threads:'買家私訊',pm_with_seller:'私訊賣家',pm_none:'還沒有人留言。',pm_placeholder:'輸入訊息',pm_send:'送出',pm_empty_thread:"還沒有訊息。可以先問賣家問題。",pm_banned:'停權中無法傳送訊息。',
  history:'狀態紀錄（只有賣家和管理員看得到）',
  ev_listed:'上架，售價 {p}',ev_buy:'{u} 按下購買',ev_buyer_cancel:'{u} 放棄購買',ev_seller_cancel:'賣家取消交易：{r}',ev_sold:'已售出，成交價 {p}',ev_price:'改價為 {p}',ev_withdraw:'下架：{r}',ev_renew:'續期',ev_relist:'重新上架',ev_archive:'Isekai 換季封存',
  r_buyer_gave_up:'買家不買了',r_no_response:'買家一直沒回應',r_seller_changed:'賣家不賣了',r_other:'其他',r_not_selling:'不賣了',r_sold_elsewhere:'在別處賣掉了（不列入成交紀錄）',r_account_deleted:'帳號已刪除',
@@ -975,7 +983,7 @@ hans:{
  rng_price:"第 {i} 个区间的价格",
  rng_del:"删除第 {i} 个区间",
  offer_title:"匿名出价",
- offer_hint:"只能填金额。卖家只看得到金额，看不到你是谁；卖家同意或婉拒都会通知你，同意后 3 天内可以用这个价格购买。",
+ offer_hint:"只填金额：直接打数字代表 k（77 = 77k），也可以写 1.5m。跟私信分开，卖家只看得到金额、看不到你是谁；同意或婉拒都会通知你，同意后 3 天内可以用这个价格购买。",
  offer_amount:"出价金额",
  offer_send:"送出出价",
  offer_raise:"提高出价",
@@ -1038,6 +1046,9 @@ hans:{
  draft_back:"从市场移回",
  draft_back_tip:"上架后会回到原本的刊登，链接、我的最爱、出价和私信都会保留",
  del_drafts_back:"其中 {n} 件是从市场移回的，删除就等于下架，收藏的人会收到下架通知。",
+ offer_ph:"金额，例如 77 或 1.5m",
+ offer_prev_bad:"看不懂这个金额",
+ pm_empty_offer:"还没有消息。私信会显示你的账号；想匿名议价，请用上面的「匿名出价」。",
  E_NAME_REQ:"请输入账号。",
  E_NAME_LONG:"账号最多 30 个字符。",
  E_NAME_TAKEN:"这个账号已经有人使用。",
@@ -1073,7 +1084,7 @@ hans:{
  sold_on:'{d} 以 {p} 成交。',note_withdrawn:'这件商品已下架。',note_archived:'这件商品已在 Isekai 换季时封存。',note_expired:'这件商品已过期，市场上看不到。',
  toast_bought:'已通知卖家，请等对方用 MoogleMail 寄出。',toast_done:'完成。',toast_sent:'已送出。',
  same_item_sales:'这件装备过去的成交',
- pm_private_buyer:'只有你和卖家看得到这段对话。',pm_private_seller:'每位买家的留言只有你和那位买家看得到。',pm_threads:'买家私信',pm_with_seller:'私信卖家',pm_none:'还没有人留言。',pm_placeholder:'输入消息',pm_send:'送出',pm_empty_thread:'还没有消息。可以先问问题或议价。',pm_banned:'封禁中无法发送消息。',
+ pm_private_buyer:'只有你和卖家看得到这段对话。',pm_private_seller:'每位买家的留言只有你和那位买家看得到。',pm_threads:'买家私信',pm_with_seller:'私信卖家',pm_none:'还没有人留言。',pm_placeholder:'输入消息',pm_send:'送出',pm_empty_thread:"还没有消息。可以先问卖家问题。",pm_banned:'封禁中无法发送消息。',
  history:'状态纪录（只有卖家和管理员看得到）',
  ev_listed:'上架，售价 {p}',ev_buy:'{u} 按下购买',ev_buyer_cancel:'{u} 放弃购买',ev_seller_cancel:'卖家取消交易：{r}',ev_sold:'已售出，成交价 {p}',ev_price:'改价为 {p}',ev_withdraw:'下架：{r}',ev_renew:'续期',ev_relist:'重新上架',ev_archive:'Isekai 换季封存',
  r_buyer_gave_up:'买家不买了',r_no_response:'买家一直没回应',r_seller_changed:'卖家不卖了',r_other:'其他',r_not_selling:'不卖了',r_sold_elsewhere:'在别处卖掉了（不列入成交纪录）',r_account_deleted:'账号已删除',
@@ -1318,7 +1329,7 @@ en:{
  rng_price:"Range {i}: price",
  rng_del:"Delete range {i}",
  offer_title:"Anonymous offer",
- offer_hint:"Amount only. The seller sees the amount but not who you are. You are told whether they accept or decline; once accepted you can buy at that price for 3 days.",
+ offer_hint:"Amount only: a plain number means k (77 = 77k), or write 1.5m. Separate from messages: the seller sees the amount, never who you are. You are told whether they accept or decline; once accepted you can buy at that price for 3 days.",
  offer_amount:"Offer amount",
  offer_send:"Send offer",
  offer_raise:"Raise offer",
@@ -1381,6 +1392,9 @@ en:{
  draft_back:"moved back",
  draft_back_tip:"Listing it puts it back on its old listing: link, favourites, offers and messages are kept",
  del_drafts_back:"{n} of them were moved back from the market: deleting them withdraws them, and people who favourited them are told.",
+ offer_ph:"Amount, e.g. 77 or 1.5m",
+ offer_prev_bad:"Not a valid amount",
+ pm_empty_offer:"No messages yet. Messages show your account name; to bargain anonymously, use \"Anonymous offer\" above.",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -1416,7 +1430,7 @@ en:{
  sold_on:'Sold for {p} on {d}.',note_withdrawn:'This listing was withdrawn.',note_archived:'This listing was archived at the end of the Isekai season.',note_expired:'This listing has expired and is hidden from the market.',
  toast_bought:'The seller has been notified. Wait for them to send it by MoogleMail.',toast_done:'Done.',toast_sent:'Sent.',
  same_item_sales:'Past sales of this exact item',
- pm_private_buyer:'Only you and the seller can see this conversation.',pm_private_seller:'Each buyer’s messages are visible only to you and that buyer.',pm_threads:'Buyer messages',pm_with_seller:'Message the seller',pm_none:'No messages yet.',pm_placeholder:'Write a message',pm_send:'Send',pm_empty_thread:'No messages yet. Ask a question or make an offer.',pm_banned:'You cannot send messages while suspended.',
+ pm_private_buyer:'Only you and the seller can see this conversation.',pm_private_seller:'Each buyer’s messages are visible only to you and that buyer.',pm_threads:'Buyer messages',pm_with_seller:'Message the seller',pm_none:'No messages yet.',pm_placeholder:'Write a message',pm_send:'Send',pm_empty_thread:"No messages yet. Ask the seller a question.",pm_banned:'You cannot send messages while suspended.',
  history:'History (only the seller and admin can see this)',
  ev_listed:'Listed at {p}',ev_buy:'{u} clicked Buy',ev_buyer_cancel:'{u} withdrew',ev_seller_cancel:'Seller cancelled the trade: {r}',ev_sold:'Sold for {p}',ev_price:'Price changed to {p}',ev_withdraw:'Withdrawn: {r}',ev_renew:'Renewed',ev_relist:'Relisted',ev_archive:'Archived at Isekai season end',
  r_buyer_gave_up:'Buyer backed out',r_no_response:'Buyer not responding',r_seller_changed:'Seller changed their mind',r_other:'Other',r_not_selling:'No longer selling',r_sold_elsewhere:'Sold elsewhere (not counted in sale history)',r_account_deleted:'Account deleted',
@@ -2110,7 +2124,7 @@ function offerArea(d){
   const u=A.me,v=d.viewer||{};
   if(v.is_seller||(v.is_admin&&d.offers))return offersHTML(d);
   if(!u||isBanned(u)||d.status!=='available')return '';
-  const o=d.my_offer,form=lab=>`<div class="offer-form"><label class="sr" for="offer-in">${t('offer_amount')}</label><input id="offer-in" class="sm" placeholder="${t('price_ph')}" autocomplete="off"><button type="button" class="btn small" data-act="offer-send" data-lid="${d.id}" data-price="${d.price}">${lab}</button></div>`;
+  const o=d.my_offer,form=lab=>`<div class="offer-form"><label class="sr" for="offer-in">${t('offer_amount')}</label><input id="offer-in" class="sm" placeholder="${t('offer_ph')}" autocomplete="off" maxlength="14" data-max="${d.price}"><button type="button" class="btn small primary" data-act="offer-send" data-lid="${d.id}" data-price="${d.price}">${lab}</button><span id="offer-prev" class="small muted" aria-live="polite"></span></div>`;
   const wd=`<button type="button" class="link small" data-act="offer-withdraw" data-lid="${d.id}">${t('offer_withdraw')}</button>`;
   let body;
   if(!o||o.status==='used')body=form(t('offer_send'));
@@ -2122,7 +2136,14 @@ function offerArea(d){
   }
   else if(o.status==='declined')body=`<p class="offer-st bad-t">${t('offer_declined',{p:{html:priceHTML(o.price)}})}</p>${form(t('offer_send_higher'))}`;
   else body=`<p class="offer-st muted">${t('offer_expired',{p:{html:priceHTML(o.price)}})}</p>${form(t('offer_send'))}`;
-  return `<div class="section offer"><h4>${t('offer_title')}</h4><p class="muted small" style="margin:0 0 6px">${t('offer_hint')}</p>${body}</div>`;
+  return `<div class="offerbox" role="group" aria-labelledby="offer-h"><div class="offer-h"><b id="offer-h">${t('offer_title')}</b></div><p class="muted small">${t('offer_hint')}</p>${body}</div>`;
+}
+/* while typing an offer: only amount characters, and what the amount reads as (a plain number is k) */
+function offerPrev(){
+  const el=$('#offer-in'),pv=$('#offer-prev');if(!el||!pv)return;
+  const v=el.value.trim(),p=v?priceIn(v):0,max=N(el.dataset.max);
+  pv.className='small '+((v&&!p)||(p&&max&&p>=max)?'bad-t':'muted');
+  pv.textContent=!v?'':!p?t('offer_prev_bad'):(max&&p>=max)?t('E_OFFER_HIGH'):'= '+fmtPrice(p)+' C';
 }
 function offersHTML(d){
   const list=d.offers||[],seller=(d.viewer||{}).is_seller,avail=d.status==='available';
@@ -2134,7 +2155,7 @@ function offersHTML(d){
     else act=(avail?`<button class="btn small primary" data-act="offer-ok" data-oid="${o.id}" data-p="${o.price}">${t('offer_accept')}</button> `:`<span class="muted small">${t(d.status==='paused'?'offer_after_relist':'offer_after_trade')}</span> `)+`<button class="btn small" data-act="offer-no" data-oid="${o.id}">${t('offer_decline')}</button>`;
     return `<li class="${o.status==='open'?'':'done'}"><b>${priceHTML(o.price)}</b> <span class="muted small">${ago(o.at)}${o.buyer?' · '+esc(o.buyer):''}</span> <span class="ofs-act">${act}</span></li>`;
   }).join(''):`<li class="muted">${t('offers_none')}</li>`;
-  return `<div class="section offer"><h4>${t('offers_title')}</h4><p class="muted small" style="margin:0 0 6px">${t('offers_hint')}</p><ul class="hist offers">${rows}</ul></div>`;
+  return `<div class="offerbox" role="group" aria-labelledby="offers-h"><div class="offer-h"><b id="offers-h">${t('offers_title')}</b></div><p class="muted small">${t('offers_hint')}</p><ul class="hist offers">${rows}</ul></div>`;
 }
 function sellerActions(l){
   const st=l.status;let msg='';
@@ -2160,9 +2181,9 @@ function sellerBtns(l){
   if(st==='withdrawn')out.push(B('relist','btn_relist'),B('hide-listing','btn_delete_listing','danger'));
   return out.join('');
 }
-function threadHTML(lid,th,canSend){
+function threadHTML(lid,th,canSend,emptyKey){
   const u=A.me;
-  const body=th.msgs.length?th.msgs.map(m=>`<div class="msg ${m.from_id===u.id?'mine':''}">${esc(m.body)}<time>${esc(m.from)} · ${ago(m.at)}</time></div>`).join(''):`<div class="muted small">${t('pm_empty_thread')}</div>`;
+  const body=th.msgs.length?th.msgs.map(m=>`<div class="msg ${m.from_id===u.id?'mine':''}">${esc(m.body)}<time>${esc(m.from)} · ${ago(m.at)}</time></div>`).join(''):`<div class="muted small">${t(emptyKey||'pm_empty_thread')}</div>`;
   const comp=canSend?`<div class="compose"><label class="sr" for="pm-in-${th.buyer_id}">${t('pm_placeholder')}</label><textarea id="pm-in-${th.buyer_id}" rows="2" maxlength="1000" placeholder="${t('pm_placeholder')}"></textarea><button class="btn primary" data-act="pm-send" data-lid="${lid}" data-buyer="${th.buyer_id}">${t('pm_send')}</button></div>`:'';
   return body+comp;
 }
@@ -2176,7 +2197,7 @@ function pmArea(d){
   }
   const mine=threads[0]||{buyer_id:u.id,msgs:[]};
   if(!mine.msgs.length&&(st==='withdrawn'||st==='archived'||st==='expired'))return '';
-  return `<div class="section"><h4>${t('pm_with_seller')}</h4><div class="muted small">${t('pm_private_buyer')}</div><div class="thread">${threadHTML(d.id,{buyer_id:u.id,msgs:mine.msgs},canSend)}</div>${isBanned(u)?`<div class="muted small">${t('pm_banned')}</div>`:''}</div>`;
+  return `<div class="section"><h4>${t('pm_with_seller')}</h4><div class="muted small">${t('pm_private_buyer')}</div><div class="thread">${threadHTML(d.id,{buyer_id:u.id,msgs:mine.msgs},canSend,st==='available'&&!isBanned(u)?'pm_empty_offer':'')}</div>${isBanned(u)?`<div class="muted small">${t('pm_banned')}</div>`:''}</div>`;
 }
 function evText(e){
   const x=e.data||{};
@@ -2791,6 +2812,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('submit',e=>{e.preventDefault();const f=e.target.dataset.form;if(f==='login')doLogin();if(f==='reg')doRegister();if(f==='chpw')doChangePw();});
 document.addEventListener('input',e=>{
   const el=e.target;
+  if(el.id==='offer-in'){const c=el.value.replace(/[^0-9.,kKmMcC]/g,'');if(c!==el.value)el.value=c;offerPrev();return;}
   if(el.dataset.f){UI.filters[el.dataset.f]=el.value;searchSoon(el.tagName==='SELECT'?0:450);return;}
   if(el.id==='sell-text'){UI.sellText=el.value;return;}
   if(el.id==='dsel-all'){if(el.checked)(A.drafts||[]).forEach(d=>UI.dsel.add(d.id));else UI.dsel.clear();renderDrafts();return;}
