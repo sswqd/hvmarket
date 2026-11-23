@@ -552,7 +552,7 @@ const T={zh:{
  import_skip_soul:"Soulbound／不可交易 {n} 件已略過。",
  import_skip_struck:"劃掉的（已售出）{n} 行已略過。",
  drafts_title:"未上架區",
- drafts_hint:"這裡的資料存在伺服器上，重新整理或換電腦都還在。售價和 ROLL 改完會自動儲存。勾選多件後可以一次填價：同一個價格、依 ROLL × n，或依 ROLL 區間。",
+ drafts_hint:"這裡的資料存在伺服器上，重新整理或換電腦都還在。售價和 ROLL 改完會自動儲存。可以先用「篩選」只顯示某一種裝備，全選後一次填價：同一個價格、依 ROLL × n，或依 ROLL 區間。",
  drafts_empty:"未上架區是空的。把裝備代碼或網址貼到上面，按「讀取並加入未上架區」。",
  select_all:"全選",
  selected_n:"已選 {n} 件",
@@ -613,7 +613,7 @@ const T={zh:{
  mf_sort_default:"預設排序",
  mf_shown:"顯示 {n} / {m} 件",
  mf_none:"沒有符合篩選的裝備。",
- dq_title:"快速選取",
+ dq_title:"篩選",
  dq_q_ph:"名稱包含…",
  dq_only:"只選這些（{n}）",
  dq_add:"加選（{n}）",
@@ -691,7 +691,7 @@ const T={zh:{
  ssel_hint:"可以移回未上架區，用批量填價一次改價格",
  ssel_draft:"移回未上架區（{n} 件）",
  td_title:"移回未上架區",
- td_confirm:"這 {n} 件會先從市場下架，放到「上架」頁的未上架區。在那裡可以用快速選取和批量填價一次改好價格，再重新上架。",
+ td_confirm:"這 {n} 件會先從市場下架，放到「上架」頁的未上架區。在那裡可以用篩選和批量填價一次改好價格，再重新上架。",
  td_keep:"重新上架會回到原本的刊登：連結、我的最愛、出價和私訊都會保留，收藏的人會在重新上架時收到通知（降價的話會顯示新舊價格）。交易中的裝備不能移回。",
  td_ok:"移回 {n} 件",
  td_done:"已移回 {n} 件到未上架區，並幫你勾選好了。",
@@ -705,6 +705,8 @@ const T={zh:{
  pm_empty_offer:"還沒有訊息。私訊會顯示你的帳號；想匿名議價，請用上面的「匿名出價」。",
  offers_title_admin:"這件的所有出價（管理員檢視）",
  offers_hint_admin:"只有管理員看得到出價者是誰，賣家看不到。",
+ dq_select_shown:"全選顯示的",
+ price_ph_s:"77 = 77k",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -900,7 +902,7 @@ hans:{
  import_skip_soul:"Soulbound／不可交易 {n} 件已略过。",
  import_skip_struck:"划掉的（已售出）{n} 行已略过。",
  drafts_title:"未上架区",
- drafts_hint:"这里的数据存在服务器上，刷新或换电脑都还在。售价和 ROLL 改完会自动保存。勾选多件后可以一次填价：同一个价格、依 ROLL × n，或依 ROLL 区间。",
+ drafts_hint:"这里的数据存在服务器上，刷新或换电脑都还在。售价和 ROLL 改完会自动保存。可以先用「筛选」只显示某一种装备，全选后一次填价：同一个价格、依 ROLL × n，或依 ROLL 区间。",
  drafts_empty:"未上架区是空的。把装备代码或网址贴到上面，按「读取并加入未上架区」。",
  select_all:"全选",
  selected_n:"已选 {n} 件",
@@ -961,7 +963,7 @@ hans:{
  mf_sort_default:"默认排序",
  mf_shown:"显示 {n} / {m} 件",
  mf_none:"没有符合筛选的装备。",
- dq_title:"快速选取",
+ dq_title:"筛选",
  dq_q_ph:"名称包含…",
  dq_only:"只选这些（{n}）",
  dq_add:"加选（{n}）",
@@ -1039,7 +1041,7 @@ hans:{
  ssel_hint:"可以移回未上架区，用批量填价一次改价格",
  ssel_draft:"移回未上架区（{n} 件）",
  td_title:"移回未上架区",
- td_confirm:"这 {n} 件会先从市场下架，放到「上架」页的未上架区。在那里可以用快速选取和批量填价一次改好价格，再重新上架。",
+ td_confirm:"这 {n} 件会先从市场下架，放到「上架」页的未上架区。在那里可以用筛选和批量填价一次改好价格，再重新上架。",
  td_keep:"重新上架会回到原本的刊登：链接、我的最爱、出价和私信都会保留，收藏的人会在重新上架时收到通知（降价的话会显示新旧价格）。交易中的装备不能移回。",
  td_ok:"移回 {n} 件",
  td_done:"已移回 {n} 件到未上架区，并帮你勾选好了。",
@@ -1053,6 +1055,8 @@ hans:{
  pm_empty_offer:"还没有消息。私信会显示你的账号；想匿名议价，请用上面的「匿名出价」。",
  offers_title_admin:"这件的所有出价（管理员检视）",
  offers_hint_admin:"只有管理员看得到出价者是谁，卖家看不到。",
+ dq_select_shown:"全选显示的",
+ price_ph_s:"77 = 77k",
  E_NAME_REQ:"请输入账号。",
  E_NAME_LONG:"账号最多 30 个字符。",
  E_NAME_TAKEN:"这个账号已经有人使用。",
@@ -1248,7 +1252,7 @@ en:{
  import_skip_soul:"{n} Soulbound / untradeable items skipped.",
  import_skip_struck:"{n} struck-out (sold) lines skipped.",
  drafts_title:"Drafts (not listed yet)",
- drafts_hint:"Drafts are saved on the server, so they survive a reload or another device. Price and ROLL changes save automatically. Tick several items to price them at once: one price, ROLL × n, or by ROLL range.",
+ drafts_hint:"Drafts are saved on the server, so they survive a reload or another device. Price and ROLL changes save automatically. Use the filter to show one kind of item, select them all and price them at once: one price, ROLL × n, or by ROLL range.",
  drafts_empty:"No drafts. Paste equipment code or links above and click \"Read and add to drafts\".",
  select_all:"Select all",
  selected_n:"{n} selected",
@@ -1309,7 +1313,7 @@ en:{
  mf_sort_default:"Default order",
  mf_shown:"Showing {n} of {m}",
  mf_none:"Nothing matches these filters.",
- dq_title:"Quick select",
+ dq_title:"Filter",
  dq_q_ph:"Name contains…",
  dq_only:"Select only these ({n})",
  dq_add:"Add these ({n})",
@@ -1387,7 +1391,7 @@ en:{
  ssel_hint:"Move them to your drafts to reprice them together with bulk pricing",
  ssel_draft:"Move {n} to drafts",
  td_title:"Move to drafts",
- td_confirm:"These {n} items leave the market and go to the drafts on your Sell page. There, quick select and bulk pricing can reprice them all at once; then list them again.",
+ td_confirm:"These {n} items leave the market and go to the drafts on your Sell page. There, the filter and bulk pricing can reprice them all at once; then list them again.",
  td_keep:"Listing them again puts them back on the same listings: links, favourites, offers and messages are kept, and people who favourited them are told when they are back (with the old and new price if it went down). Items in trade cannot be moved.",
  td_ok:"Move {n}",
  td_done:"Moved {n} items to your drafts and ticked them for you.",
@@ -1401,6 +1405,8 @@ en:{
  pm_empty_offer:"No messages yet. Messages show your account name; to bargain anonymously, use \"Anonymous offer\" above.",
  offers_title_admin:"All offers on this item (admin view)",
  offers_hint_admin:"Only admins see who made each offer; the seller does not.",
+ dq_select_shown:"Select all shown",
+ price_ph_s:"77 = 77k",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -1564,7 +1570,7 @@ async function loadViewData(){
     case 'admin':A.admin=isAdmin()?await api('hv_admin_data'):null;break;
     case 'sell':
       A.drafts=A.me?await api('hv_drafts'):null;
-      if(A.drafts&&UI.dselBack){const b=UI.dselBack;UI.dselBack=null;UI.dsel=new Set(A.drafts.filter(d=>b.has(d.listing_id)).map(d=>d.id));}
+      if(A.drafts&&UI.dselBack){const b=UI.dselBack;UI.dselBack=null;UI.dq={qual:'',type:'',q:''};UI.dsel=new Set(A.drafts.filter(d=>b.has(d.listing_id)).map(d=>d.id));}
       if(A.drafts){const ids=new Set(A.drafts.map(d=>d.id));UI.dsel=new Set([...UI.dsel].filter(i=>ids.has(i)));}
       break;
   }
@@ -2275,49 +2281,68 @@ function draftPill(d){const s=draftState(d);return `<span class="pill ${s==='ok'
 function draftsHTML(){
   const list=A.drafts;
   if(!list)return LOADING();
-  const n=list.length,sel=list.filter(d=>UI.dsel.has(d.id)).length;
+  const n=list.length;dPrune();
   let h=`<div class="panel pad"><h2>${t('drafts_title')} <span class="cnt">${n}</span></h2><p class="muted small" style="margin:0 0 8px">${t('drafts_hint')}</p>`;
   if(!n)return h+`<div class="empty">${t('drafts_empty')}</div></div>`;
   h+=`<div class="notice info">${t('roll_from_avg')}</div><div class="notice" style="margin-top:6px">${t('untrade_note')}</div>
-  <div class="bulk"><label><input type="checkbox" id="dsel-all" ${sel===n?'checked':''}> ${t('select_all')}</label><b>${t('selected_n',{n:sel})}</b>
-  <button class="btn small primary" data-act="draft-publish" ${sel?'':'disabled'}>${t('publish_n',{n:sel})}</button>
-  <button class="btn small danger" data-act="draft-delete" ${sel?'':'disabled'}>${t('delete_selected')}</button></div>
+  <div id="dbulk">${dBulkHTML()}</div>
   ${dqHTML(list)}
   <div id="bp-box">${bpHTML()}</div>
-  <div class="tablewrap"><table><thead><tr><th></th><th>${t('col_equip')}</th><th>${t('col_world')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')} %</th><th>${t('col_price')}</th><th>${t('col_status')}</th></tr></thead><tbody>
-  ${list.map(d=>`<tr><td><input type="checkbox" data-dsel="${d.id}" ${UI.dsel.has(d.id)?'checked':''} aria-label="${t('select_all')}"></td>
+  <div id="dtable">${dTableHTML()}</div></div>`;
+  return h;
+}
+/* the drafts the filter shows; only these can be ticked, so publishing, deleting and bulk pricing never touch
+   an item you cannot see */
+function dVis(){return (A.drafts||[]).filter(dqMatch);}
+function dPrune(){const vis=new Set(dVis().map(d=>d.id));UI.dsel=new Set([...UI.dsel].filter(i=>vis.has(i)));}
+function dBulkHTML(){
+  const vis=dVis(),sel=vis.filter(d=>UI.dsel.has(d.id)).length;
+  return `<div class="bulk"><label><input type="checkbox" id="dsel-all" ${vis.length&&sel===vis.length?'checked':''} ${vis.length?'':'disabled'}> ${t(dqAny()?'dq_select_shown':'select_all')}</label><b>${t('selected_n',{n:sel})}</b>
+  <button class="btn small primary" data-act="draft-publish" ${sel?'':'disabled'}>${t('publish_n',{n:sel})}</button>
+  <button class="btn small danger" data-act="draft-delete" ${sel?'':'disabled'}>${t('delete_selected')}</button></div>`;
+}
+function dTableHTML(){
+  const vis=dVis();
+  if(!vis.length)return `<div class="empty">${t('mf_none')}</div>`;
+  return `<div class="tablewrap"><table><thead><tr><th></th><th>${t('col_equip')}</th><th>${t('col_world')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')} %</th><th>${t('col_price')}</th><th>${t('col_status')}</th></tr></thead><tbody>
+  ${vis.map(d=>`<tr><td><input type="checkbox" data-dsel="${d.id}" ${UI.dsel.has(d.id)?'checked':''} aria-label="${t('sel_item')}"></td>
     <td>${d.name?nameCell(d):`<input data-dname="${d.id}" class="grow" style="min-width:260px" placeholder="${t('name_ph')}" aria-label="${t('col_equip')}"><a class="ext" href="${esc(eqUrl(d))}" target="_blank" rel="noopener" data-act="noop">↗ ${d.equip_id}</a>`}<div class="sub">${esc(eqZh(d.type)||'—')} · ${esc(catLabel(d.cat))}${d.listing_id?` · <span class="backtag" title="${t('draft_back_tip')}">↩ ${t('draft_back')}</span>`:''}</div></td>
     <td>${worldBadge(d)}</td><td class="num">${d.level??'—'}</td><td>${attrCell(d)}</td>
     <td><input data-droll="${d.id}" class="sm rollin" inputmode="decimal" placeholder="—" value="${d.roll??''}" aria-label="ROLL %"></td>
-    <td><input data-dprice="${d.id}" class="sm" placeholder="${t('price_ph')}" value="${d.price?priceInput(d.price):''}" aria-label="${t('col_price')}"></td>
+    <td><input data-dprice="${d.id}" class="sm" placeholder="${t('price_ph_s')}" value="${d.price?priceInput(d.price):''}" aria-label="${t('col_price')}"></td>
     <td id="dst-${d.id}">${draftPill(d)}</td></tr>`).join('')}
-  </tbody></table></div></div>`;
-  return h;
+  </tbody></table></div>`;
 }
-/* quick select: pick every draft of one quality / kind / name at once */
+/* after the filter or the ticks change: everything but the filter row itself, so typing keeps its focus */
+function renderDraftParts(){
+  dPrune();
+  const set=(id,h)=>{const el=document.getElementById(id);if(el)el.innerHTML=h;};
+  set('dbulk',dBulkHTML());set('bp-box',bpHTML());set('dtable',dTableHTML());set('dq-cnt',dqCntHTML());
+}
+/* filter: show only the drafts of one quality / kind / with a word in the name */
 function dqMatch(d){const f=UI.dq;return (!f.qual||d.quality===f.qual)&&(!f.type||d.type===f.type)&&nameMatch(d.name,f.q);}
 function dqAny(){return !!(UI.dq.qual||UI.dq.type||UI.dq.q.trim());}
 function dqHTML(list){
   const f=UI.dq,opt=(v,lab,cur)=>`<option value="${esc(v)}" ${cur===v?'selected':''}>${esc(lab)}</option>`;
   const quals=[...new Set(list.map(d=>d.quality).filter(Boolean))].sort((a,b)=>QUALITIES.indexOf(a)-QUALITIES.indexOf(b));
-  const tc={};list.forEach(d=>{if(d.type)tc[d.type]=(tc[d.type]||0)+1;});
+  const tc={};list.forEach(d=>{if(d.type&&(!f.qual||d.quality===f.qual))tc[d.type]=(tc[d.type]||0)+1;});
+  if(f.type&&!tc[f.type])tc[f.type]=0;
   const types=Object.keys(tc).sort((a,b)=>eqZh(a).localeCompare(eqZh(b)));
   return `<div class="dtool"><span class="dt-h">${t('dq_title')}</span>
     <label class="sr" for="dq-qual">${t('f_q_all')}</label><select id="dq-qual" data-dq="qual">${opt('',t('f_q_all'),f.qual)}${quals.map(q=>opt(q,isZh()?eqZh(q):q,f.qual)).join('')}</select>
     <label class="sr" for="dq-type">${t('mf_all_types')}</label><select id="dq-type" data-dq="type">${opt('',t('mf_all_types'),f.type)}${types.map(x=>opt(x,`${isZh()?eqZh(x):x} (${tc[x]})`,f.type)).join('')}</select>
     <label class="sr" for="dq-q">${t('dq_q_ph')}</label><input id="dq-q" data-dq="q" placeholder="${t('dq_q_ph')}" value="${esc(f.q)}">
-    <span id="dq-btns">${dqBtns()}</span></div>`;
+    <span id="dq-cnt">${dqCntHTML()}</span></div>`;
 }
-function dqBtns(){const n=dqAny()?(A.drafts||[]).filter(dqMatch).length:0,dis=n?'':'disabled';
-  return `<button class="btn small" data-act="dq-only" ${dis}>${t('dq_only',{n})}</button><button class="btn small" data-act="dq-add" ${dis}>${t('dq_add',{n})}</button>`;}
+function dqCntHTML(){if(!dqAny())return '';const all=A.drafts||[];return `<span class="muted small">${t('mf_shown',{n:dVis().length,m:all.length})}</span> <button class="btn small" data-act="dq-clear">${t('f_clear')}</button>`;}
 /* bulk pricing for the selected drafts: one price, ROLL × n, or a price per ROLL range */
 function bpHTML(){
   bpFix();const b=P.bp,sel=(A.drafts||[]).filter(d=>UI.dsel.has(d.id)).length;
   const modes=['fixed','mul','range'].map(m=>`<option value="${m}" ${b.mode===m?'selected':''}>${t('bp_mode_'+m)}</option>`).join('');
   let inner='';
-  if(b.mode==='fixed')inner=`<label class="sr" for="bp-fixed">${t('col_price')}</label><input id="bp-fixed" class="sm" data-bp="fixed" placeholder="${t('price_ph')}" value="${esc(b.fixed)}">`;
+  if(b.mode==='fixed')inner=`<label class="sr" for="bp-fixed">${t('col_price')}</label><input id="bp-fixed" class="sm" data-bp="fixed" placeholder="${t('price_ph_s')}" value="${esc(b.fixed)}">`;
   else if(b.mode==='mul')inner=`<span class="bp-f">ROLL ×</span><label class="sr" for="bp-n">n</label><input id="bp-n" class="xs" data-bp="n" inputmode="decimal" value="${esc(b.n)}"><span class="bp-f">k</span>`;
-  else inner=`<div class="rngs">${b.ranges.map((r,i)=>`<div class="rng"><input class="xs" data-rg="${i}" data-k="min" inputmode="decimal" placeholder="0" value="${esc(r.min)}" aria-label="${t('rng_min',{i:i+1})}"><span>~</span><input class="xs" data-rg="${i}" data-k="max" inputmode="decimal" placeholder="100" value="${esc(r.max)}" aria-label="${t('rng_max',{i:i+1})}"><span>% →</span><input class="sm" data-rg="${i}" data-k="price" placeholder="${t('price_ph')}" value="${esc(r.price)}" aria-label="${t('rng_price',{i:i+1})}"><button type="button" class="btn small" data-act="rng-del" data-i="${i}" aria-label="${t('rng_del',{i:i+1})}" ${b.ranges.length>1?'':'disabled'}>✕</button></div>`).join('')}<button type="button" class="btn small" data-act="rng-add">＋ ${t('rng_add')}</button></div>`;
+  else inner=`<div class="rngs">${b.ranges.map((r,i)=>`<div class="rng"><input class="xs" data-rg="${i}" data-k="min" inputmode="decimal" placeholder="0" value="${esc(r.min)}" aria-label="${t('rng_min',{i:i+1})}"><span>~</span><input class="xs" data-rg="${i}" data-k="max" inputmode="decimal" placeholder="100" value="${esc(r.max)}" aria-label="${t('rng_max',{i:i+1})}"><span>% →</span><input class="sm" data-rg="${i}" data-k="price" placeholder="${t('price_ph_s')}" value="${esc(r.price)}" aria-label="${t('rng_price',{i:i+1})}"><button type="button" class="btn small" data-act="rng-del" data-i="${i}" aria-label="${t('rng_del',{i:i+1})}" ${b.ranges.length>1?'':'disabled'}>✕</button></div>`).join('')}<button type="button" class="btn small" data-act="rng-add">＋ ${t('rng_add')}</button></div>`;
   return `<div class="dtool bp"><span class="dt-h">${t('bp_title')}</span><label class="sr" for="bp-mode">${t('bp_title')}</label><select id="bp-mode" data-bp="mode">${modes}</select>${inner}
     <button class="btn small" data-act="bp-apply" ${sel?'':'disabled'}>${t('bp_apply',{n:sel})}</button>
     <div class="bp-prev small" id="bp-prev" aria-live="polite">${bpPreview()}</div></div>`;
@@ -2373,7 +2398,7 @@ async function doImport(){
     }
   });
   if(!ok)return;
-  const keys=new Set(todo.map(x=>x.world+':'+x.equip_id));
+  const keys=new Set(todo.map(x=>x.world+':'+x.equip_id));UI.dq={qual:'',type:'',q:''};
   (A.drafts||[]).forEach(d=>{if(keys.has(d.world+':'+d.equip_id))UI.dsel.add(d.id);});
   const parts=added+updated?[t('import_done',{added,updated})]:[];
   if(soul)parts.push(t('import_skip_soul',{n:soul}));
@@ -2722,8 +2747,7 @@ const H={
     act(async()=>{await flushDraftSaves();await api('hv_draft_prices',{p_prices:c.out});},t('bp_done',{n:c.out.length})+(c.skip?' '+t('bp_skip',{n:c.skip}):''));},
   'rng-add'(){bpFix();if(P.bp.ranges.length<20){const last=P.bp.ranges[P.bp.ranges.length-1];const nx=last&&last.max.trim()&&!isNaN(parseFloat(last.max))?String(Math.round((parseFloat(last.max)+0.1)*10)/10):'';P.bp.ranges.push({min:nx,max:'',price:''});}savePrefs();renderBp();const ins=document.querySelectorAll('#bp-box input[data-k="max"]');if(ins.length)ins[ins.length-1].focus();},
   'rng-del'(el){bpFix();const i=N(el.dataset.i);if(P.bp.ranges.length>1)P.bp.ranges.splice(i,1);savePrefs();renderBp();},
-  'dq-only'(){UI.dsel=new Set((A.drafts||[]).filter(dqMatch).map(d=>d.id));renderDrafts();},
-  'dq-add'(){(A.drafts||[]).filter(dqMatch).forEach(d=>UI.dsel.add(d.id));renderDrafts();},
+  'dq-clear'(){UI.dq={qual:'',type:'',q:''};renderDrafts();},
   'mf-clear'(){UI.mf={q:'',qual:'',type:'',world:'',sort:''};renderMain();},
   async fav(el){
     if(!A.me){mLogin();return;}
@@ -2823,16 +2847,16 @@ document.addEventListener('input',e=>{
   if(el.id==='offer-in'){const c=el.value.replace(/[^0-9.,kKmMcC]/g,'');if(c!==el.value)el.value=c;offerPrev();return;}
   if(el.dataset.f){UI.filters[el.dataset.f]=el.value;searchSoon(el.tagName==='SELECT'?0:450);return;}
   if(el.id==='sell-text'){UI.sellText=el.value;return;}
-  if(el.id==='dsel-all'){if(el.checked)(A.drafts||[]).forEach(d=>UI.dsel.add(d.id));else UI.dsel.clear();renderDrafts();return;}
+  if(el.id==='dsel-all'){if(el.checked)dVis().forEach(d=>UI.dsel.add(d.id));else UI.dsel.clear();renderDraftParts();return;}
   if(el.dataset.msel!==undefined){const id=N(el.dataset.msel),l=(UI.pageItems||[]).find(x=>x.id===id);if(el.checked&&l)UI.msel.set(id,l);else UI.msel.delete(id);renderSel();return;}
   if(el.dataset.mselAll!==undefined){(UI.pageItems||[]).forEach(l=>{if(el.checked)UI.msel.set(l.id,l);else UI.msel.delete(l.id);});renderSel();return;}
   if(el.dataset.ssel!==undefined){const id=N(el.dataset.ssel);if(el.checked)UI.ssel.add(id);else UI.ssel.delete(id);renderSsel();return;}
   if(el.dataset.sselAll!==undefined){(UI.sselPage||[]).forEach(id=>{if(el.checked)UI.ssel.add(id);else UI.ssel.delete(id);});renderSsel();return;}
   if(el.dataset.mf){UI.mf[el.dataset.mf]=el.value;renderMineList();return;}
-  if(el.dataset.dq){UI.dq[el.dataset.dq]=el.value;const b=$('#dq-btns');if(b)b.innerHTML=dqBtns();return;}
+  if(el.dataset.dq){UI.dq[el.dataset.dq]=el.value;if(el.tagName==='SELECT'){const id=el.id;renderDrafts();const f=document.getElementById(id);if(f)f.focus();}else renderDraftParts();return;}
   if(el.dataset.bp){bpFix();P.bp[el.dataset.bp]=el.value;savePrefs();if(el.dataset.bp==='mode')renderBp();else{const pv=$('#bp-prev');if(pv)pv.innerHTML=bpPreview();}return;}
   if(el.dataset.rg!==undefined){bpFix();const r=P.bp.ranges[N(el.dataset.rg)];if(r){r[el.dataset.k]=el.value;savePrefs();}const pv=$('#bp-prev');if(pv)pv.innerHTML=bpPreview();return;}
-  if(el.dataset.dsel!==undefined){const id=N(el.dataset.dsel);if(el.checked)UI.dsel.add(id);else UI.dsel.delete(id);renderDrafts();return;}
+  if(el.dataset.dsel!==undefined){const id=N(el.dataset.dsel);if(el.checked)UI.dsel.add(id);else UI.dsel.delete(id);renderDraftParts();return;}
   const did=el.dataset.dprice||el.dataset.droll||el.dataset.dname;
   if(did!==undefined){
     const d=(A.drafts||[]).find(x=>x.id===N(did));if(!d)return;
