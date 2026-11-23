@@ -220,6 +220,26 @@ body.busy, body.busy button{cursor:progress}
 .bulk{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:4px}
 .bulk label{display:inline-flex;gap:5px;align-items:center}
 #bulk-price,input[data-dprice]{width:96px}
+.star{border:0;background:none;color:var(--muted);font-size:17px;line-height:1;padding:2px 4px;cursor:pointer;border-radius:3px}
+.star:hover{color:var(--warn)}.star.on{color:#D9A400}html[data-theme=dark] .star.on{color:#E8C04A}.star.big{font-size:20px;padding:0 6px}
+.rowact{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+th.ck,td.ck{width:28px;padding-right:0;text-align:center}td.ck input,th.ck input{width:16px;height:16px;cursor:pointer;margin:0}
+.selbar{position:sticky;bottom:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 14px;background:var(--panel-2);border-top:2px solid var(--accent);box-shadow:0 -4px 12px rgba(0,0,0,.12)}
+.selbar .grow{flex:1}
+.link.copyb{font-size:12px;margin-left:2px}
+.ok-t{color:var(--ok)}
+.filters.chips{border-top:0;padding-top:0}
+.dtool{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.dtool .dt-h{font-weight:700;font-size:13px;min-width:5.5em}
+.dtool input.xs,input.xs{width:58px}
+.rngs{display:flex;flex-direction:column;gap:6px}.rng{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+#dq-btns{display:inline-flex;flex-wrap:wrap;gap:8px}
+.sellgrid>*{min-width:0}
+#offer-in{width:180px}.section.offer .offer-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.offer-st{margin:0 0 8px}
+.hist.offers li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;padding:4px 0}.hist.offers li.done{opacity:.75}.ofs-act{margin-left:auto;display:inline-flex;gap:6px;align-items:center}
+.pill.ofs-accepted,.pill.ofs-used{background:var(--ok-bg);color:var(--ok)}.pill.ofs-declined{background:var(--bad-bg);color:var(--bad-tx,var(--bad))}.pill.ofs-expired{background:var(--info-bg);color:var(--muted)}
+.bp-prev{flex-basis:100%;padding-left:calc(5.5em + 10px)}.bp-f{font-weight:700}
+@media (max-width:640px){.bp-prev{padding-left:0}}
 :root{--q-peerless:#A8127A;--q-legendary:#BF5200;--q-magnificent:#2457C8;--q-exquisite:#237A35;--q-superior:#5E5E5E}
 /* dark theme: Flexoki dark (stephango.com/flexoki) - base 950/900/850 layers (no pure black), 100 off-white text, 500 muted, 400 accents; the maroon accent becomes white, red stays for errors only */
 html[data-theme=dark]{--bg:#1C1B1A;--panel:#282726;--panel-2:#343331;--ink:#E6E4D9;--muted:#9F9D96;--line:#4A4845;--accent:#E6E4D9;--accent-tx:#E6E4D9;--accent-ink:#1C1B1A;--ok:#A0AF54;--ok-bg:#2D3412;--warn:#D0A215;--warn-bg:#3F3210;--bad:#D14D41;--bad-tx:#E8705F;--bad-bg:#4A2220;--info-bg:#403E3C;--q-peerless:#E47DA8;--q-legendary:#EC8B49;--q-magnificent:#66A0C8;--q-exquisite:#A0AF54;--q-superior:#B7B5AC;color-scheme:dark}
@@ -281,6 +301,9 @@ html[data-theme=dark] .modal h3 .q,html[data-theme=dark] .modal .x{color:#E6E4D9
 .pager{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;padding:14px 0 6px}
 .pager .btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .pager .gap{color:var(--muted);padding:0 2px}
+
+.pill.paused{background:transparent;color:var(--warn);box-shadow:inset 0 0 0 1px currentColor}
+.backtag{color:var(--accent-tx,var(--accent));font-weight:700;cursor:help;white-space:nowrap}
 
 /* equipment name colours from HV综合汉化 (DDD) */
 @font-face {
@@ -524,7 +547,7 @@ const T={zh:{
  import_skip_soul:"Soulbound／不可交易 {n} 件已略過。",
  import_skip_struck:"劃掉的（已售出）{n} 行已略過。",
  drafts_title:"未上架區",
- drafts_hint:"這裡的資料存在伺服器上，重新整理或換電腦都還在。售價和 ROLL 改完會自動儲存。勾選多件後可以一次填同一個售價。",
+ drafts_hint:"這裡的資料存在伺服器上，重新整理或換電腦都還在。售價和 ROLL 改完會自動儲存。勾選多件後可以一次填價：同一個價格、依 ROLL × n，或依 ROLL 區間。",
  drafts_empty:"未上架區是空的。把裝備代碼或網址貼到上面，按「讀取並加入未上架區」。",
  select_all:"全選",
  selected_n:"已選 {n} 件",
@@ -539,6 +562,139 @@ const T={zh:{
  publish_done:"已上架 {n} 件。",
  publish_left:"{n} 件還留在未上架區（缺售價、缺名稱或已經在架上）。",
  del_drafts_confirm:"從未上架區刪除這 {n} 件？（不會影響已經上架的裝備）",
+ copy:"複製",
+ copy_t:"複製「{x}」",
+ copied_x:"已複製：{x}",
+ fav_add:"加入我的最愛",
+ fav_remove:"從我的最愛移除",
+ fav_added:"已加入我的最愛。降價、重新可購買、售出或下架時會通知你。",
+ fav_removed:"已從我的最愛移除。",
+ mine_favs:"我的最愛",
+ favs_empty:"還沒有加入任何裝備。在市場或裝備頁按 ☆ 就能加入。",
+ favs_note:"降價、重新可購買、售出或下架時會通知你",
+ fav_was:"加入時 {p}",
+ fav_clear_ended:"移除已結束的 {n} 件",
+ E_OWN_FAV:"不能把自己的裝備加入我的最愛。",
+ E_FAV_FULL:"我的最愛最多 300 件，請先移除一些。",
+ n_fav_price:"你追蹤的 {item} 降價了：{old} → {new} C。",
+ n_fav_avail:"你追蹤的 {item} 又可以購買了。",
+ n_fav_sold:"你追蹤的 {item} 已經售出。",
+ n_fav_wd:"你追蹤的 {item} 已被賣家下架。",
+ n_buy_many:"{u} 一次買了你 {n} 件裝備，已變成交易中。請到「我的交易」查看，並用 MoogleMail 以 CoD 寄給 {u}。",
+ E_MAX_TRADES:"你已經同時跟 3 位賣家交易中（上限）。同一位賣家的裝備可以繼續買（每位最多 20 件），要買其他賣家的，請先完成或放棄其中一位的交易。",
+ E_MAX_PER_SELLER:"跟同一位賣家同時交易中的裝備最多 20 件。",
+ E_BUY_MANY:"一次最多下單 50 件。",
+ sel_item:"選取這件",
+ sel_page:"選取這頁全部",
+ sel_bar:"已選取的裝備",
+ sel_n:"已選 {n} 件",
+ sel_sum:"可購買 {n} 件，合計 {p}",
+ sel_copy_links:"複製裝備連結",
+ sel_copied:"已複製 {n} 個裝備連結，一行一個。",
+ sel_buy:"一鍵下單 {n} 件",
+ sel_clear:"清除選取",
+ sel_buy_title:"一次購買多件",
+ sel_buy_confirm:"確定要購買這 {n} 件嗎？共 {s} 位賣家，合計 {p}。",
+ n_items:"{n} 件",
+ sel_buy_skip:"另外 {n} 件是你自己的或已經在交易中，不會購買。",
+ sel_buy_rules:"下單後每位賣家會各自用 MoogleMail 以 CoD 寄給你。同時最多跟 3 位賣家交易中，每位賣家最多 20 件。",
+ sel_buy_done:"已下單 {n} 件，請等賣家寄出。",
+ sel_buy_result:"下單結果",
+ sel_buy_partial:"成功 {n} 件，以下 {m} 件沒有買到：",
+ ok_btn:"好",
+ mf_q_ph:"搜尋名稱（中文、英文都可以）",
+ mf_all_types:"全部種類",
+ mf_all_worlds:"兩個世界",
+ mf_sort_default:"預設排序",
+ mf_shown:"顯示 {n} / {m} 件",
+ mf_none:"沒有符合篩選的裝備。",
+ dq_title:"快速選取",
+ dq_q_ph:"名稱包含…",
+ dq_only:"只選這些（{n}）",
+ dq_add:"加選（{n}）",
+ bp_title:"批量填價",
+ bp_mode_fixed:"同一個價格",
+ bp_mode_mul:"依 ROLL × n",
+ bp_mode_range:"依 ROLL 區間",
+ bp_apply:"套用到已選 {n} 件",
+ bp_none_sel:"先勾選要填價的裝備。",
+ bp_need_price:"請輸入價格。",
+ bp_bad_n:"n 要填大於 0 的數字，例如 1 或 1.5。",
+ bp_bad_range:"每個區間都要填價格，而且左邊的 ROLL 不能大於右邊。",
+ bp_prev:"會設定 {n} 件",
+ bp_skip:"{n} 件沒有 ROLL 或不在任何區間，價格不變",
+ bp_example:"例：ROLL {r}% → {p}",
+ bp_nothing:"沒有可以設定價格的裝備（都沒有 ROLL 或不在區間內）。",
+ bp_done:"已設定 {n} 件的價格。",
+ rng_add:"新增區間",
+ rng_min:"第 {i} 個區間的最低 ROLL",
+ rng_max:"第 {i} 個區間的最高 ROLL",
+ rng_price:"第 {i} 個區間的價格",
+ rng_del:"刪除第 {i} 個區間",
+ offer_title:"匿名出價",
+ offer_hint:"只能填金額。賣家只看得到金額，看不到你是誰；賣家同意或婉拒都會通知你，同意後 3 天內可以用這個價格購買。",
+ offer_amount:"出價金額",
+ offer_send:"送出出價",
+ offer_raise:"提高出價",
+ offer_send_higher:"出更高的價",
+ offer_withdraw:"撤回出價",
+ offer_waiting:"你的出價 {p}，等待賣家回覆。",
+ offer_accepted:"賣家同意了你的出價 {p}！在 {d} 之前可以用這個價格購買（在那之前其他人仍可能用原價先買走）。",
+ offer_buy:"用 {p} 購買",
+ offer_buy_confirm:"確定用 {p} 購買嗎？按下後會變成交易中，請等賣家用 MoogleMail 以 CoD 寄給你。",
+ offer_declined:"賣家婉拒了你的出價 {p}，可以出更高的價。",
+ offer_expired:"賣家同意的 {p} 已經超過 3 天，過期了，可以重新出價。",
+ offer_sent:"已送出出價 {p}。",
+ offer_withdrawn:"已撤回出價。",
+ E_OFFER_HIGH:"出價要低於售價；接受售價的話直接購買就好。",
+ E_OFFER_LOWER:"新的出價要比你上次的出價高。",
+ E_OFFER_ACCEPTED:"賣家已經同意你的出價，直接用那個價格購買就好。",
+ E_OFFER_MANY:"等待賣家回覆的出價最多 30 筆。",
+ E_OFFER_NONE:"沒有可以使用的出價（可能已過期或已經用過）。",
+ offers_title:"匿名出價（只有你看得到）",
+ offers_hint:"你只看得到金額，看不到是誰出的。同意後對方會收到通知，3 天內可以用這個價格購買；婉拒也會通知對方。",
+ offers_none:"目前沒有人出價。",
+ offer_accept:"同意",
+ offer_decline:"婉拒",
+ offer_after_trade:"交易中，結束後才能同意",
+ offer_accept_confirm:"同意以 {p} 賣出？對方會收到通知，3 天內可以用這個價格購買。在那之前裝備照常上架，其他人仍然可以用原價購買。",
+ offer_accepted_t:"已同意，對方會收到通知。",
+ offer_declined_t:"已婉拒，對方會收到通知。",
+ ofs_open:"等待回覆",
+ ofs_accepted:"已同意",
+ ofs_declined:"已婉拒",
+ ofs_used:"已用此價購買",
+ ofs_expired:"同意已過期",
+ offers_n:"{n} 筆出價",
+ deal_is:"議價成交 {p}",
+ deal_is_buyer:"你是用議價 {p} 買的，CoD 金額以這個價格為準。",
+ deal_short:"議價",
+ ev_offer_ok:"同意了一筆 {p} 的匿名出價",
+ ev_offer_no:"婉拒了一筆 {p} 的匿名出價",
+ n_offer:"有人匿名對你的 {item} 出價 {price} C。",
+ n_offer_ok:"賣家同意了你對 {item} 的出價 {price} C，3 天內可以用這個價格購買。",
+ n_offer_no:"賣家婉拒了你對 {item} 的出價 {price} C。",
+ n_buy_offer:"{u} 用你同意的出價 {price} C 買下 {item}，已變成交易中。請用 MoogleMail 以 CoD（{price} C）寄給 {u}。",
+ st_paused:"調整中",
+ note_paused:"賣家暫時把這件移回未上架區調整（例如改價格），現在不能購買。加入我的最愛的話，重新上架時會通知你。",
+ paused_seller:"這件在你「上架」頁的未上架區。改好價格後勾選它，按「上架已選」，就會回到這筆刊登：連結、我的最愛、出價和私訊都會保留。",
+ btn_to_draft:"移回未上架區",
+ btn_go_drafts:"到未上架區",
+ offer_after_relist:"已移回未上架區，重新上架後才能同意",
+ ev_to_draft:"賣家把它移回未上架區調整",
+ ssel_page:"選取清單裡全部可以移回的",
+ ssel_hint:"可以移回未上架區，用批量填價一次改價格",
+ ssel_draft:"移回未上架區（{n} 件）",
+ td_title:"移回未上架區",
+ td_confirm:"這 {n} 件會先從市場下架，放到「上架」頁的未上架區。在那裡可以用快速選取和批量填價一次改好價格，再重新上架。",
+ td_keep:"重新上架會回到原本的刊登：連結、我的最愛、出價和私訊都會保留，收藏的人會在重新上架時收到通知（降價的話會顯示新舊價格）。交易中的裝備不能移回。",
+ td_ok:"移回 {n} 件",
+ td_done:"已移回 {n} 件到未上架區，並幫你勾選好了。",
+ td_skip:"{n} 件沒有移回（交易中或已經不在架上）。",
+ and_more:"還有 {n} 件",
+ draft_back:"從市場移回",
+ draft_back_tip:"上架後會回到原本的刊登，連結、我的最愛、出價和私訊都會保留",
+ del_drafts_back:"其中 {n} 件是從市場移回的，刪除就等於下架，收藏的人會收到下架通知。",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -546,7 +702,6 @@ const T={zh:{
  E_LOGIN:"帳號或密碼不對。",
  E_CUR_PW:"目前的密碼不對。",
  E_RESET_PW:"新密碼不能是 00000。",
- E_MAX_TRADES:"你同時交易中的裝備已經有 3 件（上限），請先完成或放棄其中一件。",
  E_DUP:"已經在架上",
  demo_tag:'原型',demo_note:'資料都是假的，只存在你這台瀏覽器。用右邊切換身分，體驗賣家、買家和管理員看到的畫面。',demo_as:'切換身分',guest:'訪客（未登入）',demo_reset:'重設假資料',demo_reset_done:'假資料已重設。',
  hint_u0:'管理員，也就是你',hint_u1:'賣家，有一則新私訊',hint_u2:'買家，正在交易一件',hint_u3:'賣家',hint_u4:'新帳號，與 Carol 同 IP',hint_u5:'常常放棄購買',hint_new:'你剛註冊的帳號',
@@ -582,13 +737,13 @@ const T={zh:{
  ms_price:'實際成交價',ms_hint:'有議價的話請填實際付款的金額。這個數字會成為其他玩家參考的成交價。',
  ct_hint:'商品會回到「上架中」，買家會收到通知。原因會記錄下來，只有你和管理員看得到。',reason:'原因',note_optional:'補充說明（可不填）',
  bg_hint:'商品會回到「上架中」，賣家會收到通知。經常放棄購買可能會被其他玩家檢舉。',
- price_invalid:'看不懂這個價格，可以寫 1500000、1.5m 或 800k。',price_ph:'例如 1.5m',new_price:'新售價',
+ price_invalid:"看不懂這個價格。直接打數字代表 k（77 就是 77k），也可以寫 800k、1.5m；要精確到 Credits 請在後面加 c，例如 500c。",price_ph:"例如 77（=77k）、1.5m",new_price:'新售價',
  sell_title:'上架裝備',sell_need_login:'請先登入才能上架。',sell_steps_title:'用 HVUT 產生裝備代碼',
  sell_step1:'在 HV 進入裝備的「整理」頁面',sell_step2:'先按左側的「可交易的」，只留下可以交易的裝備',sell_step3:'勾選要賣的裝備',sell_step4:'按左側的「裝備代碼」',sell_step5:"把跳出來的文字全部複製，貼到下面的框框，按「讀取並加入未上架區」",
  sell_need_hvut:'需要先安裝 HVUT。主世界和 ISK 的裝備可以混在一起貼，網站會自動分開；Soulbound 的裝備會被擋下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 換算的：傳奇 170–200、史詩 150–180 對應 0–100%。HVUT 的 AVG 是四捨五入過的整數，所以可能跟實際差 1–2%，需要的話可以直接改。布甲少了 A、I、W 其中一個會自動標成瘸腿。',untrade_note:'記得先按 HVUT 的「可交易的」再勾選。HVUT 代碼不會標出 Untradeable，網站沒辦法替你擋下不可交易的裝備；不可交易的裝備無法用 MoogleMail 寄出，被檢舉會被下架。',lame:'瘸腿',lame_t:'少了 {x} 屬性',
  sell_paste_ph:'把 HVUT 的裝備代碼貼在這裡',sell_sample:'填入範例',sell_parse:'讀取裝備',sell_preview:'確認並填售價',
  sell_ok:'可上架',sell_err_dup:'已經在架上',sell_err_duppaste:'重複貼了兩次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
- sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件裝備。',sell_unread:'下面這幾行讀不懂，已略過：',sell_none:'沒有讀到任何裝備連結。請確認貼上的是 HVUT「裝備代碼」產生的文字。',sell_credits:'售價一律用主世界 Credits，ISK 裝備也一樣。可以寫 1.5m 或 800k。',sell_fix_prices:'有些裝備還沒填售價，或價格格式不對。',sell_nothing:'沒有勾選任何可上架的裝備。',
+ sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件裝備。',sell_unread:'下面這幾行讀不懂，已略過：',sell_none:'沒有讀到任何裝備連結。請確認貼上的是 HVUT「裝備代碼」產生的文字。',sell_credits:"售價一律用主世界 Credits，ISK 裝備也一樣。直接打數字代表 k（77 就是 77k），也可以寫 800k、1.5m。",sell_fix_prices:'有些裝備還沒填售價，或價格格式不對。',sell_nothing:'沒有勾選任何可上架的裝備。',
  mine_selling:'我賣的',mine_buying:'我買的',mine_all:'全部',mine_closed:'已下架／封存',mine_empty:'這裡還沒有東西。',
  age_listed:'上架 {d} 天',expires_in:'{d} 天後到期',expired_note:'已過期，市場上看不到，按「續期」重新顯示',trade_days:'交易中 {d} 天',stale_warn:'已超過 {d} 天，請跟買家確認或取消交易',
  b_active:'交易中',b_done:'已成交',b_cancelled:'已放棄或被取消',sold_date:'{d} 成交',
@@ -735,7 +890,7 @@ hans:{
  import_skip_soul:"Soulbound／不可交易 {n} 件已略过。",
  import_skip_struck:"划掉的（已售出）{n} 行已略过。",
  drafts_title:"未上架区",
- drafts_hint:"这里的数据存在服务器上，刷新或换电脑都还在。售价和 ROLL 改完会自动保存。勾选多件后可以一次填同一个售价。",
+ drafts_hint:"这里的数据存在服务器上，刷新或换电脑都还在。售价和 ROLL 改完会自动保存。勾选多件后可以一次填价：同一个价格、依 ROLL × n，或依 ROLL 区间。",
  drafts_empty:"未上架区是空的。把装备代码或网址贴到上面，按「读取并加入未上架区」。",
  select_all:"全选",
  selected_n:"已选 {n} 件",
@@ -750,6 +905,139 @@ hans:{
  publish_done:"已上架 {n} 件。",
  publish_left:"{n} 件还留在未上架区（缺售价、缺名称或已经在架上）。",
  del_drafts_confirm:"从未上架区删除这 {n} 件？（不会影响已经上架的装备）",
+ copy:"复制",
+ copy_t:"复制「{x}」",
+ copied_x:"已复制：{x}",
+ fav_add:"加入我的最爱",
+ fav_remove:"从我的最爱移除",
+ fav_added:"已加入我的最爱。降价、重新可购买、售出或下架时会通知你。",
+ fav_removed:"已从我的最爱移除。",
+ mine_favs:"我的最爱",
+ favs_empty:"还没有加入任何装备。在市场或装备页按 ☆ 就能加入。",
+ favs_note:"降价、重新可购买、售出或下架时会通知你",
+ fav_was:"加入时 {p}",
+ fav_clear_ended:"移除已结束的 {n} 件",
+ E_OWN_FAV:"不能把自己的装备加入我的最爱。",
+ E_FAV_FULL:"我的最爱最多 300 件，请先移除一些。",
+ n_fav_price:"你追踪的 {item} 降价了：{old} → {new} C。",
+ n_fav_avail:"你追踪的 {item} 又可以购买了。",
+ n_fav_sold:"你追踪的 {item} 已经售出。",
+ n_fav_wd:"你追踪的 {item} 已被卖家下架。",
+ n_buy_many:"{u} 一次买了你 {n} 件装备，已变成交易中。请到「我的交易」查看，并用 MoogleMail 以 CoD 寄给 {u}。",
+ E_MAX_TRADES:"你已经同时跟 3 位卖家交易中（上限）。同一位卖家的装备可以继续买（每位最多 20 件），要买其他卖家的，请先完成或放弃其中一位的交易。",
+ E_MAX_PER_SELLER:"跟同一位卖家同时交易中的装备最多 20 件。",
+ E_BUY_MANY:"一次最多下单 50 件。",
+ sel_item:"选取这件",
+ sel_page:"选取这页全部",
+ sel_bar:"已选取的装备",
+ sel_n:"已选 {n} 件",
+ sel_sum:"可购买 {n} 件，合计 {p}",
+ sel_copy_links:"复制装备链接",
+ sel_copied:"已复制 {n} 个装备链接，一行一个。",
+ sel_buy:"一键下单 {n} 件",
+ sel_clear:"清除选取",
+ sel_buy_title:"一次购买多件",
+ sel_buy_confirm:"确定要购买这 {n} 件吗？共 {s} 位卖家，合计 {p}。",
+ n_items:"{n} 件",
+ sel_buy_skip:"另外 {n} 件是你自己的或已经在交易中，不会购买。",
+ sel_buy_rules:"下单后每位卖家会各自用 MoogleMail 以 CoD 寄给你。同时最多跟 3 位卖家交易中，每位卖家最多 20 件。",
+ sel_buy_done:"已下单 {n} 件，请等卖家寄出。",
+ sel_buy_result:"下单结果",
+ sel_buy_partial:"成功 {n} 件，以下 {m} 件没有买到：",
+ ok_btn:"好",
+ mf_q_ph:"搜索名称（中文、英文都可以）",
+ mf_all_types:"全部种类",
+ mf_all_worlds:"两个世界",
+ mf_sort_default:"默认排序",
+ mf_shown:"显示 {n} / {m} 件",
+ mf_none:"没有符合筛选的装备。",
+ dq_title:"快速选取",
+ dq_q_ph:"名称包含…",
+ dq_only:"只选这些（{n}）",
+ dq_add:"加选（{n}）",
+ bp_title:"批量填价",
+ bp_mode_fixed:"同一个价格",
+ bp_mode_mul:"依 ROLL × n",
+ bp_mode_range:"依 ROLL 区间",
+ bp_apply:"应用到已选 {n} 件",
+ bp_none_sel:"先勾选要填价的装备。",
+ bp_need_price:"请输入价格。",
+ bp_bad_n:"n 要填大于 0 的数字，例如 1 或 1.5。",
+ bp_bad_range:"每个区间都要填价格，而且左边的 ROLL 不能大于右边。",
+ bp_prev:"会设置 {n} 件",
+ bp_skip:"{n} 件没有 ROLL 或不在任何区间，价格不变",
+ bp_example:"例：ROLL {r}% → {p}",
+ bp_nothing:"没有可以设置价格的装备（都没有 ROLL 或不在区间内）。",
+ bp_done:"已设置 {n} 件的价格。",
+ rng_add:"新增区间",
+ rng_min:"第 {i} 个区间的最低 ROLL",
+ rng_max:"第 {i} 个区间的最高 ROLL",
+ rng_price:"第 {i} 个区间的价格",
+ rng_del:"删除第 {i} 个区间",
+ offer_title:"匿名出价",
+ offer_hint:"只能填金额。卖家只看得到金额，看不到你是谁；卖家同意或婉拒都会通知你，同意后 3 天内可以用这个价格购买。",
+ offer_amount:"出价金额",
+ offer_send:"送出出价",
+ offer_raise:"提高出价",
+ offer_send_higher:"出更高的价",
+ offer_withdraw:"撤回出价",
+ offer_waiting:"你的出价 {p}，等待卖家回复。",
+ offer_accepted:"卖家同意了你的出价 {p}！在 {d} 之前可以用这个价格购买（在那之前其他人仍可能用原价先买走）。",
+ offer_buy:"用 {p} 购买",
+ offer_buy_confirm:"确定用 {p} 购买吗？按下后会变成交易中，请等卖家用 MoogleMail 以 CoD 寄给你。",
+ offer_declined:"卖家婉拒了你的出价 {p}，可以出更高的价。",
+ offer_expired:"卖家同意的 {p} 已经超过 3 天，过期了，可以重新出价。",
+ offer_sent:"已送出出价 {p}。",
+ offer_withdrawn:"已撤回出价。",
+ E_OFFER_HIGH:"出价要低于售价；接受售价的话直接购买就好。",
+ E_OFFER_LOWER:"新的出价要比你上次的出价高。",
+ E_OFFER_ACCEPTED:"卖家已经同意你的出价，直接用那个价格购买就好。",
+ E_OFFER_MANY:"等待卖家回复的出价最多 30 笔。",
+ E_OFFER_NONE:"没有可以使用的出价（可能已过期或已经用过）。",
+ offers_title:"匿名出价（只有你看得到）",
+ offers_hint:"你只看得到金额，看不到是谁出的。同意后对方会收到通知，3 天内可以用这个价格购买；婉拒也会通知对方。",
+ offers_none:"目前没有人出价。",
+ offer_accept:"同意",
+ offer_decline:"婉拒",
+ offer_after_trade:"交易中，结束后才能同意",
+ offer_accept_confirm:"同意以 {p} 卖出？对方会收到通知，3 天内可以用这个价格购买。在那之前装备照常上架，其他人仍然可以用原价购买。",
+ offer_accepted_t:"已同意，对方会收到通知。",
+ offer_declined_t:"已婉拒，对方会收到通知。",
+ ofs_open:"等待回复",
+ ofs_accepted:"已同意",
+ ofs_declined:"已婉拒",
+ ofs_used:"已用此价购买",
+ ofs_expired:"同意已过期",
+ offers_n:"{n} 笔出价",
+ deal_is:"议价成交 {p}",
+ deal_is_buyer:"你是用议价 {p} 买的，CoD 金额以这个价格为准。",
+ deal_short:"议价",
+ ev_offer_ok:"同意了一笔 {p} 的匿名出价",
+ ev_offer_no:"婉拒了一笔 {p} 的匿名出价",
+ n_offer:"有人匿名对你的 {item} 出价 {price} C。",
+ n_offer_ok:"卖家同意了你对 {item} 的出价 {price} C，3 天内可以用这个价格购买。",
+ n_offer_no:"卖家婉拒了你对 {item} 的出价 {price} C。",
+ n_buy_offer:"{u} 用你同意的出价 {price} C 买下 {item}，已变成交易中。请用 MoogleMail 以 CoD（{price} C）寄给 {u}。",
+ st_paused:"调整中",
+ note_paused:"卖家暂时把这件移回未上架区调整（例如改价格），现在不能购买。加入我的最爱的话，重新上架时会通知你。",
+ paused_seller:"这件在你「上架」页的未上架区。改好价格后勾选它，按「上架已选」，就会回到这笔刊登：链接、我的最爱、出价和私信都会保留。",
+ btn_to_draft:"移回未上架区",
+ btn_go_drafts:"到未上架区",
+ offer_after_relist:"已移回未上架区，重新上架后才能同意",
+ ev_to_draft:"卖家把它移回未上架区调整",
+ ssel_page:"选取清单里全部可以移回的",
+ ssel_hint:"可以移回未上架区，用批量填价一次改价格",
+ ssel_draft:"移回未上架区（{n} 件）",
+ td_title:"移回未上架区",
+ td_confirm:"这 {n} 件会先从市场下架，放到「上架」页的未上架区。在那里可以用快速选取和批量填价一次改好价格，再重新上架。",
+ td_keep:"重新上架会回到原本的刊登：链接、我的最爱、出价和私信都会保留，收藏的人会在重新上架时收到通知（降价的话会显示新旧价格）。交易中的装备不能移回。",
+ td_ok:"移回 {n} 件",
+ td_done:"已移回 {n} 件到未上架区，并帮你勾选好了。",
+ td_skip:"{n} 件没有移回（交易中或已经不在架上）。",
+ and_more:"还有 {n} 件",
+ draft_back:"从市场移回",
+ draft_back_tip:"上架后会回到原本的刊登，链接、我的最爱、出价和私信都会保留",
+ del_drafts_back:"其中 {n} 件是从市场移回的，删除就等于下架，收藏的人会收到下架通知。",
  E_NAME_REQ:"请输入账号。",
  E_NAME_LONG:"账号最多 30 个字符。",
  E_NAME_TAKEN:"这个账号已经有人使用。",
@@ -757,7 +1045,6 @@ hans:{
  E_LOGIN:"账号或密码不对。",
  E_CUR_PW:"目前的密码不对。",
  E_RESET_PW:"新密码不能是 00000。",
- E_MAX_TRADES:"你同时交易中的装备已经有 3 件（上限），请先完成或放弃其中一件。",
  E_DUP:"已经在架上",
  demo_tag:'原型',demo_note:'数据都是假的，只存在你这台浏览器。用右边切换身份，体验卖家、买家和管理员看到的画面。',demo_as:'切换身份',guest:'访客（未登录）',demo_reset:'重设假数据',demo_reset_done:'假数据已重设。',
  hint_u0:'管理员，也就是你',hint_u1:'卖家，有一条新私信',hint_u2:'买家，正在交易一件',hint_u3:'卖家',hint_u4:'新账号，与 Carol 同 IP',hint_u5:'常常放弃购买',hint_new:'你刚注册的账号',
@@ -793,13 +1080,13 @@ hans:{
  ms_price:'实际成交价',ms_hint:'有议价的话请填实际付款的金额。这个数字会成为其他玩家参考的成交价。',
  ct_hint:'商品会回到「上架中」，买家会收到通知。原因会记录下来，只有你和管理员看得到。',reason:'原因',note_optional:'补充说明（可不填）',
  bg_hint:'商品会回到「上架中」，卖家会收到通知。经常放弃购买可能会被其他玩家举报。',
- price_invalid:'看不懂这个价格，可以写 1500000、1.5m 或 800k。',price_ph:'例如 1.5m',new_price:'新售价',
+ price_invalid:"看不懂这个价格。直接打数字代表 k（77 就是 77k），也可以写 800k、1.5m；要精确到 Credits 请在后面加 c，例如 500c。",price_ph:"例如 77（=77k）、1.5m",new_price:'新售价',
  sell_title:'上架装备',sell_need_login:'请先登录才能上架。',sell_steps_title:'用 HVUT 产生装备代码',
  sell_step1:'在 HV 进入装备的「整理」页面',sell_step2:'先按左侧的「可交易的」，只留下可以交易的装备',sell_step3:'勾选要卖的装备',sell_step4:'按左侧的「装备代码」',sell_step5:"把跳出来的文字全部复制，贴到下面的框框，按「读取并加入未上架区」",
  sell_need_hvut:'需要先安装 HVUT。主世界和 ISK 的装备可以混在一起贴，网站会自动分开；Soulbound 的装备会被挡下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 换算的：传奇 170–200、史诗 150–180 对应 0–100%。HVUT 的 AVG 是四舍五入过的整数，所以可能跟实际差 1–2%，需要的话可以直接改。布甲少了 A、I、W 其中一个会自动标成瘸腿。',untrade_note:'记得先按 HVUT 的「可交易的」再勾选。HVUT 代码不会标出 Untradeable，网站没办法替你挡下不可交易的装备；不可交易的装备无法用 MoogleMail 寄出，被举报会被下架。',lame:'瘸腿',lame_t:'少了 {x} 属性',
  sell_paste_ph:'把 HVUT 的装备代码贴在这里',sell_sample:'填入范例',sell_parse:'读取装备',sell_preview:'确认并填售价',
  sell_ok:'可上架',sell_err_dup:'已经在架上',sell_err_duppaste:'重复贴了两次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
- sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件装备。',sell_unread:'下面这几行读不懂，已略过：',sell_none:'没有读到任何装备链接。请确认粘贴的是 HVUT「装备代码」产生的文字。',sell_credits:'售价一律用主世界 Credits，ISK 装备也一样。可以写 1.5m 或 800k。',sell_fix_prices:'有些装备还没填售价，或价格格式不对。',sell_nothing:'没有勾选任何可上架的装备。',
+ sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件装备。',sell_unread:'下面这几行读不懂，已略过：',sell_none:'没有读到任何装备链接。请确认粘贴的是 HVUT「装备代码」产生的文字。',sell_credits:"售价一律用主世界 Credits，ISK 装备也一样。直接打数字代表 k（77 就是 77k），也可以写 800k、1.5m。",sell_fix_prices:'有些装备还没填售价，或价格格式不对。',sell_nothing:'没有勾选任何可上架的装备。',
  mine_selling:'我卖的',mine_buying:'我买的',mine_all:'全部',mine_closed:'已下架／封存',mine_empty:'这里还没有东西。',
  age_listed:'上架 {d} 天',expires_in:'{d} 天后到期',expired_note:'已过期，市场上看不到，按「续期」重新显示',trade_days:'交易中 {d} 天',stale_warn:'已超过 {d} 天，请跟买家确认或取消交易',
  b_active:'交易中',b_done:'已成交',b_cancelled:'已放弃或被取消',sold_date:'{d} 成交',
@@ -946,7 +1233,7 @@ en:{
  import_skip_soul:"{n} Soulbound / untradeable items skipped.",
  import_skip_struck:"{n} struck-out (sold) lines skipped.",
  drafts_title:"Drafts (not listed yet)",
- drafts_hint:"Drafts are saved on the server, so they survive a reload or another device. Price and ROLL changes save automatically. Tick several items to give them one price at once.",
+ drafts_hint:"Drafts are saved on the server, so they survive a reload or another device. Price and ROLL changes save automatically. Tick several items to price them at once: one price, ROLL × n, or by ROLL range.",
  drafts_empty:"No drafts. Paste equipment code or links above and click \"Read and add to drafts\".",
  select_all:"Select all",
  selected_n:"{n} selected",
@@ -961,6 +1248,139 @@ en:{
  publish_done:"Listed {n} items.",
  publish_left:"{n} stayed in drafts (no price, no name or already listed).",
  del_drafts_confirm:"Remove these {n} items from your drafts? (Listed items are not affected.)",
+ copy:"Copy",
+ copy_t:"Copy \"{x}\"",
+ copied_x:"Copied: {x}",
+ fav_add:"Add to favourites",
+ fav_remove:"Remove from favourites",
+ fav_added:"Added to favourites. You will be notified when it gets cheaper, is for sale again, sells or is withdrawn.",
+ fav_removed:"Removed from favourites.",
+ mine_favs:"Favourites",
+ favs_empty:"Nothing here yet. Press ☆ on the market or on an item to add it.",
+ favs_note:"you are notified when an item gets cheaper, is for sale again, sells or is withdrawn",
+ fav_was:"was {p}",
+ fav_clear_ended:"Remove {n} ended",
+ E_OWN_FAV:"You cannot add your own item to favourites.",
+ E_FAV_FULL:"Favourites hold at most 300 items. Remove some first.",
+ n_fav_price:"{item} on your favourites is cheaper: {old} → {new} C.",
+ n_fav_avail:"{item} on your favourites is for sale again.",
+ n_fav_sold:"{item} on your favourites has been sold.",
+ n_fav_wd:"{item} on your favourites was withdrawn by the seller.",
+ n_buy_many:"{u} bought {n} of your items at once; they are now In Trade. See My trades and send them to {u} by MoogleMail with CoD.",
+ E_MAX_TRADES:"You already have trades open with 3 sellers (the limit). You can keep buying from those sellers (up to 20 items each); to buy from someone else, finish or give up one of those trades first.",
+ E_MAX_PER_SELLER:"At most 20 items from one seller can be in trade at once.",
+ E_BUY_MANY:"You can buy at most 50 items at once.",
+ sel_item:"Select this item",
+ sel_page:"Select all on this page",
+ sel_bar:"Selected items",
+ sel_n:"{n} selected",
+ sel_sum:"{n} can be bought, {p} in total",
+ sel_copy_links:"Copy item links",
+ sel_copied:"Copied {n} item links, one per line.",
+ sel_buy:"Buy {n} items",
+ sel_clear:"Clear selection",
+ sel_buy_title:"Buy several items",
+ sel_buy_confirm:"Buy these {n} items from {s} sellers for {p} in total?",
+ n_items:"{n} items",
+ sel_buy_skip:"{n} other selected items are yours or already in trade, and will not be bought.",
+ sel_buy_rules:"Each seller sends you their items by MoogleMail with CoD. You can have trades open with up to 3 sellers at once, up to 20 items each.",
+ sel_buy_done:"Bought {n} items. Wait for the sellers to send them.",
+ sel_buy_result:"Purchase result",
+ sel_buy_partial:"{n} bought. These {m} were not:",
+ ok_btn:"OK",
+ mf_q_ph:"Search names (English or Chinese)",
+ mf_all_types:"All kinds",
+ mf_all_worlds:"Both worlds",
+ mf_sort_default:"Default order",
+ mf_shown:"Showing {n} of {m}",
+ mf_none:"Nothing matches these filters.",
+ dq_title:"Quick select",
+ dq_q_ph:"Name contains…",
+ dq_only:"Select only these ({n})",
+ dq_add:"Add these ({n})",
+ bp_title:"Bulk pricing",
+ bp_mode_fixed:"One price",
+ bp_mode_mul:"ROLL × n",
+ bp_mode_range:"By ROLL range",
+ bp_apply:"Apply to {n} selected",
+ bp_none_sel:"Tick the drafts to price first.",
+ bp_need_price:"Enter a price.",
+ bp_bad_n:"n must be a number above 0, such as 1 or 1.5.",
+ bp_bad_range:"Every range needs a price, and its lower ROLL cannot be above the upper one.",
+ bp_prev:"{n} will be priced",
+ bp_skip:"{n} without ROLL or outside every range stay unchanged",
+ bp_example:"e.g. ROLL {r}% → {p}",
+ bp_nothing:"Nothing to price: none of them has a ROLL inside a range.",
+ bp_done:"Priced {n} items.",
+ rng_add:"Add range",
+ rng_min:"Range {i}: lowest ROLL",
+ rng_max:"Range {i}: highest ROLL",
+ rng_price:"Range {i}: price",
+ rng_del:"Delete range {i}",
+ offer_title:"Anonymous offer",
+ offer_hint:"Amount only. The seller sees the amount but not who you are. You are told whether they accept or decline; once accepted you can buy at that price for 3 days.",
+ offer_amount:"Offer amount",
+ offer_send:"Send offer",
+ offer_raise:"Raise offer",
+ offer_send_higher:"Offer more",
+ offer_withdraw:"Withdraw offer",
+ offer_waiting:"Your offer: {p}. Waiting for the seller.",
+ offer_accepted:"The seller accepted your offer of {p}! You can buy at this price until {d} (until then someone else can still buy it at the full price).",
+ offer_buy:"Buy for {p}",
+ offer_buy_confirm:"Buy for {p}? It becomes In Trade; wait for the seller to send it by MoogleMail with CoD.",
+ offer_declined:"The seller declined your offer of {p}. You can offer more.",
+ offer_expired:"The seller accepted {p} more than 3 days ago; it has run out. You can make a new offer.",
+ offer_sent:"Offer of {p} sent.",
+ offer_withdrawn:"Offer withdrawn.",
+ E_OFFER_HIGH:"An offer has to be below the price; if the price is fine, just buy it.",
+ E_OFFER_LOWER:"A new offer has to be higher than your last one.",
+ E_OFFER_ACCEPTED:"The seller already accepted your offer; buy at that price.",
+ E_OFFER_MANY:"You can have at most 30 offers waiting for an answer.",
+ E_OFFER_NONE:"No offer to use (it may have run out or been used).",
+ offers_title:"Anonymous offers (only you see these)",
+ offers_hint:"You see the amounts, never who made them. If you accept, they are told and can buy at that price for 3 days; if you decline, they are told too.",
+ offers_none:"No offers yet.",
+ offer_accept:"Accept",
+ offer_decline:"Decline",
+ offer_after_trade:"In trade; you can accept once it ends",
+ offer_accept_confirm:"Sell for {p}? They are told and can buy at this price for 3 days. Until then the item stays listed and anyone can still buy it at the full price.",
+ offer_accepted_t:"Accepted; they have been told.",
+ offer_declined_t:"Declined; they have been told.",
+ ofs_open:"Waiting",
+ ofs_accepted:"Accepted",
+ ofs_declined:"Declined",
+ ofs_used:"Bought at this price",
+ ofs_expired:"Acceptance ran out",
+ offers_n:"{n} offers",
+ deal_is:"agreed price {p}",
+ deal_is_buyer:"You bought it at the agreed price of {p}; the CoD should be for this amount.",
+ deal_short:"agreed",
+ ev_offer_ok:"Accepted an anonymous offer of {p}",
+ ev_offer_no:"Declined an anonymous offer of {p}",
+ n_offer:"Someone made an anonymous offer of {price} C on your {item}.",
+ n_offer_ok:"The seller accepted your offer of {price} C on {item}. You can buy at this price for 3 days.",
+ n_offer_no:"The seller declined your offer of {price} C on {item}.",
+ n_buy_offer:"{u} bought your {item} at the offer you accepted, {price} C. It is now In Trade. Send it to {u} by MoogleMail with CoD ({price} C).",
+ st_paused:"Paused",
+ note_paused:"The seller has taken this off the market for a moment to adjust it (for example its price), so it cannot be bought right now. Add it to favourites to be told when it is back.",
+ paused_seller:"This item is in the drafts on your Sell page. Change its price, tick it and click \"List selected\" to put it back on this listing: its link, favourites, offers and messages are kept.",
+ btn_to_draft:"Move to drafts",
+ btn_go_drafts:"Go to drafts",
+ offer_after_relist:"In your drafts; you can accept once it is listed again",
+ ev_to_draft:"Seller moved it back to drafts to adjust it",
+ ssel_page:"Select every item on this list that can be moved",
+ ssel_hint:"Move them to your drafts to reprice them together with bulk pricing",
+ ssel_draft:"Move {n} to drafts",
+ td_title:"Move to drafts",
+ td_confirm:"These {n} items leave the market and go to the drafts on your Sell page. There, quick select and bulk pricing can reprice them all at once; then list them again.",
+ td_keep:"Listing them again puts them back on the same listings: links, favourites, offers and messages are kept, and people who favourited them are told when they are back (with the old and new price if it went down). Items in trade cannot be moved.",
+ td_ok:"Move {n}",
+ td_done:"Moved {n} items to your drafts and ticked them for you.",
+ td_skip:"{n} not moved (in trade or no longer listed).",
+ and_more:"and {n} more",
+ draft_back:"moved back",
+ draft_back_tip:"Listing it puts it back on its old listing: link, favourites, offers and messages are kept",
+ del_drafts_back:"{n} of them were moved back from the market: deleting them withdraws them, and people who favourited them are told.",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -968,7 +1388,6 @@ en:{
  E_LOGIN:"Wrong username or password.",
  E_CUR_PW:"The current password is wrong.",
  E_RESET_PW:"The new password cannot be 00000.",
- E_MAX_TRADES:"You already have 3 items in trade, which is the limit. Finish or withdraw one first.",
  E_DUP:"Already listed",
  demo_tag:'Prototype',demo_note:'All data is fake and stays in this browser. Switch identity on the right to see what sellers, buyers and the admin see.',demo_as:'View as',guest:'Guest (not logged in)',demo_reset:'Reset demo data',demo_reset_done:'Demo data reset.',
  hint_u0:'admin, that is you',hint_u1:'seller, has a new message',hint_u2:'buyer, one trade in progress',hint_u3:'seller',hint_u4:'new account, same IP as Carol',hint_u5:'often backs out',hint_new:'the account you just made',
@@ -1004,13 +1423,13 @@ en:{
  ms_price:'Final price',ms_hint:'If you negotiated, enter the amount actually paid. Other players will see this as the reference price.',
  ct_hint:'The item goes back to For Sale and the buyer is notified. The reason is kept on record, visible only to you and the admin.',reason:'Reason',note_optional:'Note (optional)',
  bg_hint:'The item goes back to For Sale and the seller is notified. Backing out often may get you reported by other players.',
- price_invalid:'Could not read that price. Use 1500000, 1.5m or 800k.',price_ph:'e.g. 1.5m',new_price:'New price',
+ price_invalid:"Could not read that price. A plain number means thousands (77 = 77k); you can also write 800k or 1.5m, or add c for exact Credits, such as 500c.",price_ph:"e.g. 77 (= 77k), 1.5m",new_price:'New price',
  sell_title:'List equipment',sell_need_login:'Log in to list equipment.',sell_steps_title:'Generate equipment code with HVUT',
  sell_step1:"In HV, open the equipment inventory page",sell_step2:"First click \"Tradeables\" on the left, so only tradeable items are shown",sell_step3:'Tick the equipment you want to sell',sell_step4:"Click \"Equip Code\" on the left",sell_step5:"Copy all of the text that appears, paste it into the box below and click \"Read and add to drafts\"",
  sell_need_hvut:'Requires HVUT. You can paste Persistent and Isekai equipment together; the site sorts them. Soulbound items are rejected.',roll_from_avg:'ROLL % is converted from HVUT’s AVG: Legendary 170–200 and Magnificent 150–180 map to 0–100%. HVUT rounds AVG to a whole number, so the result can be off by 1–2%; edit it if you need to. Cloth armor missing A, I or W is flagged as lame.',untrade_note:"Remember to click \"Tradeables\" in HVUT before ticking items. The HVUT code does not mark Untradeable items, so the site cannot reject them; an untradeable item cannot be sent by MoogleMail, and reported listings are taken down.",lame:'Lame',lame_t:'missing {x}',
  sell_paste_ph:'Paste the HVUT equipment code here',sell_sample:'Fill in sample',sell_parse:'Read equipment',sell_preview:'Check and set prices',
  sell_ok:'Ready',sell_err_dup:'Already listed',sell_err_duppaste:'Pasted twice',sell_err_soul:'Soulbound, cannot be listed',sell_err_untrade:'Untradeable, cannot be listed',
- sell_submit:'List {n} items',sell_done:'Listed {n} items.',sell_unread:'These lines could not be read and were skipped:',sell_none:'No equipment links found. Make sure you pasted the text from HVUT “Equipment Code”.',sell_credits:'Prices are always in Persistent Credits, Isekai items included. You can write 1.5m or 800k.',sell_fix_prices:'Some items have no price yet or the price could not be read.',sell_nothing:'No listable items are ticked.',
+ sell_submit:'List {n} items',sell_done:'Listed {n} items.',sell_unread:'These lines could not be read and were skipped:',sell_none:'No equipment links found. Make sure you pasted the text from HVUT “Equipment Code”.',sell_credits:"Prices are always in Persistent Credits, Isekai items included. A plain number means thousands (77 = 77k); you can also write 800k or 1.5m.",sell_fix_prices:'Some items have no price yet or the price could not be read.',sell_nothing:'No listable items are ticked.',
  mine_selling:'Selling',mine_buying:'Buying',mine_all:'All',mine_closed:'Withdrawn / archived',mine_empty:'Nothing here yet.',
  age_listed:'listed {d}d ago',expires_in:'expires in {d}d',expired_note:'Expired and hidden from the market. Renew to show it again.',trade_days:'in trade {d}d',stale_warn:'Over {d} days. Check with the buyer or cancel the trade.',
  b_active:'In trade',b_done:'Completed',b_cancelled:'Withdrawn or cancelled',sold_date:'sold {d}',
@@ -1050,7 +1469,7 @@ function t(k,p){
 }
 
 /* ================= state ================= */
-const P={lang:'zh',world:'main',token:'',langSet:false,theme:'light'}; // kept in this browser; langSet = the visitor picked a language
+const P={lang:'zh',world:'main',token:'',langSet:false,theme:'light',bp:null}; // kept in this browser; langSet = the visitor picked a language
 function loadPrefs(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(o&&typeof o==='object')for(const k of Object.keys(P))if(typeof o[k]===typeof P[k])P[k]=o[k];}catch(e){}if(!LANGS.some(l=>l[0]===P.lang))P.lang='zh';if(!P.langSet)P.lang=browserLang();}
 /* until the visitor picks a language, follow the browser: the first of its languages the site has.
    zh-TW / zh-HK / zh-MO / zh-Hant → 繁中, any other Chinese → 简中, English or nothing usable → English */
@@ -1068,11 +1487,14 @@ const isZh=()=>P.lang!=='en';
 /* colour theme: the original parchment colours, or dark */
 function applyTheme(){if(P.theme==='dark')document.documentElement.dataset.theme='dark';else delete document.documentElement.dataset.theme;}
 const htmlLang=()=>(LANGS.find(l=>l[0]===P.lang)||LANGS[0])[3];
+function bpDefault(){return {mode:'fixed',fixed:'',n:'1',ranges:[{min:'',max:'',price:''}]};}
+function bpFix(){const b=P.bp;if(!b||typeof b!=='object'||!['fixed','mul','range'].includes(b.mode)||!Array.isArray(b.ranges)){P.bp=bpDefault();return;}if(!b.ranges.length)b.ranges.push({min:'',max:'',price:''});b.ranges=b.ranges.slice(0,20).map(r=>({min:String(r&&r.min||''),max:String(r&&r.max||''),price:String(r&&r.price||'')}));b.fixed=String(b.fixed||'');b.n=String(b.n||'1');}
 function savePrefs(){try{localStorage.setItem(LS_KEY,JSON.stringify(P));}catch(e){}}
 const A={me:null,market:null,mine:null,inbox:null,notifs:null,admin:null,detail:null}; // from the server
 function defaultFilters(){return {q:'',qual:'',lvMin:'',lvMax:'',pMin:'',pMax:'',rMin:'',rMax:'',attrs:[],sort:'price_desc',seller:'',eq:{cat:[],type:[],slot:[],pre:[],suf:[]}};}
 const UI={view:'market',tab:'available',page:1,eqOpen:false,filters:defaultFilters(),mineTab:'selling',mineStatus:'all',adminTab:'reports',repStatus:'open',
   sellText:'',sellBad:[],importMsg:'',importWarn:null,dsel:new Set(),notifOpen:false,detailId:null,buyConfirm:null,forcePw:false,busy:false};
+UI.msel=new Map();UI.ssel=new Set();UI.dselBack=null;UI.pageItems=[];UI.mf={q:'',qual:'',type:'',world:'',sort:''};UI.dq={qual:'',type:'',q:''};
 
 /* ================= server ================= */
 class ApiErr extends Error{constructor(code){super(code);this.code=code;}}
@@ -1117,11 +1539,12 @@ async function loadView(){
 async function loadViewData(){
   switch(UI.view){
     case 'market':await loadMarket();break;
-    case 'mine':if(A.me){[A.mine,A.blocks]=await Promise.all([api('hv_mine'),api('hv_blocks')]);}else{A.mine=null;A.blocks=null;}break;
+    case 'mine':if(A.me){[A.mine,A.blocks,A.favs]=await Promise.all([api('hv_mine'),api('hv_blocks'),api('hv_favs')]);}else{A.mine=null;A.blocks=null;A.favs=null;}break;
     case 'inbox':A.inbox=A.me?await api('hv_inbox'):null;break;
     case 'admin':A.admin=isAdmin()?await api('hv_admin_data'):null;break;
     case 'sell':
       A.drafts=A.me?await api('hv_drafts'):null;
+      if(A.drafts&&UI.dselBack){const b=UI.dselBack;UI.dselBack=null;UI.dsel=new Set(A.drafts.filter(d=>b.has(d.listing_id)).map(d=>d.id));}
       if(A.drafts){const ids=new Set(A.drafts.map(d=>d.id));UI.dsel=new Set([...UI.dsel].filter(i=>ids.has(i)));}
       break;
   }
@@ -1164,7 +1587,14 @@ function fmtNum(v){return Number(v).toLocaleString('en-US');}
 function trimNum(n){return String(+n.toFixed(2));}
 function fmtPrice(v){v=Math.round(Number(v));if(v>=1e6)return trimNum(v/1e6)+'m';if(v>=1e3)return trimNum(v/1e3)+'k';return String(v);}
 function priceHTML(v){return `<span class="price" title="${fmtNum(Math.round(v))} Credits">${fmtPrice(v)}<small> C</small></span>`;}
-function parsePrice(s){s=String(s||'').trim().toLowerCase().replace(/[,\s]/g,'').replace(/credits?$|c$/,'');const m=s.match(/^(\d+(?:\.\d+)?)([km]?)$/);if(!m)return null;let v=parseFloat(m[1]);if(m[2]==='k')v*=1e3;if(m[2]==='m')v*=1e6;v=Math.round(v);return v>0&&v<1e12?v:null;}
+/* typed prices: a bare number means thousands (77 = 77k), k and m as written, a trailing c = exact Credits */
+function parsePrice(s,defK){s=String(s||'').trim().toLowerCase().replace(/[,\s]/g,'');const cr=/(credits?|c)$/.test(s);s=s.replace(/credits?$|c$/,'');const m=s.match(/^(\d+(?:\.\d+)?)([km]?)$/);if(!m)return null;let v=parseFloat(m[1]);if(m[2]==='k')v*=1e3;else if(m[2]==='m')v*=1e6;else if(defK&&!cr)v*=1e3;v=Math.round(v);return v>0&&v<1e12?v:null;}
+const priceIn=x=>parsePrice(x,true);
+/* HVUT "@ price": a small bare number is thousands (@ 77 = 77k), a big one is Credits (@ 150000) */
+function importPrice(x){const b=String(x||'').trim().replace(/[,\s]/g,'');return /^\d+(\.\d+)?$/.test(b)&&parseFloat(b)<1000?parsePrice(b,true):parsePrice(b,false);}
+/* a price put back into a box, written exactly, so saving it unchanged keeps the same number */
+function priceInput(v){v=Math.round(Number(v));if(!v)return '';if(v<1000)return v+'c';if(v%1e6===0)return v/1e6+'m';return v/1e3+'k';}
+function fmtDateTime(ms){const d=new Date(ms);return fmtDate(ms)+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 function fmtDate(ms){const d=new Date(ms);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function ago(x){const diff=Date.now()-ts(x);if(diff<HOUR)return t('just_now');if(diff<DAY)return t('hours_ago',{h:Math.floor(diff/HOUR)});return t('days_ago',{d:Math.floor(diff/DAY)});}
 function catLabel(c){return (isZh()?eqZh(c):c)||'—';}
@@ -1242,7 +1672,7 @@ function typeFromName(name){let tp=deriveType(name);const c=catOf(tp);
   if(/Armor$/.test(c)){const pm=name.match(new RegExp('\\b'+tp+'\\s+([A-Z][a-z]+)\\b'));if(pm&&pm[1]!=='Of')tp=tp+' '+pm[1];}
   return tp;}
 function deriveType(name){for(const k of TYPE_KEYS){if(new RegExp('\\b'+k+'\\b').test(name))return k;}return '';}
-function notifText(n){const p=Object.assign({},n.params);if(p.item)p.item=eqZh(p.item);if(p.rk)p.r=t(p.rk);if(p.dk)p.dur=t(p.dk);return t('n_'+n.type,p);}
+function notifText(n){const p=Object.assign({},n.params);if(p.old!=null)p.old=fmtPrice(p.old);if(p.price!=null)p.price=fmtPrice(p.price);if(p.new!=null)p.new=fmtPrice(p.new);if(p.item)p.item=eqZh(p.item);if(p.rk)p.r=t(p.rk);if(p.dk)p.dur=t(p.dk);return t('n_'+n.type,p);}
 
 /* ================= import parser ================= */
 function stripBB(s){return s.replace(/\[\/?(?:size|b|i|u|s|color|font|url)(?:=[^\]]*)?\]/gi,'');}
@@ -1296,7 +1726,7 @@ function parseImport(text){
     if(!attrs&&rem)attrs=['A','I','W'].filter(x=>rem.includes(x)).join('');
     if(roll==null)roll=rollFromAvg(quality,hv_avg);
     if(roll!=null&&(roll<0||roll>100))roll=null;
-    items.push({world,equip_id,equip_key,name,quality,type:tp,cat:c,level,roll,hv_avg,attrs,lame:lameOf(c,attrs),soul,untr,unas,fromTag:!!m,price:parsePrice(priceText)});
+    items.push({world,equip_id,equip_key,name,quality,type:tp,cat:c,level,roll,hv_avg,attrs,lame:lameOf(c,attrs),soul,untr,unas,fromTag:!!m,price:importPrice(priceText)});
   }
   return {items,bad,struck};
 }
@@ -1304,6 +1734,9 @@ function parseImport(text){
 /* ================= rendering ================= */
 function render(){
   renderHeader();renderBanner();renderMain();
+  if($('.selbar-slot'))renderSel();
+  if($('.ssel-slot'))renderSsel();
+  if(UI.scrollDrafts&&UI.view==='sell'&&A.drafts){UI.scrollDrafts=false;const db=$('#drafts-box');if(db)db.scrollIntoView({block:'start'});}
   $('#foot').textContent=t('footer')+(isZh()?' '+t('eq_credit'):'');
   const n=A.me?A.me.unread:0;document.title=(n?`(${n}) `:'')+t('brand');
 }
@@ -1473,6 +1906,29 @@ function renderEqf(){
 }
 function eqClose(focusBtn){UI.eqOpen=false;renderEqf();if(focusBtn){const b=$('#eqf-btn');if(b)b.focus();}}
 
+/* ---- favourites (the account carries the ids, so stars show everywhere) ---- */
+function isFav(id){return !!(A.me&&Array.isArray(A.me.favs)&&A.me.favs.includes(Number(id)));}
+function favBtn(l,big){const on=isFav(l.id),k=on?'fav_remove':'fav_add';return `<button type="button" class="star ${on?'on':''} ${big?'big':''}" data-act="fav" data-lid="${l.id}" aria-pressed="${on}" title="${t(k)}" aria-label="${t(k)}">${on?'★':'☆'}</button>`;}
+function syncStars(){document.querySelectorAll('.star[data-lid]').forEach(b=>{const on=isFav(b.dataset.lid),k=on?'fav_remove':'fav_add';b.classList.toggle('on',on);b.textContent=on?'★':'☆';b.setAttribute('aria-pressed',on);b.title=t(k);b.setAttribute('aria-label',t(k));});}
+/* ---- selected items: kept across pages and searches, like a basket, to copy their links or buy them together ---- */
+function selCk(l){return `<td class="ck" data-act="noop"><input type="checkbox" data-msel="${l.id}" ${UI.msel.has(l.id)?'checked':''} aria-label="${t('sel_item')}"></td>`;}
+function selAllTh(){return `<th class="ck"><input type="checkbox" data-msel-all aria-label="${t('sel_page')}"></th>`;}
+function selBuyable(){const u=A.me;return [...UI.msel.values()].filter(l=>l.status==='available'&&!(u&&l.seller_id===u.id));}
+function selBarHTML(){
+  const n=UI.msel.size;if(!n)return '';
+  const b=selBuyable(),sum=b.reduce((x,l)=>x+Number(l.price||0),0);
+  return `<div class="selbar" role="region" aria-label="${t('sel_bar')}"><b>${t('sel_n',{n})}</b><span class="muted small">${t('sel_sum',{n:b.length,p:{html:priceHTML(sum)}})}</span><span class="grow"></span><button type="button" class="btn small" data-act="sel-copy">${t('sel_copy_links')}</button><button type="button" class="btn small primary" data-act="sel-buy" ${b.length?'':'disabled'}>${t('sel_buy',{n:b.length})}</button><button type="button" class="btn small" data-act="sel-clear">${t('sel_clear')}</button></div>`;
+}
+function renderSel(){
+  document.querySelectorAll('.selbar-slot').forEach(el=>el.innerHTML=selBarHTML());
+  document.querySelectorAll('input[data-msel]').forEach(c=>c.checked=UI.msel.has(N(c.dataset.msel)));
+  const page=UI.pageItems||[],on=page.filter(l=>UI.msel.has(l.id)).length;
+  document.querySelectorAll('input[data-msel-all]').forEach(a=>{a.checked=!!page.length&&on===page.length;a.indeterminate=on>0&&on<page.length;});
+}
+/* a name matches when every word does; Chinese words become the English names they stand for */
+function nameMatch(name,q){q=String(q||'').trim();if(!q)return true;const n=String(name||'').toLowerCase(),zh=eqZh(name||'').toLowerCase();
+  return queryGroups(q).every(g=>g.some(w=>n.includes(String(w).toLowerCase())||zh.includes(String(w).toLowerCase())));}
+
 /* ---- market ----
    Filtering, sorting and paging happen in the database (hv_market_search), so a visit downloads one page of 50
    items however big the market grows. Text boxes search shortly after typing stops; lists and buttons at once. */
@@ -1480,7 +1936,7 @@ function searchArgs(){
   const f=UI.filters;
   return {p_world:P.world,p_tab:UI.tab,p_page:UI.page,p_token:P.token||null,p_f:{q:f.q.trim(),qa:queryGroups(f.q),qual:f.qual,
     cats:f.eq.cat,types:f.eq.type,slots:f.eq.slot,pres:f.eq.pre,sufs:f.eq.suf,
-    lv_min:parseInt(f.lvMin)||null,lv_max:parseInt(f.lvMax)||null,p_min:parsePrice(f.pMin)||null,p_max:parsePrice(f.pMax)||null,
+    lv_min:parseInt(f.lvMin)||null,lv_max:parseInt(f.lvMax)||null,p_min:priceIn(f.pMin)||null,p_max:priceIn(f.pMax)||null,
     r_min:pct(f.rMin),r_max:pct(f.rMax),
     attrs:f.attrs.join(''),seller:f.seller?Number(f.seller):null,sort:f.sort}};
 }
@@ -1574,20 +2030,24 @@ function renderResults(){
   const pages=Math.max(1,Math.ceil(d.total/d.per));
   h+=`<div class="rsum">${t('res_total',{n:d.total.toLocaleString()})}${pages>1?' · '+t('pg_of',{p:d.page,n:pages}):''}</div>`;
   if(sold){
+    UI.pageItems=[];
     h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th>${isk?`<th>${t('col_season')}</th>`:''}</tr></thead><tbody>`+
     arr.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(eqZh(l.type))}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${sellerLink(l)}</td>${isk?`<td>${esc(l.season??'?')}</td>`:''}</tr>`).join('')+`</tbody></table></div>`;
   } else {
-    const it=UI.tab==='in_trade';
-    h+=`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_seller')}</th><th>${it?t('col_status'):''}</th></tr></thead><tbody>`+
+    const it=UI.tab==='in_trade';UI.pageItems=arr;
+    h+=`<div class="tablewrap"><table><thead><tr>${selAllTh()}<th>${t('col_equip')}</th><th class="hide-sm">${t('col_type')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_seller')}</th><th>${it?t('col_status'):''}</th></tr></thead><tbody>`+
     arr.map(l=>{
       let a='';
+      const own=u&&u.id===l.seller_id;
       if(it)a=pill('in_trade');
-      else if(u&&u.id===l.seller_id)a=`<span class="tag">${t('yours')}</span>`;
+      else if(own)a=`<span class="tag">${t('yours')}</span>`;
       else a=`<button class="btn small primary" data-act="buy-ask" data-lid="${l.id}">${t('btn_buy')}</button>`;
-      return `<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(eqZh(l.type))}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
+      if(!own)a=`<span class="rowact">${a}${favBtn(l)}</span>`;
+      return `<tr class="row" data-act="open" data-lid="${l.id}">${selCk(l)}<td>${nameCell(l)}${mcHTML(l)}</td><td class="hide-sm">${esc(eqZh(l.type))}<div class="sub">${esc(catLabel(l.cat))}</div></td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.price)}</td><td>${sellerLink(l)}</td><td>${a}</td></tr>`;
     }).join('')+`</tbody></table></div>`;
   }
-  box.innerHTML=h+pagerHTML(d);
+  box.innerHTML=h+pagerHTML(d)+(sold?'':'<div class="selbar-slot"></div>');
+  if(!sold)renderSel();
 }
 
 /* ---- detail ---- */
@@ -1609,16 +2069,17 @@ function detailHTML(d){
     [t('col_attr'),attrCell(d)],
     [t('col_avg'),avgHTML(d.roll)+(d.hv_avg!=null?` <span class="muted small">（HVUT AVG ${d.hv_avg}）</span>`:'')],
     priceRow,
-    [t('col_seller'),`${esc(d.seller)}${u&&!v.is_seller&&!d.seller_deleted?` · <button class="link" data-act="report" data-uid="${d.seller_id}" data-name="${esc(d.seller)}" data-lid="${d.id}">${t('report_user')}</button>`:''}`],
+    [t('col_seller'),`${esc(d.seller)}${!v.is_seller?' '+copyBtn(d.seller):''}${u&&!v.is_seller&&!d.seller_deleted?` · <button class="link" data-act="report" data-uid="${d.seller_id}" data-name="${esc(d.seller)}" data-lid="${d.id}">${t('report_user')}</button>`:''}`],
     [t('d_world'),worldBadge(d)+(d.world==='isekai'&&d.season?` ${t('isk_season',{n:d.season})}`:'')],
     [t('d_msgs'),t('msg_n',{n:d.msg_count||0})],
     [t('d_listed'),fmtDate(ts(d.created_at))],
-    [t('d_id'),`<a href="${esc(eqUrl(d))}" target="_blank" rel="noopener">${d.equip_id} ↗</a>`],
+    [t('d_id'),`<a href="${esc(eqUrl(d))}" target="_blank" rel="noopener">${d.equip_id} ↗</a> ${copyBtn(String(d.equip_id))}`],
   ];
   const past=d.past||[];
-  return `<div class="dhead">${pill(st)}<a class="btn small" href="${esc(eqUrl(d))}" target="_blank" rel="noopener">${t('open_in_hv')} ↗</a></div>
+  return `<div class="dhead">${pill(st)}<a class="btn small" href="${esc(eqUrl(d))}" target="_blank" rel="noopener">${t('open_in_hv')} ↗</a>${!v.is_seller&&(st==='available'||st==='in_trade'||st==='paused'||isFav(d.id))?favBtn(d,true):''}</div>
   <dl class="dgrid">${rows.map(([k,x])=>`<dt>${k}</dt><dd>${x}</dd>`).join('')}</dl>
   <div class="dact">${actionArea(d)}</div>
+  ${offerArea(d)}
   ${past.length?`<div class="section"><h4>${t('same_item_sales')}</h4><ul class="hist">${past.map(x=>`<li>${fmtDate(ts(x.sold_at))} · ${fmtPrice(x.sold_price)} · ${esc(x.seller)}</li>`).join('')}</ul></div>`:''}
   ${pmArea(d)}
   ${d.history?historyHTML(d):''}`;
@@ -1627,6 +2088,7 @@ function actionArea(d){
   const u=A.me,v=d.viewer||{},st=d.status;
   if(st==='sold')return `<div class="notice info">${t('sold_on',{d:fmtDate(ts(d.sold_at)),p:{html:priceHTML(d.sold_price)}})}</div>`;
   if(v.is_seller)return sellerActions(d);
+  if(st==='paused')return `<div class="notice info">${t('note_paused')}</div>`;
   if(st==='withdrawn')return `<div class="notice info">${t('note_withdrawn')}</div>`;
   if(st==='archived')return `<div class="notice info">${t('note_archived')}</div>`;
   if(st==='expired')return `<div class="notice info">${t('note_expired')}</div>`;
@@ -1637,19 +2099,51 @@ function actionArea(d){
     return `<div class="row-btns"><button class="btn primary" data-act="buy" data-lid="${d.id}">${t('btn_buy')} · ${fmtPrice(d.price)} C</button></div>`;
   }
   if(st==='in_trade'){
-    if(v.is_buyer)return `<div class="notice ok">${t('you_are_buyer')}</div><div class="row-btns"><button class="btn danger" data-act="giveup" data-lid="${d.id}" data-name="${esc(d.name)}">${t('buyer_giveup')}</button></div>`;
+    if(v.is_buyer)return `<div class="notice ok">${t('you_are_buyer')}${d.deal_price?'<br>'+t('deal_is_buyer',{p:{html:priceHTML(d.deal_price)}}):''}</div><div class="row-btns"><button class="btn danger" data-act="giveup" data-lid="${d.id}" data-name="${esc(d.name)}">${t('buyer_giveup')}</button></div>`;
     const pos=v.wait_pos||0;
     return `<div class="notice">${t('in_trade_other')}${pos?' '+t('on_wait',{n:pos}):''}</div><div class="row-btns">${pos?`<button class="btn" data-act="wait" data-v="leave" data-lid="${d.id}">${t('leave_wait')}</button>`:`<button class="btn" data-act="wait" data-v="join" data-lid="${d.id}">${t('join_wait')}</button>`}</div>`;
   }
   return '';
 }
+/* anonymous offers: a buyer sees and changes their own, the seller sees every amount but never who */
+function offerArea(d){
+  const u=A.me,v=d.viewer||{};
+  if(v.is_seller||(v.is_admin&&d.offers))return offersHTML(d);
+  if(!u||isBanned(u)||d.status!=='available')return '';
+  const o=d.my_offer,form=lab=>`<div class="offer-form"><label class="sr" for="offer-in">${t('offer_amount')}</label><input id="offer-in" class="sm" placeholder="${t('price_ph')}" autocomplete="off"><button type="button" class="btn small" data-act="offer-send" data-lid="${d.id}" data-price="${d.price}">${lab}</button></div>`;
+  const wd=`<button type="button" class="link small" data-act="offer-withdraw" data-lid="${d.id}">${t('offer_withdraw')}</button>`;
+  let body;
+  if(!o||o.status==='used')body=form(t('offer_send'));
+  else if(o.status==='open')body=`<p class="offer-st">${t('offer_waiting',{p:{html:priceHTML(o.price)}})} ${wd}</p>${form(t('offer_raise'))}`;
+  else if(o.status==='accepted'){
+    body=UI.offerConfirm===d.id
+      ?`<div class="notice">${t('offer_buy_confirm',{p:{html:priceHTML(o.price)}})}</div><div class="row-btns"><button class="btn primary" data-act="offer-buy-yes" data-lid="${d.id}">${t('confirm')}</button><button class="btn" data-act="offer-buy-no" data-lid="${d.id}">${t('cancel')}</button></div>`
+      :`<div class="notice ok">${t('offer_accepted',{p:{html:priceHTML(o.price)},d:fmtDateTime(ts(o.until))})}</div><div class="row-btns"><button class="btn primary" data-act="offer-buy" data-lid="${d.id}">${t('offer_buy',{p:fmtPrice(o.price)})}</button>${wd}</div>`;
+  }
+  else if(o.status==='declined')body=`<p class="offer-st bad-t">${t('offer_declined',{p:{html:priceHTML(o.price)}})}</p>${form(t('offer_send_higher'))}`;
+  else body=`<p class="offer-st muted">${t('offer_expired',{p:{html:priceHTML(o.price)}})}</p>${form(t('offer_send'))}`;
+  return `<div class="section offer"><h4>${t('offer_title')}</h4><p class="muted small" style="margin:0 0 6px">${t('offer_hint')}</p>${body}</div>`;
+}
+function offersHTML(d){
+  const list=d.offers||[],seller=(d.viewer||{}).is_seller,avail=d.status==='available';
+  if(!list.length&&!avail)return '';
+  const rows=list.length?list.map(o=>{
+    let act;
+    if(o.status!=='open')act=`<span class="pill ofs-${o.status}">${t('ofs_'+o.status)}</span>`;
+    else if(!seller)act=`<span class="pill">${t('ofs_open')}</span>`;
+    else act=(avail?`<button class="btn small primary" data-act="offer-ok" data-oid="${o.id}" data-p="${o.price}">${t('offer_accept')}</button> `:`<span class="muted small">${t(d.status==='paused'?'offer_after_relist':'offer_after_trade')}</span> `)+`<button class="btn small" data-act="offer-no" data-oid="${o.id}">${t('offer_decline')}</button>`;
+    return `<li class="${o.status==='open'?'':'done'}"><b>${priceHTML(o.price)}</b> <span class="muted small">${ago(o.at)}${o.buyer?' · '+esc(o.buyer):''}</span> <span class="ofs-act">${act}</span></li>`;
+  }).join(''):`<li class="muted">${t('offers_none')}</li>`;
+  return `<div class="section offer"><h4>${t('offers_title')}</h4><p class="muted small" style="margin:0 0 6px">${t('offers_hint')}</p><ul class="hist offers">${rows}</ul></div>`;
+}
 function sellerActions(l){
   const st=l.status;let msg='';
   if(st==='in_trade'){
     const dd=daysSince(l.trade_at);
-    msg=`<div class="notice ${dd>=STALE_DAYS?'bad':''}">${t('buyer_is',{name:l.buyer||'?'})}（${t('buyer_stats',{n:l.buyer_cancels30||0})}）· ${t('trade_days',{d:dd})}${dd>=STALE_DAYS?'<br>'+t('stale_warn',{d:STALE_DAYS}):''} · <button class="link" data-act="report" data-uid="${l.buyer_id}" data-name="${esc(l.buyer||'')}" data-lid="${l.id}">${t('report_buyer')}</button></div>`;
+    msg=`<div class="notice ${dd>=STALE_DAYS?'bad':''}">${t('buyer_is',{name:l.buyer||'?'})}${l.buyer?' '+copyBtn(l.buyer):''}${l.deal_price?' · '+t('deal_is',{p:{html:priceHTML(l.deal_price)}}):''}（${t('buyer_stats',{n:l.buyer_cancels30||0})}）· ${t('trade_days',{d:dd})}${dd>=STALE_DAYS?'<br>'+t('stale_warn',{d:STALE_DAYS}):''} · <button class="link" data-act="report" data-uid="${l.buyer_id}" data-name="${esc(l.buyer||'')}" data-lid="${l.id}">${t('report_buyer')}</button></div>`;
   } else if(st==='expired')msg=`<div class="notice">${t('expired_note')}</div>`;
   else if(st==='withdrawn')msg=`<div class="notice info">${t('note_withdrawn')}</div>`;
+  else if(st==='paused')msg=`<div class="notice info">${t('paused_seller')}</div>`;
   else if(st==='archived')msg=`<div class="notice info">${t('note_archived')}</div>`;
   else msg=`<div class="notice info">${t('your_listing')}</div>`;
   const b=sellerBtns(l);
@@ -1659,9 +2153,10 @@ function sellerBtns(l){
   const st=l.status,out=[];
   if(isBanned(A.me))return '';
   const B=(a,k,cls)=>`<button class="btn small ${cls||''}" data-act="${a}" data-lid="${l.id}" data-name="${esc(l.name)}" data-price="${l.price}">${t(k)}</button>`;
-  if(st==='available'){out.push(B('edit-price','btn_edit_price'),B('withdraw','btn_withdraw'));if(daysSince(l.renewed_at)>=EXPIRE_DAYS-7)out.push(B('renew','btn_renew'));}
-  if(st==='expired')out.push(B('renew','btn_renew','primary'),B('withdraw','btn_withdraw'));
-  if(st==='in_trade')out.push(B('mark-sold','btn_mark_sold','primary'),B('cancel-trade','btn_cancel_trade'));
+  if(st==='available'){out.push(B('edit-price','btn_edit_price'),B('to-draft','btn_to_draft'),B('withdraw','btn_withdraw'));if(daysSince(l.renewed_at)>=EXPIRE_DAYS-7)out.push(B('renew','btn_renew'));}
+  if(st==='expired')out.push(B('renew','btn_renew','primary'),B('to-draft','btn_to_draft'),B('withdraw','btn_withdraw'));
+  if(st==='paused')out.push(B('go-drafts','btn_go_drafts','primary'));
+  if(st==='in_trade')out.push(B('mark-sold','btn_mark_sold','primary').replace(`data-price="${l.price}"`,`data-price="${l.deal_price||l.price}"`),B('cancel-trade','btn_cancel_trade'));
   if(st==='withdrawn')out.push(B('relist','btn_relist'),B('hide-listing','btn_delete_listing','danger'));
   return out.join('');
 }
@@ -1695,9 +2190,12 @@ function evText(e){
     case 'withdraw':return t('ev_withdraw',{r:t(x.r)});
     case 'renew':return t('ev_renew');
     case 'relist':return t('ev_relist');
+    case 'to_draft':return t('ev_to_draft');
     case 'archive':return t('ev_archive');
     case 'details':return t('ev_details');
     case 'hidden':return t('ev_hidden');
+    case 'offer_ok':return t('ev_offer_ok',{p:fmtPrice(x.p)});
+    case 'offer_no':return t('ev_offer_no',{p:fmtPrice(x.p)});
   }
   return esc(e.type);
 }
@@ -1721,6 +2219,9 @@ function importWarnHTML(w){
   const lines=[];if(w.noRoll)lines.push(t('import_warn_roll',{n:w.noRoll}));if(w.noLv)lines.push(t('import_warn_lv',{n:w.noLv}));
   return `<div class="notice bad" style="margin-top:10px"><b>${lines.join(' ')}</b> ${t('import_warn_tail')}${hvutFixHTML()}</div>`;
 }
+function copyText(text,msg){const done=()=>toast(msg||t('copied'));
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).then(done,()=>{fallbackCopy(text);done();});else{fallbackCopy(text);done();}}
+function copyBtn(v){return `<button type="button" class="link copyb" data-act="copy" data-v="${esc(v)}" title="${t('copy_t',{x:v})}">${t('copy')}</button>`;}
 function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}
 function viewSell(){
   const u=A.me;if(!u)return needLogin('sell_need_login');
@@ -1750,19 +2251,66 @@ function draftsHTML(){
   if(!n)return h+`<div class="empty">${t('drafts_empty')}</div></div>`;
   h+=`<div class="notice info">${t('roll_from_avg')}</div><div class="notice" style="margin-top:6px">${t('untrade_note')}</div>
   <div class="bulk"><label><input type="checkbox" id="dsel-all" ${sel===n?'checked':''}> ${t('select_all')}</label><b>${t('selected_n',{n:sel})}</b>
-  <label class="sr" for="bulk-price">${t('bulk_price')}</label><input id="bulk-price" class="sm" placeholder="${t('price_ph')}"><button class="btn small" data-act="draft-bulk-price" ${sel?'':'disabled'}>${t('bulk_price')}</button>
   <button class="btn small primary" data-act="draft-publish" ${sel?'':'disabled'}>${t('publish_n',{n:sel})}</button>
   <button class="btn small danger" data-act="draft-delete" ${sel?'':'disabled'}>${t('delete_selected')}</button></div>
+  ${dqHTML(list)}
+  <div id="bp-box">${bpHTML()}</div>
   <div class="tablewrap"><table><thead><tr><th></th><th>${t('col_equip')}</th><th>${t('col_world')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')} %</th><th>${t('col_price')}</th><th>${t('col_status')}</th></tr></thead><tbody>
   ${list.map(d=>`<tr><td><input type="checkbox" data-dsel="${d.id}" ${UI.dsel.has(d.id)?'checked':''} aria-label="${t('select_all')}"></td>
-    <td>${d.name?nameCell(d):`<input data-dname="${d.id}" class="grow" style="min-width:260px" placeholder="${t('name_ph')}" aria-label="${t('col_equip')}"><a class="ext" href="${esc(eqUrl(d))}" target="_blank" rel="noopener" data-act="noop">↗ ${d.equip_id}</a>`}<div class="sub">${esc(eqZh(d.type)||'—')} · ${esc(catLabel(d.cat))}</div></td>
+    <td>${d.name?nameCell(d):`<input data-dname="${d.id}" class="grow" style="min-width:260px" placeholder="${t('name_ph')}" aria-label="${t('col_equip')}"><a class="ext" href="${esc(eqUrl(d))}" target="_blank" rel="noopener" data-act="noop">↗ ${d.equip_id}</a>`}<div class="sub">${esc(eqZh(d.type)||'—')} · ${esc(catLabel(d.cat))}${d.listing_id?` · <span class="backtag" title="${t('draft_back_tip')}">↩ ${t('draft_back')}</span>`:''}</div></td>
     <td>${worldBadge(d)}</td><td class="num">${d.level??'—'}</td><td>${attrCell(d)}</td>
     <td><input data-droll="${d.id}" class="sm rollin" inputmode="decimal" placeholder="—" value="${d.roll??''}" aria-label="ROLL %"></td>
-    <td><input data-dprice="${d.id}" class="sm" placeholder="${t('price_ph')}" value="${d.price?fmtPrice(d.price):''}" aria-label="${t('col_price')}"></td>
+    <td><input data-dprice="${d.id}" class="sm" placeholder="${t('price_ph')}" value="${d.price?priceInput(d.price):''}" aria-label="${t('col_price')}"></td>
     <td id="dst-${d.id}">${draftPill(d)}</td></tr>`).join('')}
   </tbody></table></div></div>`;
   return h;
 }
+/* quick select: pick every draft of one quality / kind / name at once */
+function dqMatch(d){const f=UI.dq;return (!f.qual||d.quality===f.qual)&&(!f.type||d.type===f.type)&&nameMatch(d.name,f.q);}
+function dqAny(){return !!(UI.dq.qual||UI.dq.type||UI.dq.q.trim());}
+function dqHTML(list){
+  const f=UI.dq,opt=(v,lab,cur)=>`<option value="${esc(v)}" ${cur===v?'selected':''}>${esc(lab)}</option>`;
+  const quals=[...new Set(list.map(d=>d.quality).filter(Boolean))].sort((a,b)=>QUALITIES.indexOf(a)-QUALITIES.indexOf(b));
+  const tc={};list.forEach(d=>{if(d.type)tc[d.type]=(tc[d.type]||0)+1;});
+  const types=Object.keys(tc).sort((a,b)=>eqZh(a).localeCompare(eqZh(b)));
+  return `<div class="dtool"><span class="dt-h">${t('dq_title')}</span>
+    <label class="sr" for="dq-qual">${t('f_q_all')}</label><select id="dq-qual" data-dq="qual">${opt('',t('f_q_all'),f.qual)}${quals.map(q=>opt(q,isZh()?eqZh(q):q,f.qual)).join('')}</select>
+    <label class="sr" for="dq-type">${t('mf_all_types')}</label><select id="dq-type" data-dq="type">${opt('',t('mf_all_types'),f.type)}${types.map(x=>opt(x,`${isZh()?eqZh(x):x} (${tc[x]})`,f.type)).join('')}</select>
+    <label class="sr" for="dq-q">${t('dq_q_ph')}</label><input id="dq-q" data-dq="q" placeholder="${t('dq_q_ph')}" value="${esc(f.q)}">
+    <span id="dq-btns">${dqBtns()}</span></div>`;
+}
+function dqBtns(){const n=dqAny()?(A.drafts||[]).filter(dqMatch).length:0,dis=n?'':'disabled';
+  return `<button class="btn small" data-act="dq-only" ${dis}>${t('dq_only',{n})}</button><button class="btn small" data-act="dq-add" ${dis}>${t('dq_add',{n})}</button>`;}
+/* bulk pricing for the selected drafts: one price, ROLL × n, or a price per ROLL range */
+function bpHTML(){
+  bpFix();const b=P.bp,sel=(A.drafts||[]).filter(d=>UI.dsel.has(d.id)).length;
+  const modes=['fixed','mul','range'].map(m=>`<option value="${m}" ${b.mode===m?'selected':''}>${t('bp_mode_'+m)}</option>`).join('');
+  let inner='';
+  if(b.mode==='fixed')inner=`<label class="sr" for="bp-fixed">${t('col_price')}</label><input id="bp-fixed" class="sm" data-bp="fixed" placeholder="${t('price_ph')}" value="${esc(b.fixed)}">`;
+  else if(b.mode==='mul')inner=`<span class="bp-f">ROLL ×</span><label class="sr" for="bp-n">n</label><input id="bp-n" class="xs" data-bp="n" inputmode="decimal" value="${esc(b.n)}"><span class="bp-f">k</span>`;
+  else inner=`<div class="rngs">${b.ranges.map((r,i)=>`<div class="rng"><input class="xs" data-rg="${i}" data-k="min" inputmode="decimal" placeholder="0" value="${esc(r.min)}" aria-label="${t('rng_min',{i:i+1})}"><span>~</span><input class="xs" data-rg="${i}" data-k="max" inputmode="decimal" placeholder="100" value="${esc(r.max)}" aria-label="${t('rng_max',{i:i+1})}"><span>% →</span><input class="sm" data-rg="${i}" data-k="price" placeholder="${t('price_ph')}" value="${esc(r.price)}" aria-label="${t('rng_price',{i:i+1})}"><button type="button" class="btn small" data-act="rng-del" data-i="${i}" aria-label="${t('rng_del',{i:i+1})}" ${b.ranges.length>1?'':'disabled'}>✕</button></div>`).join('')}<button type="button" class="btn small" data-act="rng-add">＋ ${t('rng_add')}</button></div>`;
+  return `<div class="dtool bp"><span class="dt-h">${t('bp_title')}</span><label class="sr" for="bp-mode">${t('bp_title')}</label><select id="bp-mode" data-bp="mode">${modes}</select>${inner}
+    <button class="btn small" data-act="bp-apply" ${sel?'':'disabled'}>${t('bp_apply',{n:sel})}</button>
+    <div class="bp-prev small" id="bp-prev" aria-live="polite">${bpPreview()}</div></div>`;
+}
+function bpCalc(){
+  bpFix();const b=P.bp,sel=(A.drafts||[]).filter(d=>UI.dsel.has(d.id)),out=[];let skip=0;
+  if(b.mode==='fixed'){const p=priceIn(b.fixed);if(!p)return {err:b.fixed.trim()?'price_invalid':'bp_need_price'};sel.forEach(d=>out.push([d.id,p]));}
+  else if(b.mode==='mul'){const n=parseFloat(String(b.n).replace(',','.'));if(!(n>0))return {err:'bp_bad_n'};
+    sel.forEach(d=>{if(d.roll==null){skip++;return;}const p=Math.round(Number(d.roll)*n*1000);if(p>0&&p<1e12)out.push([d.id,p]);else skip++;});}
+  else{const rs=[];
+    for(const r of b.ranges){const lo=r.min.trim()===''?0:parseFloat(r.min),hi=r.max.trim()===''?100:parseFloat(r.max),p=priceIn(r.price);
+      if(isNaN(lo)||isNaN(hi)||lo>hi||!p)return {err:'bp_bad_range'};rs.push([lo,hi,p]);}
+    sel.forEach(d=>{if(d.roll==null){skip++;return;}const v=Math.round(Number(d.roll)*10)/10,m=rs.find(([lo,hi])=>v>=lo&&v<=hi);if(m)out.push([d.id,m[2]]);else skip++;});}
+  return {out,skip};
+}
+function bpPreview(){
+  if(!UI.dsel.size)return `<span class="muted">${t('bp_none_sel')}</span>`;
+  const c=bpCalc();if(c.err)return `<span class="bad-t">${t(c.err)}</span>`;
+  const ex=c.out.length&&P.bp.mode!=='fixed'?(()=>{const d=(A.drafts||[]).find(x=>x.id===c.out[0][0]);return d?' · '+t('bp_example',{r:d.roll,p:fmtPrice(c.out[0][1])}):'';})():'';
+  return `<span class="muted">${t('bp_prev',{n:c.out.length})}${c.skip?' · '+t('bp_skip',{n:c.skip}):''}${ex}</span>`;
+}
+function renderBp(){const el=$('#bp-box');if(el)el.innerHTML=bpHTML();}
 function renderDrafts(){const el=$('#drafts-box');if(el)el.innerHTML=draftsHTML();}
 /* field edits are saved on their own shortly after typing stops, and before listing */
 const pendingSaves={};
@@ -1816,22 +2364,94 @@ function viewMine(){
   const data=A.mine;
   const head=`<div class="mhead"><h1>${t('nav_mine')}</h1><span class="muted">${t('credits_only')}</span></div>`;
   if(!data)return head+LOADING();
-  const selling=data.selling,buying=data.buying;
-  const tabs=`<div class="tabs">${[['selling','mine_selling',selling.length],['buying','mine_buying',buying.length],['blocks','mine_blocks',(A.blocks||[]).length]].map(([v,k,n])=>`<button class="tab ${UI.mineTab===v?'on':''}" data-act="mine-tab" data-v="${v}">${t(k)} <span class="cnt">${n}</span></button>`).join('')}</div>`;
+  const favs=A.favs||[];
+  const tabs=`<div class="tabs">${[['selling','mine_selling',data.selling.length],['buying','mine_buying',data.buying.length],['favs','mine_favs',favs.length],['blocks','mine_blocks',(A.blocks||[]).length]].map(([v,k,n])=>`<button class="tab ${UI.mineTab===v?'on':''}" data-act="mine-tab" data-v="${v}">${t(k)} <span class="cnt">${n}</span></button>`).join('')}</div>`;
   let body='';
-  if(UI.mineTab==='blocks'){
-    body=blocksHTML();
-  } else if(UI.mineTab==='selling'){
-    const G={all:()=>true,available:l=>l.status==='available'||l.status==='expired',in_trade:l=>l.status==='in_trade',sold:l=>l.status==='sold',closed:l=>l.status==='withdrawn'||l.status==='archived'};
-    const chips=[['all','mine_all'],['available','st_available'],['in_trade','st_in_trade'],['sold','st_sold'],['closed','mine_closed']].map(([v,k])=>`<button class="chip ${UI.mineStatus===v?'on':''}" data-act="mine-status" data-v="${v}">${t(k)} ${selling.filter(G[v]).length}</button>`).join('');
-    const rank={in_trade:0,expired:1,available:2,sold:3,withdrawn:4,archived:5};
-    const list=selling.filter(G[UI.mineStatus]||G.all).sort((a,b)=>(rank[a.status]-rank[b.status])||(ts(b.created_at)-ts(a.created_at)));
-    body=`<div class="filters">${chips}<button class="btn small" data-act="reload">${t('refresh')}</button></div>`+(list.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_info')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.status==='sold'?l.sold_price:l.price)}</td><td>${pill(l.status)}</td><td class="small">${infoCell(l)}</td><td class="acts">${sellerBtns(l)}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('mine_empty')}</div>`);
+  if(UI.mineTab==='blocks')body=blocksHTML();
+  else if(UI.mineTab==='selling'||UI.mineTab==='favs'){
+    const all=UI.mineTab==='selling'?data.selling:favs;
+    body=all.length?mfBarHTML(all)+`<div id="mine-list">${mineListHTML()}</div>`:`<div class="filters"><button class="btn small" data-act="reload">${t('refresh')}</button></div><div class="empty">${t(UI.mineTab==='favs'?'favs_empty':'mine_empty')}</div>`;
   } else {
-    body=buying.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th>${t('col_seller')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${buying.map(({l,s})=>`<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td>${esc(l.seller)}</td><td class="num">${priceHTML(s==='done'?l.sold_price:l.price)}</td><td><span class="pill ${s}">${t('b_'+s)}</span>${s==='done'?` <span class="muted small">${fmtDate(ts(l.sold_at))}</span>`:''}</td><td class="acts">${s==='active'&&!isBanned(A.me)?`<button class="btn small danger" data-act="giveup" data-lid="${l.id}" data-name="${esc(l.name)}">${t('buyer_giveup')}</button>`:''}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('mine_empty')}</div>`;
+    const buying=data.buying;
+    body=buying.length?`<div class="tablewrap"><table><thead><tr><th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th>${t('col_seller')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${buying.map(({l,s,deal})=>`<tr class="row" data-act="open" data-lid="${l.id}"><td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td>${esc(l.seller)} ${copyBtn(l.seller)}</td><td class="num">${s==='done'?priceHTML(l.sold_price):s==='active'&&deal?priceHTML(deal)+`<div class="sub">${t('deal_short')}</div>`:priceHTML(l.price)}</td><td><span class="pill ${s}">${t('b_'+s)}</span>${s==='done'?` <span class="muted small">${fmtDate(ts(l.sold_at))}</span>`:''}</td><td class="acts">${s==='active'&&!isBanned(A.me)?`<button class="btn small danger" data-act="giveup" data-lid="${l.id}" data-name="${esc(l.name)}">${t('buyer_giveup')}</button>`:''}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">${t('mine_empty')}</div>`;
   }
   return head+tabs+`<div class="panel">${body}</div>`;
 }
+/* filters for my listings and my favourites: done here in the page, the whole list is already loaded */
+const MF_SORTS=['new','price_desc','price_asc','avg','lv'];
+function mfBarHTML(all){
+  const f=UI.mf;
+  const quals=[...new Set(all.map(l=>l.quality).filter(Boolean))].sort((a,b)=>QUALITIES.indexOf(a)-QUALITIES.indexOf(b));
+  const types=[...new Set(all.map(l=>l.type).filter(Boolean))].sort((a,b)=>eqZh(a).localeCompare(eqZh(b)));
+  const worlds=new Set(all.map(l=>l.world));
+  if(f.qual&&!quals.includes(f.qual))f.qual='';if(f.type&&!types.includes(f.type))f.type='';if(f.world&&!worlds.has(f.world))f.world='';
+  const opt=(v,lab,cur)=>`<option value="${esc(v)}" ${cur===v?'selected':''}>${esc(lab)}</option>`;
+  return `<div class="filters mf">
+    <label class="sr" for="mf-q">${t('mf_q_ph')}</label><input id="mf-q" class="grow" type="search" data-mf="q" placeholder="${t('mf_q_ph')}" value="${esc(f.q)}">
+    <label class="sr" for="mf-qual">${t('f_q_all')}</label><select id="mf-qual" data-mf="qual">${opt('',t('f_q_all'),f.qual)}${quals.map(q=>opt(q,isZh()?eqZh(q):q,f.qual)).join('')}</select>
+    <label class="sr" for="mf-type">${t('mf_all_types')}</label><select id="mf-type" data-mf="type">${opt('',t('mf_all_types'),f.type)}${types.map(x=>opt(x,isZh()?eqZh(x):x,f.type)).join('')}</select>
+    ${worlds.size>1?`<label class="sr" for="mf-world">${t('col_world')}</label><select id="mf-world" data-mf="world">${opt('',t('mf_all_worlds'),f.world)}${opt('main',t('world_main'),f.world)}${opt('isekai',t('world_isk'),f.world)}</select>`:''}
+    <label class="sr" for="mf-sort">${t('f_sort')}</label><select id="mf-sort" data-mf="sort">${opt('',t('mf_sort_default'),f.sort)}${MF_SORTS.map(x=>opt(x,t('sort_'+x),f.sort)).join('')}</select>
+    <button class="btn small" data-act="mf-clear">${t('f_clear')}</button>
+    <button class="btn small" data-act="reload">${t('refresh')}</button>
+  </div>`;
+}
+function mfApply(list){
+  const f=UI.mf,pv=l=>Number(l.status==='sold'?l.sold_price:l.price)||0;
+  let out=list.filter(l=>(!f.qual||l.quality===f.qual)&&(!f.type||l.type===f.type)&&(!f.world||l.world===f.world)&&nameMatch(l.name,f.q));
+  const S={new:(a,b)=>ts(b.created_at)-ts(a.created_at),price_desc:(a,b)=>pv(b)-pv(a),price_asc:(a,b)=>pv(a)-pv(b),avg:(a,b)=>(b.roll??-1)-(a.roll??-1),lv:(a,b)=>(b.level??0)-(a.level??0)};
+  if(S[f.sort])out=out.slice().sort(S[f.sort]);
+  return out;
+}
+function mineListHTML(){
+  return UI.mineTab==='favs'?favListHTML():sellingListHTML();
+}
+function sellingListHTML(){
+  const selling=mfApply(A.mine.selling);
+  const G={all:()=>true,available:l=>l.status==='available'||l.status==='expired',in_trade:l=>l.status==='in_trade',sold:l=>l.status==='sold',closed:l=>l.status==='withdrawn'||l.status==='archived'};
+  const chips=[['all','mine_all'],['available','st_available'],['in_trade','st_in_trade'],['sold','st_sold'],['closed','mine_closed']].map(([v,k])=>`<button class="chip ${UI.mineStatus===v?'on':''}" data-act="mine-status" data-v="${v}">${t(k)} ${selling.filter(G[v]).length}</button>`).join('');
+  const rank={in_trade:0,expired:1,available:2,sold:3,withdrawn:4,archived:5};
+  let list=selling.filter(G[UI.mineStatus]||G.all);
+  if(!UI.mf.sort)list=list.slice().sort((a,b)=>(rank[a.status]-rank[b.status])||(ts(b.created_at)-ts(a.created_at)));
+  const shown=`<span class="muted small">${t('mf_shown',{n:list.length,m:A.mine.selling.length})}</span>`;
+  const can=!isBanned(A.me),mv=can?list.filter(movable):[];UI.sselPage=mv.map(l=>l.id);
+  const ckTh=can?`<th class="ck">${mv.length?`<input type="checkbox" data-ssel-all aria-label="${t('ssel_page')}">`:''}</th>`:'';
+  const ckTd=l=>can?(movable(l)?`<td class="ck" data-act="noop"><input type="checkbox" data-ssel="${l.id}" ${UI.ssel.has(l.id)?'checked':''} aria-label="${t('sel_item')}"></td>`:'<td class="ck"></td>'):'';
+  return `<div class="filters chips">${chips}${shown}</div>`+(list.length?`<div class="tablewrap"><table><thead><tr>${ckTh}<th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_info')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}">${ckTd(l)}<td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.status==='sold'?l.sold_price:l.price)}</td><td>${pill(l.status)}</td><td class="small">${infoCell(l)}</td><td class="acts">${sellerBtns(l)}</td></tr>`).join('')}</tbody></table></div><div class="ssel-slot"></div>`:`<div class="empty">${t('mf_none')}</div>`);
+}
+/* my listings that can go back to the drafts (for sale or expired), to reprice many with the drafts tools */
+function movable(l){return l.status==='available'||l.status==='expired';}
+function sselLive(){const ok=new Set(((A.mine&&A.mine.selling)||[]).filter(movable).map(l=>l.id));UI.ssel.forEach(id=>{if(!ok.has(id))UI.ssel.delete(id);});return UI.ssel.size;}
+function sselBarHTML(){
+  const n=sselLive();if(!n)return '';
+  return `<div class="selbar" role="region" aria-label="${t('sel_bar')}"><b>${t('sel_n',{n})}</b><span class="muted small">${t('ssel_hint')}</span><span class="grow"></span><button type="button" class="btn small primary" data-act="ssel-draft">${t('ssel_draft',{n})}</button><button type="button" class="btn small" data-act="ssel-clear">${t('sel_clear')}</button></div>`;
+}
+function renderSsel(){
+  document.querySelectorAll('.ssel-slot').forEach(el=>el.innerHTML=sselBarHTML());
+  document.querySelectorAll('input[data-ssel]').forEach(c=>c.checked=UI.ssel.has(N(c.dataset.ssel)));
+  const page=UI.sselPage||[],on=page.filter(id=>UI.ssel.has(id)).length;
+  document.querySelectorAll('input[data-ssel-all]').forEach(a=>{a.checked=!!page.length&&on===page.length;a.indeterminate=on>0&&on<page.length;});
+}
+function mToDraft(ids,names){
+  const list=names.length?`<ul class="hist">${names.slice(0,8).map(x=>`<li><b>${x}</b></li>`).join('')}${names.length>8?`<li class="muted">${t('and_more',{n:names.length-8})}</li>`:''}</ul>`:'';
+  openModal(t('td_title'),`${list}<p style="margin:0 0 6px">${t('td_confirm',{n:ids.length})}</p><p class="muted small" style="margin:0">${t('td_keep')}</p>${okCancel('to-draft-ok',`data-ids="${ids.join(',')}"`,t('td_ok',{n:ids.length}))}`);
+}
+function favPriceHTML(l){
+  if(l.status==='sold')return priceHTML(l.sold_price);
+  let h=priceHTML(l.price);const was=Number(l.fav_price||0),now=Number(l.price||0);
+  if(was&&was!==now)h+=`<div class="sub ${now<was?'ok-t':'warn-t'}">${now<was?'↓':'↑'} ${t('fav_was',{p:fmtPrice(was)})}</div>`;
+  return h;
+}
+function favListHTML(){
+  const list=mfApply(A.favs||[]),u=A.me;UI.pageItems=list;
+  const ended=(A.favs||[]).filter(l=>!['available','in_trade','paused'].includes(l.status)).length;
+  const bar=`<div class="filters chips"><span class="muted small">${t('mf_shown',{n:list.length,m:(A.favs||[]).length})} · ${t('favs_note')}</span>${ended?`<button class="btn small" data-act="fav-clear">${t('fav_clear_ended',{n:ended})}</button>`:''}</div>`;
+  if(!list.length)return bar+`<div class="empty">${t('mf_none')}</div>`;
+  return bar+`<div class="tablewrap"><table><thead><tr>${selAllTh()}<th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_seller')}</th><th>${t('col_status')}</th><th></th></tr></thead><tbody>${list.map(l=>{
+    const buy=l.status==='available'&&!(u&&u.id===l.seller_id)&&!isBanned(u)?`<button class="btn small primary" data-act="buy-ask" data-lid="${l.id}">${t('btn_buy')}</button>`:'';
+    return `<tr class="row" data-act="open" data-lid="${l.id}">${selCk(l)}<td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${favPriceHTML(l)}</td><td>${esc(l.seller)}</td><td>${pill(l.status)}</td><td><span class="rowact">${buy}${favBtn(l)}</span></td></tr>`;}).join('')}</tbody></table></div><div class="selbar-slot"></div>`;
+}
+function renderMineList(){const el=$('#mine-list');if(!el)return;el.innerHTML=mineListHTML();if(UI.mineTab==='favs')renderSel();else renderSsel();}
 /* ---- blacklist (a tab of My trades) ---- */
 function blocksHTML(){
   const list=A.blocks||[];
@@ -1850,10 +2470,10 @@ function blocksHTML(){
 }
 function infoCell(l){
   const st=l.status;
-  if(st==='available'){const age=daysSince(l.renewed_at);return t('age_listed',{d:daysSince(l.created_at)})+(age>=EXPIRE_DAYS-7?` · <span class="warn-t">${t('expires_in',{d:Math.max(0,EXPIRE_DAYS-age)})}</span>`:'');}
+  if(st==='available'){const age=daysSince(l.renewed_at);return t('age_listed',{d:daysSince(l.created_at)})+(l.offers_open?` · <b class="warn-t">${t('offers_n',{n:l.offers_open})}</b>`:'')+(age>=EXPIRE_DAYS-7?` · <span class="warn-t">${t('expires_in',{d:Math.max(0,EXPIRE_DAYS-age)})}</span>`:'');}
   if(st==='expired')return `<span class="warn-t">${t('expired_note')}</span>`;
-  if(st==='in_trade'){const dd=daysSince(l.trade_at);return t('buyer_is',{name:l.buyer||'?'})+' · '+t('trade_days',{d:dd})+(dd>=STALE_DAYS?`<div class="bad-t">${t('stale_warn',{d:STALE_DAYS})}</div>`:'');}
-  if(st==='sold')return t('buyer_is',{name:l.buyer||'?'})+' · '+t('sold_date',{d:fmtDate(ts(l.sold_at))});
+  if(st==='in_trade'){const dd=daysSince(l.trade_at);return t('buyer_is',{name:l.buyer||'?'})+(l.buyer?' '+copyBtn(l.buyer):'')+(l.deal_price?' · '+t('deal_is',{p:{html:priceHTML(l.deal_price)}}):'')+' · '+t('trade_days',{d:dd})+(dd>=STALE_DAYS?`<div class="bad-t">${t('stale_warn',{d:STALE_DAYS})}</div>`:'');}
+  if(st==='sold')return t('buyer_is',{name:l.buyer||'?'})+(l.buyer?' '+copyBtn(l.buyer):'')+' · '+t('sold_date',{d:fmtDate(ts(l.sold_at))});
   if(st==='withdrawn')return l.withdraw_reason?t(l.withdraw_reason):'';
   if(st==='archived')return t('isk_season',{n:l.season??'?'});
   return '';
@@ -1933,14 +2553,25 @@ function openModal(titleHTML,body,opts){
   $('#modal-root').innerHTML=`<div class="modal-back" data-act="modal-back"><div class="modal ${opts.wide?'wide':''}" role="dialog" aria-modal="true" aria-label="${esc(opts.label||titleHTML.replace(/<[^>]+>/g,''))}"><h3><span>${titleHTML}</span>${opts.noClose?'':`<button class="x" data-act="close" aria-label="${t('close')}">×</button>`}</h3><div class="body">${body}</div></div></div>`;
   const f=$('#modal-root [autofocus]');if(f)f.focus();
 }
-function closeModal(){$('#modal-root').innerHTML='';UI.detailId=null;UI.buyConfirm=null;UI.forcePw=false;}
+function closeModal(){$('#modal-root').innerHTML='';UI.detailId=null;UI.buyConfirm=null;UI.offerConfirm=null;UI.forcePw=false;}
 function back(){if(UI.detailId&&A.detail)renderDetail();else closeModal();}
 function okCancel(a,attrs,label,cls){return `<div class="mbtns"><button class="btn" data-act="sub-cancel">${t('cancel')}</button><button class="btn ${cls||'primary'}" data-act="${a}" ${attrs}>${label||t('confirm')}</button></div>`;}
 const nm=el=>esc(el.dataset.name||'');
 const eqNm=el=>eqZhHTML(el.dataset.name||'');
-function mMarkSold(el){openModal(t('btn_mark_sold'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('ms_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="muted small" style="margin:0">${t('ms_hint')}</p><p class="err" id="m-err"></p></div>${okCancel('ms-ok',`data-lid="${el.dataset.lid}"`)}`);}
+function mMarkSold(el){openModal(t('btn_mark_sold'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('ms_price')}</label><input id="m-price" value="${priceInput(el.dataset.price)}" autofocus><p class="muted small" style="margin:0">${t('ms_hint')}</p><p class="err" id="m-err"></p></div>${okCancel('ms-ok',`data-lid="${el.dataset.lid}"`)}`);}
 function mCancelTrade(el){openModal(t('btn_cancel_trade'),`<div class="form"><b>${eqNm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_buyer_gave_up','r_no_response','r_seller_changed','r_other'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('ct_hint')}</p></div>${okCancel('ct-ok',`data-lid="${el.dataset.lid}"`,t('btn_cancel_trade'),'danger')}`);}
-function mEditPrice(el){openModal(t('btn_edit_price'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('new_price')}</label><input id="m-price" value="${fmtPrice(el.dataset.price)}" autofocus><p class="err" id="m-err"></p></div>${okCancel('ep-ok',`data-lid="${el.dataset.lid}"`)}`);}
+function mSelBuy(){
+  const u=A.me;if(!u){mLogin();return;}
+  if(isBanned(u)){toast(t('banned_cant'),true);return;}
+  const all=[...UI.msel.values()],buy=selBuyable(),skip=all.length-buy.length;
+  if(!buy.length)return;
+  if(buy.length>50){toast(t('E_BUY_MANY'),true);return;}
+  const g=new Map();buy.forEach(l=>{if(!g.has(l.seller_id))g.set(l.seller_id,{name:l.seller,items:[]});g.get(l.seller_id).items.push(l);});
+  const sum=a=>a.reduce((x,l)=>x+Number(l.price||0),0);
+  const rows=[...g.values()].map(x=>`<li><b>${esc(x.name)}</b> · ${t('n_items',{n:x.items.length})} · ${priceHTML(sum(x.items))}</li>`).join('');
+  openModal(t('sel_buy_title'),`<p style="margin:0 0 6px">${t('sel_buy_confirm',{n:buy.length,s:g.size,p:{html:priceHTML(sum(buy))}})}</p><ul class="hist">${rows}</ul>${skip?`<p class="muted small" style="margin:6px 0 0">${t('sel_buy_skip',{n:skip})}</p>`:''}<div class="notice" style="margin-top:8px">${t('sel_buy_rules')}</div>${okCancel('sel-buy-ok','',t('sel_buy',{n:buy.length}))}`);
+}
+function mEditPrice(el){openModal(t('btn_edit_price'),`<div class="form"><b>${eqNm(el)}</b><label for="m-price">${t('new_price')}</label><input id="m-price" value="${priceInput(el.dataset.price)}" placeholder="${t('price_ph')}" autofocus><p class="err" id="m-err"></p></div>${okCancel('ep-ok',`data-lid="${el.dataset.lid}"`)}`);}
 function mHideListing(el){openModal(t('del_listing_title'),`<p style="margin:0 0 6px"><b>${eqNm(el)}</b></p><p style="margin:0">${t('del_listing_confirm')}</p>${okCancel('hide-ok',`data-lid="${el.dataset.lid}"`,t('btn_delete_listing'),'danger')}`);}
 function mWithdraw(el){openModal(t('btn_withdraw'),`<div class="form"><b>${eqNm(el)}</b><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_not_selling','r_sold_elsewhere'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select></div>${okCancel('wd-ok',`data-lid="${el.dataset.lid}"`,t('btn_withdraw'),'danger')}`);}
 function mGiveup(el){openModal(t('buyer_giveup'),`<div class="form"><b>${eqNm(el)}</b><label for="m-note">${t('note_optional')}</label><textarea id="m-note" rows="2" maxlength="300"></textarea><p class="muted small" style="margin:0">${t('bg_hint')}</p></div>${okCancel('giveup-ok',`data-lid="${el.dataset.lid}"`,t('buyer_giveup'),'danger')}`);}
@@ -2007,7 +2638,7 @@ const H={
   'clear-filters'(){UI.filters=defaultFilters();renderMain();searchSoon(0);},
   'clear-seller'(){UI.filters.seller='';renderMain();searchSoon(0);},
   'seller-filter'(el,e){e.preventDefault();UI.filters=defaultFilters();UI.filters.seller=el.dataset.uid;UI.filters.sellerName=el.dataset.name;if(UI.tab!=='sold')UI.tab='available';UI.page=1;closeModal();if(UI.view!=='market')go('market');else{renderMain();searchSoon(0);}},
-  open(el){UI.buyConfirm=null;openDetail(el.dataset.lid);},
+  open(el){UI.buyConfirm=null;UI.offerConfirm=null;openDetail(el.dataset.lid);},
   'buy-ask'(el){if(!A.me){mLogin();return;}UI.buyConfirm=N(el.dataset.lid);openDetail(el.dataset.lid);},
   buy(el){UI.buyConfirm=N(el.dataset.lid);renderDetail();},
   'buy-yes'(el){const id=N(el.dataset.lid);UI.buyConfirm=null;act(()=>api('hv_buy',{p_id:id}),t('toast_bought'));},
@@ -2016,17 +2647,27 @@ const H={
   giveup(el){mGiveup(el);},
   'giveup-ok'(el){const id=N(el.dataset.lid),note=val('m-note').trim();back();act(()=>api('hv_buyer_cancel',{p_id:id,p_note:note}),t('toast_done'));},
   'mark-sold'(el){mMarkSold(el);},
-  'ms-ok'(el){const p=parsePrice(val('m-price'));if(!p){setErr('price_invalid');return;}const id=N(el.dataset.lid);back();act(()=>api('hv_mark_sold',{p_id:id,p_price:p}),t('toast_done'));},
+  'ms-ok'(el){const p=priceIn(val('m-price'));if(!p){setErr('price_invalid');return;}const id=N(el.dataset.lid);back();act(()=>api('hv_mark_sold',{p_id:id,p_price:p}),t('toast_done'));},
   'cancel-trade'(el){mCancelTrade(el);},
   'ct-ok'(el){const id=N(el.dataset.lid),r=val('m-reason'),note=val('m-note').trim();back();act(()=>api('hv_seller_cancel',{p_id:id,p_reason:r,p_note:note}),t('toast_done'));},
   'edit-price'(el){mEditPrice(el);},
-  'ep-ok'(el){const p=parsePrice(val('m-price'));if(!p){setErr('price_invalid');return;}const id=N(el.dataset.lid);back();act(()=>api('hv_edit_price',{p_id:id,p_price:p}),t('toast_done'));},
+  'ep-ok'(el){const p=priceIn(val('m-price'));if(!p){setErr('price_invalid');return;}const id=N(el.dataset.lid);back();act(()=>api('hv_edit_price',{p_id:id,p_price:p}),t('toast_done'));},
   withdraw(el){mWithdraw(el);},
   'hide-listing'(el){mHideListing(el);},
   'hide-ok'(el){const id=N(el.dataset.lid);closeModal();if(UI.detailId===id){UI.detailId=null;A.detail=null;}act(()=>api('hv_hide_listing',{p_id:id}),t('toast_deleted'));},
   'wd-ok'(el){const id=N(el.dataset.lid),r=val('m-reason');back();act(()=>api('hv_withdraw',{p_id:id,p_reason:r}),t('toast_done'));},
   renew(el){act(()=>api('hv_renew',{p_id:N(el.dataset.lid)}),t('toast_done'));},
   relist(el){act(()=>api('hv_relist',{p_id:N(el.dataset.lid)}),t('toast_done'));},
+  'to-draft'(el,e){if(e)e.stopPropagation();mToDraft([N(el.dataset.lid)],[eqNm(el)]);},
+  'ssel-draft'(){const all=((A.mine&&A.mine.selling)||[]).filter(l=>UI.ssel.has(l.id)&&movable(l));if(!all.length)return;mToDraft(all.map(l=>l.id),all.map(l=>qName(l)));},
+  'ssel-clear'(){UI.ssel.clear();renderSsel();},
+  'to-draft-ok'(el){const ids=String(el.dataset.ids||'').split(',').map(N).filter(Boolean);closeModal();let r=null;
+    act(async()=>{r=await api('hv_to_draft',{p_ids:ids});}).then(ok=>{if(!ok||!r)return;
+      ids.forEach(id=>UI.ssel.delete(id));
+      toast(t('td_done',{n:r.moved})+(r.skip?' '+t('td_skip',{n:r.skip}):''),r.skip>0);
+      if(r.moved){UI.dselBack=new Set(ids);UI.scrollDrafts=true;delete viewAt.sell;go('sell');}
+    });},
+  'go-drafts'(el,e){if(e)e.stopPropagation();closeModal();UI.scrollDrafts=true;go('sell');},
   'pm-send'(el){const b=N(el.dataset.buyer);const body=val('pm-in-'+b).trim();if(!body)return;act(()=>api('hv_send_msg',{p_listing:N(el.dataset.lid),p_buyer:b,p_body:body}),t('toast_sent'));},
   report(el){if(!A.me){mLogin();return;}mReport(el);},
   'rp-ok'(el){const body=val('m-body').trim();if(!body){setErr('rp_need_body');return;}const uid=N(el.dataset.uid),lid=val('m-lid')?N(val('m-lid')):null,cat=val('m-cat');back();act(()=>api('hv_report',{p_target:uid,p_listing:lid,p_cat:cat,p_body:body}),t('rp_done'));},
@@ -2038,21 +2679,53 @@ const H={
     try{if(!n.read)A.me=await api('hv_notif_read',{p_id:n.id});}catch(e){}
     renderHeader();
     if(n.listing_id)openDetail(n.listing_id);
-    else if(n.view){if(n.tab)UI.adminTab=n.tab;go(n.view);}
+    else if(n.view){if(n.view==='mine'){UI.mineTab='selling';UI.mineStatus='in_trade';}else if(n.tab)UI.adminTab=n.tab;go(n.view);}
   },
   login(){mLogin();},
   register(){mRegister();},
   forgot(){mForgot();},
   'change-pw'(){mChangePw(false);},
   async logout(){const tok=P.token;P.token='';A.me=null;clearCaches();savePrefs();UI.notifOpen=false;UI.forcePw=false;closeModal();try{await rpc('hv_logout',{p_token:tok});}catch(e){}if(UI.view==='admin')go('market');else refresh(true);},
-  'copy-fmt'(){const done=()=>toast(t('copied'));
-    if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(HVUT_FMT).then(done,()=>{fallbackCopy(HVUT_FMT);done();});else{fallbackCopy(HVUT_FMT);done();}},
+  'copy-fmt'(){copyText(HVUT_FMT);},
+  copy(el,e){if(e)e.stopPropagation();copyText(el.dataset.v,t('copied_x',{x:el.dataset.v}));},
   'sell-import'(){UI.sellText=val('sell-text');doImport();},
-  'draft-bulk-price'(){const p=parsePrice(val('bulk-price'));if(!p){toast(t('price_invalid'),true);return;}const ids=[...UI.dsel];
-    act(async()=>{await flushDraftSaves();await api('hv_draft_update',{p_ids:ids,p_set:{price:p}});},t('toast_done'));},
+  'bp-apply'(){const c=bpCalc();if(c.err){toast(t(c.err),true);return;}if(!c.out.length){toast(t('bp_nothing'),true);return;}
+    act(async()=>{await flushDraftSaves();await api('hv_draft_prices',{p_prices:c.out});},t('bp_done',{n:c.out.length})+(c.skip?' '+t('bp_skip',{n:c.skip}):''));},
+  'rng-add'(){bpFix();if(P.bp.ranges.length<20){const last=P.bp.ranges[P.bp.ranges.length-1];const nx=last&&last.max.trim()&&!isNaN(parseFloat(last.max))?String(Math.round((parseFloat(last.max)+0.1)*10)/10):'';P.bp.ranges.push({min:nx,max:'',price:''});}savePrefs();renderBp();const ins=document.querySelectorAll('#bp-box input[data-k="max"]');if(ins.length)ins[ins.length-1].focus();},
+  'rng-del'(el){bpFix();const i=N(el.dataset.i);if(P.bp.ranges.length>1)P.bp.ranges.splice(i,1);savePrefs();renderBp();},
+  'dq-only'(){UI.dsel=new Set((A.drafts||[]).filter(dqMatch).map(d=>d.id));renderDrafts();},
+  'dq-add'(){(A.drafts||[]).filter(dqMatch).forEach(d=>UI.dsel.add(d.id));renderDrafts();},
+  'mf-clear'(){UI.mf={q:'',qual:'',type:'',world:'',sort:''};renderMain();},
+  async fav(el){
+    if(!A.me){mLogin();return;}
+    const id=N(el.dataset.lid),on=!isFav(id),prev=A.me.favs||[];
+    A.me.favs=on?[...prev,id]:prev.filter(x=>x!==id);syncStars();
+    try{A.me=await api('hv_fav',{p_id:id,p_on:on});delete viewAt.mine;syncStars();toast(t(on?'fav_added':'fav_removed'));}
+    catch(e){A.me.favs=prev;syncStars();handleErr(e);}
+  },
+  'fav-clear'(){act(async()=>{A.me=await api('hv_fav_clear');},t('toast_done'));},
+  'offer-send'(el){const p=priceIn(val('offer-in'));if(!p){toast(t('price_invalid'),true);return;}if(p>=N(el.dataset.price)){toast(t('E_OFFER_HIGH'),true);return;}
+    act(()=>api('hv_offer',{p_id:N(el.dataset.lid),p_price:p}),t('offer_sent',{p:fmtPrice(p)}));},
+  'offer-withdraw'(el){act(()=>api('hv_offer',{p_id:N(el.dataset.lid),p_price:null}),t('offer_withdrawn'));},
+  'offer-buy'(el){UI.offerConfirm=N(el.dataset.lid);renderDetail();},
+  'offer-buy-no'(){UI.offerConfirm=null;renderDetail();},
+  'offer-buy-yes'(el){const id=N(el.dataset.lid);UI.offerConfirm=null;act(()=>api('hv_buy_offer',{p_id:id}),t('toast_bought'));},
+  'offer-ok'(el){openModal(t('offer_accept'),`<p style="margin:0">${t('offer_accept_confirm',{p:{html:priceHTML(el.dataset.p)}})}</p>${okCancel('offer-ok-yes',`data-oid="${el.dataset.oid}"`,t('offer_accept'))}`);},
+  'offer-ok-yes'(el){const id=N(el.dataset.oid);back();act(()=>api('hv_offer_decide',{p_offer:id,p_accept:true}),t('offer_accepted_t'));},
+  'offer-no'(el){act(()=>api('hv_offer_decide',{p_offer:N(el.dataset.oid),p_accept:false}),t('offer_declined_t'));},
+  'sel-clear'(){UI.msel.clear();renderSel();},
+  'sel-copy'(){const it=[...UI.msel.values()];if(!it.length)return;copyText(it.map(eqUrl).join('\n'),t('sel_copied',{n:it.length}));},
+  'sel-buy'(){mSelBuy();},
+  'sel-buy-ok'(){const ids=selBuyable().map(l=>l.id);closeModal();let r=null;
+    act(async()=>{r=await api('hv_buy_many',{p_ids:ids});}).then(ok=>{if(!ok||!r)return;
+      const names=new Map([...UI.msel.values()].map(l=>[l.id,l]));
+      r.ok.forEach(id=>UI.msel.delete(id));renderSel();
+      if(!r.fail.length){toast(t('sel_buy_done',{n:r.ok.length}));return;}
+      openModal(t('sel_buy_result'),`<p style="margin:0 0 6px">${t('sel_buy_partial',{n:r.ok.length,m:r.fail.length})}</p><ul class="hist">${r.fail.map(f=>{const l=names.get(f.id);return `<li><b>${l?qName(l):'#'+f.id}</b><br><span class="muted small">${t(f.e)}</span></li>`;}).join('')}</ul><div class="mbtns"><button class="btn primary" data-act="sub-cancel">${t('ok_btn')}</button></div>`);
+    });},
   'draft-publish'(){const ids=[...UI.dsel];let r=null;
     act(async()=>{await flushDraftSaves();r=await api('hv_draft_publish',{p_ids:ids});}).then(ok=>{if(!ok||!r)return;const left=r.dup+r.noprice+r.noname;toast(t('publish_done',{n:r.listed})+(left?' '+t('publish_left',{n:left}):''),left>0);});},
-  'draft-delete'(){openModal(t('delete_selected'),`<p style="margin:0">${t('del_drafts_confirm',{n:UI.dsel.size})}</p>${okCancel('draft-delete-ok','',t('delete_selected'),'danger')}`);},
+  'draft-delete'(){const back=(A.drafts||[]).filter(d=>UI.dsel.has(d.id)&&d.listing_id).length;openModal(t('delete_selected'),`<p style="margin:0">${t('del_drafts_confirm',{n:UI.dsel.size})}</p>${back?`<p class="muted small" style="margin:6px 0 0">${t('del_drafts_back',{n:back})}</p>`:''}${okCancel('draft-delete-ok','',t('delete_selected'),'danger')}`);},
   'draft-delete-ok'(){const ids=[...UI.dsel];closeModal();act(()=>api('hv_draft_delete',{p_ids:ids}),t('toast_done'));},
   'mine-tab'(el){UI.mineTab=el.dataset.v;renderMain();},
   'bl-add'(){const n=val('bl-name').trim();if(!n){toast(t('E_NO_USER'),true);return;}
@@ -2121,15 +2794,23 @@ document.addEventListener('input',e=>{
   if(el.dataset.f){UI.filters[el.dataset.f]=el.value;searchSoon(el.tagName==='SELECT'?0:450);return;}
   if(el.id==='sell-text'){UI.sellText=el.value;return;}
   if(el.id==='dsel-all'){if(el.checked)(A.drafts||[]).forEach(d=>UI.dsel.add(d.id));else UI.dsel.clear();renderDrafts();return;}
+  if(el.dataset.msel!==undefined){const id=N(el.dataset.msel),l=(UI.pageItems||[]).find(x=>x.id===id);if(el.checked&&l)UI.msel.set(id,l);else UI.msel.delete(id);renderSel();return;}
+  if(el.dataset.mselAll!==undefined){(UI.pageItems||[]).forEach(l=>{if(el.checked)UI.msel.set(l.id,l);else UI.msel.delete(l.id);});renderSel();return;}
+  if(el.dataset.ssel!==undefined){const id=N(el.dataset.ssel);if(el.checked)UI.ssel.add(id);else UI.ssel.delete(id);renderSsel();return;}
+  if(el.dataset.sselAll!==undefined){(UI.sselPage||[]).forEach(id=>{if(el.checked)UI.ssel.add(id);else UI.ssel.delete(id);});renderSsel();return;}
+  if(el.dataset.mf){UI.mf[el.dataset.mf]=el.value;renderMineList();return;}
+  if(el.dataset.dq){UI.dq[el.dataset.dq]=el.value;const b=$('#dq-btns');if(b)b.innerHTML=dqBtns();return;}
+  if(el.dataset.bp){bpFix();P.bp[el.dataset.bp]=el.value;savePrefs();if(el.dataset.bp==='mode')renderBp();else{const pv=$('#bp-prev');if(pv)pv.innerHTML=bpPreview();}return;}
+  if(el.dataset.rg!==undefined){bpFix();const r=P.bp.ranges[N(el.dataset.rg)];if(r){r[el.dataset.k]=el.value;savePrefs();}const pv=$('#bp-prev');if(pv)pv.innerHTML=bpPreview();return;}
   if(el.dataset.dsel!==undefined){const id=N(el.dataset.dsel);if(el.checked)UI.dsel.add(id);else UI.dsel.delete(id);renderDrafts();return;}
   const did=el.dataset.dprice||el.dataset.droll||el.dataset.dname;
   if(did!==undefined){
     const d=(A.drafts||[]).find(x=>x.id===N(did));if(!d)return;
     const v=el.value.trim();
-    if(el.dataset.dprice!==undefined){if(!v){d.price=null;queueDraftSave(d.id,'price',null);}else{const p=parsePrice(v);if(!p){el.classList.add('err');return;}d.price=p;queueDraftSave(d.id,'price',p);}}
+    if(el.dataset.dprice!==undefined){if(!v){d.price=null;queueDraftSave(d.id,'price',null);}else{const p=priceIn(v);if(!p){el.classList.add('err');return;}d.price=p;queueDraftSave(d.id,'price',p);}}
     else if(el.dataset.droll!==undefined){if(!v){d.roll=null;queueDraftSave(d.id,'roll',null);}else{const r=parseFloat(v.replace('%',''));if(!(r>=0&&r<=100)){el.classList.add('err');return;}d.roll=Math.round(r*10)/10;queueDraftSave(d.id,'roll',d.roll);}}
     else{d.name=v;queueDraftSave(d.id,'name',v);}
-    el.classList.remove('err');updDraftPill(d);return;
+    el.classList.remove('err');updDraftPill(d);if(el.dataset.droll!==undefined){const pv=$('#bp-prev');if(pv)pv.innerHTML=bpPreview();}return;
   }
 });
 document.addEventListener('change',e=>{const el=e.target;
@@ -2138,6 +2819,7 @@ const did=el.dataset&&(el.dataset.dprice||el.dataset.droll||el.dataset.dname);if
 window.addEventListener('beforeunload',()=>{for(const k of Object.keys(pendingSaves))runDraftSave(k);});
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target&&e.target.id==='bl-name'){e.preventDefault();H['bl-add']();return;}
+  if(e.key==='Enter'&&e.target&&e.target.id==='offer-in'){e.preventDefault();const b=$('[data-act="offer-send"]');if(b)b.click();return;}
   if(e.key==='Escape'&&UI.eqOpen&&!$('#modal-root').innerHTML){eqClose(true);return;}
   if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){if($('#modal-root .detail'))closeModal();else back();}
   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&e.target.id&&e.target.id.startsWith('pm-in-')){const b=e.target.parentElement.querySelector('[data-act="pm-send"]');if(b)b.click();}
@@ -2145,7 +2827,7 @@ document.addEventListener('keydown',e=>{
 function route(){
   const h=(location.hash||'#market').slice(1);
   UI.view=['market','sell','mine','inbox','admin'].includes(h)?h:'market';
-  UI.notifOpen=false;render();window.scrollTo(0,0);
+  UI.notifOpen=false;window.scrollTo(0,0);render();
   refresh();
 }
 window.addEventListener('hashchange',route);
@@ -2153,7 +2835,7 @@ window.addEventListener('hashchange',route);
 setInterval(async()=>{if(!P.token||document.hidden||Date.now()-lastMe<55000)return;try{await loadMe();renderHeader();}catch(e){}},60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!$('#modal-root').innerHTML&&!UI.busy)refresh();});
 
-loadPrefs();
+loadPrefs();bpFix();
 document.documentElement.lang=htmlLang();
 applyTheme();
 (async()=>{
