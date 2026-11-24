@@ -310,6 +310,8 @@ html[data-theme=dark] .modal h3 .q,html[data-theme=dark] .modal .x{color:#E6E4D9
 .offer-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .offerbox .hist.offers{margin:0;padding-left:0;list-style:none}
 
+tr.grp td{background:var(--panel-2);font-weight:700;font-size:13px;padding:7px 10px;border-top:2px solid var(--line)}
+
 /* equipment name colours from HV综合汉化 (DDD) */
 @font-face {
 font-family: 'HV Ultimate Star Wheel';
@@ -707,6 +709,11 @@ const T={zh:{
  offers_hint_admin:"只有管理員看得到出價者是誰，賣家看不到。",
  dq_select_shown:"全選顯示的",
  price_ph_s:"77 = 77k",
+ sort_buyer:"買家（依買家分組）",
+ grp_buyer:"買家：{name}",
+ grp_trade:"交易中 {n} 件，合計 {p}",
+ grp_sold:"已售出 {n} 件",
+ grp_none:"沒有買家的裝備",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -752,7 +759,7 @@ const T={zh:{
  price_invalid:"看不懂這個價格。直接打數字代表 k（77 就是 77k），也可以寫 800k、1.5m；要精確到 Credits 請在後面加 c，例如 500c。",price_ph:"例如 77（=77k）、1.5m",new_price:'新售價',
  sell_title:'上架裝備',sell_need_login:'請先登入才能上架。',sell_steps_title:'用 HVUT 產生裝備代碼',
  sell_step1:'在 HV 進入裝備的「整理」頁面',sell_step2:'先按左側的「可交易的」，只留下可以交易的裝備',sell_step3:'勾選要賣的裝備',sell_step4:'按左側的「裝備代碼」',sell_step5:"把跳出來的文字全部複製，貼到下面的框框，按「讀取並加入未上架區」",
- sell_need_hvut:'需要先安裝 HVUT。主世界和 ISK 的裝備可以混在一起貼，網站會自動分開；Soulbound 的裝備會被擋下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 換算的：傳奇 170–200、史詩 150–180 對應 0–100%。HVUT 的 AVG 是四捨五入過的整數，所以可能跟實際差 1–2%，需要的話可以直接改。布甲少了 A、I、W 其中一個會自動標成瘸腿。',untrade_note:'記得先按 HVUT 的「可交易的」再勾選。HVUT 代碼不會標出 Untradeable，網站沒辦法替你擋下不可交易的裝備；不可交易的裝備無法用 MoogleMail 寄出，被檢舉會被下架。',lame:'瘸腿',lame_t:'少了 {x} 屬性',
+ sell_need_hvut:'需要先安裝 HVUT。主世界和 ISK 的裝備可以混在一起貼，網站會自動分開；Soulbound 的裝備會被擋下。',roll_from_avg:"ROLL% 是用 HVUT 的 AVG 換算的：傳奇 170–200、史詩 150–180 對應 0–100%。舊版 HVUT 的 AVG 是四捨五入過的整數，可能跟實際差 1–2%，需要的話可以直接改；新版 HVUT 會輸出小數和百分比（例如 AVG: 68.1% / 190.4），網站會直接採用。布甲少了 A、I、W 其中一個會自動標成瘸腿。",untrade_note:'記得先按 HVUT 的「可交易的」再勾選。HVUT 代碼不會標出 Untradeable，網站沒辦法替你擋下不可交易的裝備；不可交易的裝備無法用 MoogleMail 寄出，被檢舉會被下架。',lame:'瘸腿',lame_t:'少了 {x} 屬性',
  sell_paste_ph:'把 HVUT 的裝備代碼貼在這裡',sell_sample:'填入範例',sell_parse:'讀取裝備',sell_preview:'確認並填售價',
  sell_ok:'可上架',sell_err_dup:'已經在架上',sell_err_duppaste:'重複貼了兩次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
  sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件裝備。',sell_unread:'下面這幾行讀不懂，已略過：',sell_none:'沒有讀到任何裝備連結。請確認貼上的是 HVUT「裝備代碼」產生的文字。',sell_credits:"售價一律用主世界 Credits，ISK 裝備也一樣。直接打數字代表 k（77 就是 77k），也可以寫 800k、1.5m。",sell_fix_prices:'有些裝備還沒填售價，或價格格式不對。',sell_nothing:'沒有勾選任何可上架的裝備。',
@@ -1057,6 +1064,11 @@ hans:{
  offers_hint_admin:"只有管理员看得到出价者是谁，卖家看不到。",
  dq_select_shown:"全选显示的",
  price_ph_s:"77 = 77k",
+ sort_buyer:"买家（依买家分组）",
+ grp_buyer:"买家：{name}",
+ grp_trade:"交易中 {n} 件，合计 {p}",
+ grp_sold:"已售出 {n} 件",
+ grp_none:"没有买家的装备",
  E_NAME_REQ:"请输入账号。",
  E_NAME_LONG:"账号最多 30 个字符。",
  E_NAME_TAKEN:"这个账号已经有人使用。",
@@ -1102,7 +1114,7 @@ hans:{
  price_invalid:"看不懂这个价格。直接打数字代表 k（77 就是 77k），也可以写 800k、1.5m；要精确到 Credits 请在后面加 c，例如 500c。",price_ph:"例如 77（=77k）、1.5m",new_price:'新售价',
  sell_title:'上架装备',sell_need_login:'请先登录才能上架。',sell_steps_title:'用 HVUT 产生装备代码',
  sell_step1:'在 HV 进入装备的「整理」页面',sell_step2:'先按左侧的「可交易的」，只留下可以交易的装备',sell_step3:'勾选要卖的装备',sell_step4:'按左侧的「装备代码」',sell_step5:"把跳出来的文字全部复制，贴到下面的框框，按「读取并加入未上架区」",
- sell_need_hvut:'需要先安装 HVUT。主世界和 ISK 的装备可以混在一起贴，网站会自动分开；Soulbound 的装备会被挡下。',roll_from_avg:'ROLL% 是用 HVUT 的 AVG 换算的：传奇 170–200、史诗 150–180 对应 0–100%。HVUT 的 AVG 是四舍五入过的整数，所以可能跟实际差 1–2%，需要的话可以直接改。布甲少了 A、I、W 其中一个会自动标成瘸腿。',untrade_note:'记得先按 HVUT 的「可交易的」再勾选。HVUT 代码不会标出 Untradeable，网站没办法替你挡下不可交易的装备；不可交易的装备无法用 MoogleMail 寄出，被举报会被下架。',lame:'瘸腿',lame_t:'少了 {x} 属性',
+ sell_need_hvut:'需要先安装 HVUT。主世界和 ISK 的装备可以混在一起贴，网站会自动分开；Soulbound 的装备会被挡下。',roll_from_avg:"ROLL% 是用 HVUT 的 AVG 换算的：传奇 170–200、史诗 150–180 对应 0–100%。旧版 HVUT 的 AVG 是四舍五入过的整数，可能跟实际差 1–2%，需要的话可以直接改；新版 HVUT 会输出小数和百分比（例如 AVG: 68.1% / 190.4），网站会直接采用。布甲少了 A、I、W 其中一个会自动标成瘸腿。",untrade_note:'记得先按 HVUT 的「可交易的」再勾选。HVUT 代码不会标出 Untradeable，网站没办法替你挡下不可交易的装备；不可交易的装备无法用 MoogleMail 寄出，被举报会被下架。',lame:'瘸腿',lame_t:'少了 {x} 属性',
  sell_paste_ph:'把 HVUT 的装备代码贴在这里',sell_sample:'填入范例',sell_parse:'读取装备',sell_preview:'确认并填售价',
  sell_ok:'可上架',sell_err_dup:'已经在架上',sell_err_duppaste:'重复贴了两次',sell_err_soul:'Soulbound，不能上架',sell_err_untrade:'Untradeable，不能上架',
  sell_submit:'上架 {n} 件',sell_done:'已上架 {n} 件装备。',sell_unread:'下面这几行读不懂，已略过：',sell_none:'没有读到任何装备链接。请确认粘贴的是 HVUT「装备代码」产生的文字。',sell_credits:"售价一律用主世界 Credits，ISK 装备也一样。直接打数字代表 k（77 就是 77k），也可以写 800k、1.5m。",sell_fix_prices:'有些装备还没填售价，或价格格式不对。',sell_nothing:'没有勾选任何可上架的装备。',
@@ -1407,6 +1419,11 @@ en:{
  offers_hint_admin:"Only admins see who made each offer; the seller does not.",
  dq_select_shown:"Select all shown",
  price_ph_s:"77 = 77k",
+ sort_buyer:"Buyer (grouped)",
+ grp_buyer:"Buyer: {name}",
+ grp_trade:"{n} in trade, {p} in total",
+ grp_sold:"{n} sold",
+ grp_none:"Items without a buyer",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -1452,7 +1469,7 @@ en:{
  price_invalid:"Could not read that price. A plain number means thousands (77 = 77k); you can also write 800k or 1.5m, or add c for exact Credits, such as 500c.",price_ph:"e.g. 77 (= 77k), 1.5m",new_price:'New price',
  sell_title:'List equipment',sell_need_login:'Log in to list equipment.',sell_steps_title:'Generate equipment code with HVUT',
  sell_step1:"In HV, open the equipment inventory page",sell_step2:"First click \"Tradeables\" on the left, so only tradeable items are shown",sell_step3:'Tick the equipment you want to sell',sell_step4:"Click \"Equip Code\" on the left",sell_step5:"Copy all of the text that appears, paste it into the box below and click \"Read and add to drafts\"",
- sell_need_hvut:'Requires HVUT. You can paste Persistent and Isekai equipment together; the site sorts them. Soulbound items are rejected.',roll_from_avg:'ROLL % is converted from HVUT’s AVG: Legendary 170–200 and Magnificent 150–180 map to 0–100%. HVUT rounds AVG to a whole number, so the result can be off by 1–2%; edit it if you need to. Cloth armor missing A, I or W is flagged as lame.',untrade_note:"Remember to click \"Tradeables\" in HVUT before ticking items. The HVUT code does not mark Untradeable items, so the site cannot reject them; an untradeable item cannot be sent by MoogleMail, and reported listings are taken down.",lame:'Lame',lame_t:'missing {x}',
+ sell_need_hvut:'Requires HVUT. You can paste Persistent and Isekai equipment together; the site sorts them. Soulbound items are rejected.',roll_from_avg:"ROLL % is converted from HVUT’s AVG: Legendary 170–200 and Magnificent 150–180 map to 0–100%. Older HVUT rounds AVG to a whole number, so the result can be off by 1–2%; edit it if you need to. Newer HVUT gives a decimal and its own percentage (e.g. AVG: 68.1% / 190.4), which the site uses directly. Cloth armor missing A, I or W is flagged as lame.",untrade_note:"Remember to click \"Tradeables\" in HVUT before ticking items. The HVUT code does not mark Untradeable items, so the site cannot reject them; an untradeable item cannot be sent by MoogleMail, and reported listings are taken down.",lame:'Lame',lame_t:'missing {x}',
  sell_paste_ph:'Paste the HVUT equipment code here',sell_sample:'Fill in sample',sell_parse:'Read equipment',sell_preview:'Check and set prices',
  sell_ok:'Ready',sell_err_dup:'Already listed',sell_err_duppaste:'Pasted twice',sell_err_soul:'Soulbound, cannot be listed',sell_err_untrade:'Untradeable, cannot be listed',
  sell_submit:'List {n} items',sell_done:'Listed {n} items.',sell_unread:'These lines could not be read and were skipped:',sell_none:'No equipment links found. Make sure you pasted the text from HVUT “Equipment Code”.',sell_credits:"Prices are always in Persistent Credits, Isekai items included. A plain number means thousands (77 = 77k); you can also write 800k or 1.5m.",sell_fix_prices:'Some items have no price yet or the price could not be read.',sell_nothing:'No listable items are ticked.',
@@ -1728,7 +1745,7 @@ function parseImport(text){
     }
     if(!/^[A-Za-z]/.test(name))name=name.replace(/^[^A-Za-z]+/,'');
     const first=name.split(' ')[0];const quality=QUALITIES.includes(first)?first:'';
-    let level=null,soul=false,untr=false,unas=false,attrs='',hv_avg=null,roll=null,rem='',priceText='';
+    let level=null,soul=false,untr=false,unas=false,attrs='',hv_avg=null,avgPct=null,roll=null,rem='',priceText='';
     for(const g of tail.matchAll(/(\s-\s*)?\(([^()]*)\)/g)){
       if(g[1]){priceText=g[2].trim();continue;}
       for(const part of g[2].split(',').map(x=>x.trim()).filter(Boolean)){
@@ -1737,7 +1754,8 @@ function parseImport(text){
         else if(/^soul\s*bound$/i.test(part))soul=true;
         else if(/^un\s*trad(?:e)?able$/i.test(part))untr=true;
         else if(/^unassigned$/i.test(part))unas=true;
-        else if((x=part.match(/^AVG\s*[:=]?\s*(\d+(?:\.\d+)?)/i)))hv_avg=Math.round(+x[1]);
+        /* "AVG: 186" (HVUT now, rounded) or "AVG: 68.1% / 190.4" (newer HVUT: its own ROLL % and the exact AVG) */
+        else if(/^AVG\b/i.test(part)){for(const n of part.replace(/^AVG\s*[:=]?/i,'').matchAll(/(\d+(?:\.\d+)?)\s*(%?)/g)){if(n[2])avgPct=+n[1];else if(hv_avg==null)hv_avg=Math.round(+n[1]*10)/10;}}
         else if(/^[SDEAIW]{1,6}$/.test(part))attrs=part;
         else if((x=part.match(/^(\d+(?:\.\d+)?)\s*%(?:\s+([aiw]{1,3}))?/i))){roll=+x[1];if(x[2])rem=x[2].toUpperCase();}
       }
@@ -1750,7 +1768,14 @@ function parseImport(text){
     const tp=nt||(m?type:'');
     const c=catOf(nt)||(m&&cat&&CATS.includes(cat)?cat:catOf(tp));
     if(!attrs&&rem)attrs=['A','I','W'].filter(x=>rem.includes(x)).join('');
-    if(roll==null)roll=rollFromAvg(quality,hv_avg);
+    if(roll==null){
+      const calc=rollFromAvg(quality,hv_avg);
+      /* HVUT's own % comes from the unrounded AVG, so it is the more exact one, as long as it uses the same
+         scale as the site (within rounding of the shown AVG); otherwise the site's own formula decides */
+      if(quality==='Peerless'||avgPct==null)roll=calc;
+      else if(calc==null||Math.abs(avgPct-calc)<=0.35)roll=avgPct;
+      else roll=calc;
+    }
     if(roll!=null&&(roll<0||roll>100))roll=null;
     items.push({world,equip_id,equip_key,name,quality,type:tp,cat:c,level,roll,hv_avg,attrs,lame:lameOf(c,attrs),soul,untr,unas,fromTag:!!m,price:importPrice(priceText)});
   }
@@ -2433,6 +2458,7 @@ function viewMine(){
 }
 /* filters for my listings and my favourites: done here in the page, the whole list is already loaded */
 const MF_SORTS=['new','price_desc','price_asc','avg','lv'];
+const MINE_RANK={in_trade:0,expired:1,available:2,sold:3,withdrawn:4,archived:5};
 function mfBarHTML(all){
   const f=UI.mf;
   const quals=[...new Set(all.map(l=>l.quality).filter(Boolean))].sort((a,b)=>QUALITIES.indexOf(a)-QUALITIES.indexOf(b));
@@ -2445,7 +2471,7 @@ function mfBarHTML(all){
     <label class="sr" for="mf-qual">${t('f_q_all')}</label><select id="mf-qual" data-mf="qual">${opt('',t('f_q_all'),f.qual)}${quals.map(q=>opt(q,isZh()?eqZh(q):q,f.qual)).join('')}</select>
     <label class="sr" for="mf-type">${t('mf_all_types')}</label><select id="mf-type" data-mf="type">${opt('',t('mf_all_types'),f.type)}${types.map(x=>opt(x,isZh()?eqZh(x):x,f.type)).join('')}</select>
     ${worlds.size>1?`<label class="sr" for="mf-world">${t('col_world')}</label><select id="mf-world" data-mf="world">${opt('',t('mf_all_worlds'),f.world)}${opt('main',t('world_main'),f.world)}${opt('isekai',t('world_isk'),f.world)}</select>`:''}
-    <label class="sr" for="mf-sort">${t('f_sort')}</label><select id="mf-sort" data-mf="sort">${opt('',t('mf_sort_default'),f.sort)}${MF_SORTS.map(x=>opt(x,t('sort_'+x),f.sort)).join('')}</select>
+    <label class="sr" for="mf-sort">${t('f_sort')}</label><select id="mf-sort" data-mf="sort">${opt('',t('mf_sort_default'),f.sort)}${MF_SORTS.map(x=>opt(x,t('sort_'+x),f.sort)).join('')}${UI.mineTab!=='favs'?opt('buyer',t('sort_buyer'),f.sort):''}</select>
     <button class="btn small" data-act="mf-clear">${t('f_clear')}</button>
     <button class="btn small" data-act="reload">${t('refresh')}</button>
   </div>`;
@@ -2453,8 +2479,11 @@ function mfBarHTML(all){
 function mfApply(list){
   const f=UI.mf,pv=l=>Number(l.status==='sold'?l.sold_price:l.price)||0;
   let out=list.filter(l=>(!f.qual||l.quality===f.qual)&&(!f.type||l.type===f.type)&&(!f.world||l.world===f.world)&&nameMatch(l.name,f.q));
-  const S={new:(a,b)=>ts(b.created_at)-ts(a.created_at),price_desc:(a,b)=>pv(b)-pv(a),price_asc:(a,b)=>pv(a)-pv(b),avg:(a,b)=>(b.roll??-1)-(a.roll??-1),lv:(a,b)=>(b.level??0)-(a.level??0)};
-  if(S[f.sort])out=out.slice().sort(S[f.sort]);
+  const bk=l=>String(l.buyer||'').toLowerCase(),dflt=(a,b)=>((MINE_RANK[a.status]??9)-(MINE_RANK[b.status]??9))||(ts(b.created_at)-ts(a.created_at));
+  const S={new:(a,b)=>ts(b.created_at)-ts(a.created_at),price_desc:(a,b)=>pv(b)-pv(a),price_asc:(a,b)=>pv(a)-pv(b),avg:(a,b)=>(b.roll??-1)-(a.roll??-1),lv:(a,b)=>(b.level??0)-(a.level??0),
+    /* my items grouped by buyer (in trade first, oldest trade first, then sold); items without a buyer last */
+    buyer:(a,b)=>((a.buyer?0:1)-(b.buyer?0:1))||bk(a).localeCompare(bk(b))||(a.buyer?((MINE_RANK[a.status]??9)-(MINE_RANK[b.status]??9))||(ts(a.trade_at||a.sold_at)-ts(b.trade_at||b.sold_at)):dflt(a,b))};
+  if(S[f.sort]&&!(f.sort==='buyer'&&UI.mineTab==='favs'))out=out.slice().sort(S[f.sort]);
   return out;
 }
 function mineListHTML(){
@@ -2464,14 +2493,25 @@ function sellingListHTML(){
   const selling=mfApply(A.mine.selling);
   const G={all:()=>true,available:l=>l.status==='available'||l.status==='expired',in_trade:l=>l.status==='in_trade',sold:l=>l.status==='sold',closed:l=>l.status==='withdrawn'||l.status==='archived'};
   const chips=[['all','mine_all'],['available','st_available'],['in_trade','st_in_trade'],['sold','st_sold'],['closed','mine_closed']].map(([v,k])=>`<button class="chip ${UI.mineStatus===v?'on':''}" data-act="mine-status" data-v="${v}">${t(k)} ${selling.filter(G[v]).length}</button>`).join('');
-  const rank={in_trade:0,expired:1,available:2,sold:3,withdrawn:4,archived:5};
   let list=selling.filter(G[UI.mineStatus]||G.all);
-  if(!UI.mf.sort)list=list.slice().sort((a,b)=>(rank[a.status]-rank[b.status])||(ts(b.created_at)-ts(a.created_at)));
+  if(!UI.mf.sort)list=list.slice().sort((a,b)=>(MINE_RANK[a.status]-MINE_RANK[b.status])||(ts(b.created_at)-ts(a.created_at)));
   const shown=`<span class="muted small">${t('mf_shown',{n:list.length,m:A.mine.selling.length})}</span>`;
   const can=!isBanned(A.me),mv=can?list.filter(movable):[];UI.sselPage=mv.map(l=>l.id);
   const ckTh=can?`<th class="ck">${mv.length?`<input type="checkbox" data-ssel-all aria-label="${t('ssel_page')}">`:''}</th>`:'';
   const ckTd=l=>can?(movable(l)?`<td class="ck" data-act="noop"><input type="checkbox" data-ssel="${l.id}" ${UI.ssel.has(l.id)?'checked':''} aria-label="${t('sel_item')}"></td>`:'<td class="ck"></td>'):'';
-  return `<div class="filters chips">${chips}${shown}</div>`+(list.length?`<div class="tablewrap"><table><thead><tr>${ckTh}<th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_info')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}">${ckTd(l)}<td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.status==='sold'?l.sold_price:l.price)}</td><td>${pill(l.status)}</td><td class="small">${infoCell(l)}</td><td class="acts">${sellerBtns(l)}</td></tr>`).join('')}</tbody></table></div><div class="ssel-slot"></div>`:`<div class="empty">${t('mf_none')}</div>`);
+  return `<div class="filters chips">${chips}${shown}</div>`+(list.length?`<div class="tablewrap"><table><thead><tr>${ckTh}<th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_info')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${buyerRows(list,l=>`<tr class="row" data-act="open" data-lid="${l.id}">${ckTd(l)}<td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.status==='sold'?l.sold_price:l.price)}</td><td>${pill(l.status)}</td><td class="small">${infoCell(l)}</td><td class="acts">${sellerBtns(l)}</td></tr>`,can?9:8)}</tbody></table></div><div class="ssel-slot"></div>`:`<div class="empty">${t('mf_none')}</div>`);
+}
+/* table rows; sorted by buyer, each buyer gets a heading with what is in trade with them (handy for the CoD) */
+function buyerRows(list,rowHTML,cols){
+  if(UI.mf.sort!=='buyer')return list.map(rowHTML).join('');
+  const groups=[];let cur=null;
+  list.forEach(l=>{const k=l.buyer?String(l.buyer).toLowerCase():'';if(!cur||cur.k!==k)groups.push(cur={k,name:l.buyer||'',items:[]});cur.items.push(l);});
+  return groups.map(g=>{
+    const tr=g.items.filter(l=>l.status==='in_trade'),sold=g.items.filter(l=>l.status==='sold').length;
+    const sum=tr.reduce((s,l)=>s+(Number(l.deal_price||l.price)||0),0);
+    const head=g.name?`${t('grp_buyer',{name:g.name})} ${copyBtn(g.name)}${tr.length?' · '+t('grp_trade',{n:tr.length,p:{html:priceHTML(sum)}}):''}${sold?' · '+t('grp_sold',{n:sold}):''}`:t('grp_none');
+    return `<tr class="grp"><td colspan="${cols}">${head}</td></tr>`+g.items.map(rowHTML).join('');
+  }).join('');
 }
 /* my listings that can go back to the drafts (for sale or expired), to reprice many with the drafts tools */
 function movable(l){return l.status==='available'||l.status==='expired';}
