@@ -312,6 +312,13 @@ html[data-theme=dark] .modal h3 .q,html[data-theme=dark] .modal .x{color:#E6E4D9
 
 tr.grp td{background:var(--panel-2);font-weight:700;font-size:13px;padding:7px 10px;border-top:2px solid var(--line)}
 
+.presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line)}
+.presets[hidden]{display:none}.chip.preset{padding:0;display:inline-flex;align-items:stretch;overflow:hidden}
+.chip.preset button{background:none;border:0;color:inherit;font:inherit;padding:4px 10px;cursor:pointer}
+.chip.preset .x{padding:4px 8px 4px 2px;opacity:.65}.chip.preset .x:hover{opacity:1}
+.ps-save{display:inline-flex;gap:6px;align-items:center;margin-left:auto}.ps-save label{font-weight:700;font-size:13px}.ps-save input{width:9em}
+@media(max-width:620px){.eqf-foot .ps-save{order:9;flex-basis:100%;margin-left:0}.eqf-foot .ps-save input{flex:1;width:auto;min-width:0}}
+
 /* equipment name colours from HV综合汉化 (DDD) */
 @font-face {
 font-family: 'HV Ultimate Star Wheel';
@@ -714,6 +721,22 @@ const T={zh:{
  grp_trade:"交易中 {n} 件，合計 {p}",
  grp_sold:"已售出 {n} 件",
  grp_none:"沒有買家的裝備",
+ ps_label:"快捷",
+ ps_save_label:"快捷",
+ ps_ph:"取個名稱",
+ ps_save:"儲存",
+ ps_what:"把目前所有的篩選（搜尋文字、裝備篩選、品質、等級、價格、ROLL、主屬性和排序）存成快捷按鈕，存在帳號裡，換裝置也看得到",
+ ps_login:"登入後可以把篩選存成快捷",
+ ps_need_name:"請先幫快捷取個名稱",
+ ps_saved:"已儲存快捷「{n}」",
+ ps_updated:"已更新快捷「{n}」",
+ ps_max:"快捷最多 20 個，請先刪掉一些",
+ ps_apply_tip:"清除目前的篩選，換成「{n}」",
+ ps_applied:"已套用快捷「{n}」",
+ ps_del_title:"刪除快捷",
+ ps_del_confirm:"要刪除快捷「{n}」嗎？",
+ ps_del_ok:"刪除",
+ ps_deleted:"已刪除快捷「{n}」",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -1069,6 +1092,22 @@ hans:{
  grp_trade:"交易中 {n} 件，合计 {p}",
  grp_sold:"已售出 {n} 件",
  grp_none:"没有买家的装备",
+ ps_label:"快捷",
+ ps_save_label:"快捷",
+ ps_ph:"取个名称",
+ ps_save:"保存",
+ ps_what:"把目前所有的筛选（搜索文字、装备筛选、品质、等级、价格、ROLL、主属性和排序）存成快捷按钮，存在账号里，换装置也看得到",
+ ps_login:"登录后可以把筛选存成快捷",
+ ps_need_name:"请先帮快捷取个名称",
+ ps_saved:"已保存快捷「{n}」",
+ ps_updated:"已更新快捷「{n}」",
+ ps_max:"快捷最多 20 个，请先删掉一些",
+ ps_apply_tip:"清除目前的筛选，换成「{n}」",
+ ps_applied:"已应用快捷「{n}」",
+ ps_del_title:"删除快捷",
+ ps_del_confirm:"要删除快捷「{n}」吗？",
+ ps_del_ok:"删除",
+ ps_deleted:"已删除快捷「{n}」",
  E_NAME_REQ:"请输入账号。",
  E_NAME_LONG:"账号最多 30 个字符。",
  E_NAME_TAKEN:"这个账号已经有人使用。",
@@ -1424,6 +1463,22 @@ en:{
  grp_trade:"{n} in trade, {p} in total",
  grp_sold:"{n} sold",
  grp_none:"Items without a buyer",
+ ps_label:"Saved",
+ ps_save_label:"Save as",
+ ps_ph:"Name",
+ ps_save:"Save",
+ ps_what:"Saves every current filter (search, equipment filter, quality, level, price, ROLL, stats and sort) as a shortcut button on your account, so it is on all your devices",
+ ps_login:"Log in to save filters as shortcuts",
+ ps_need_name:"Give the shortcut a name first",
+ ps_saved:"Saved \"{n}\"",
+ ps_updated:"Updated \"{n}\"",
+ ps_max:"Up to 20 shortcuts; delete some first",
+ ps_apply_tip:"Clear the current filters and use \"{n}\"",
+ ps_applied:"Using \"{n}\"",
+ ps_del_title:"Delete shortcut",
+ ps_del_confirm:"Delete the shortcut \"{n}\"?",
+ ps_del_ok:"Delete",
+ ps_deleted:"Deleted \"{n}\"",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -2015,7 +2070,7 @@ async function runSearch(){
   try{if(await loadMarket()&&UI.view==='market'){renderMarketHead();renderResults();}}catch(e){handleErr(e);}
 }
 function searchSoon(delay){
-  UI.page=1;clearTimeout(mkTimer);
+  UI.page=1;clearTimeout(mkTimer);renderPresets();
   const box=$('#results');if(box)box.classList.add('stale');
   const cnt=$('#eqf-cnt');if(cnt)cnt.textContent='…';
   mkTimer=setTimeout(runSearch,delay);
@@ -2048,12 +2103,39 @@ function viewMarket(){
       <button class="btn small" data-act="reload">${t('refresh')}</button>
       <div class="eqf-pop" id="eqf-pop" role="dialog" aria-label="${t('eqf_open')}" ${UI.eqOpen?'':'hidden'}>
         <div class="eqf-body" id="eqf-body">${UI.eqOpen?eqBodyHTML():''}</div>
-        <div class="eqf-foot"><span class="eqf-cnt" id="eqf-cnt" aria-live="polite">${eqCntText()}</span><span class="muted small eqf-rule">${t('eqf_rule')}</span><button type="button" class="btn small" data-act="eqf-clear">${t('f_clear')}</button><button type="button" class="btn small primary" data-act="eqf-done">${t('eqf_done')}</button></div>
+        <div class="eqf-foot"><span class="eqf-cnt" id="eqf-cnt" aria-live="polite">${eqCntText()}</span><span class="muted small eqf-rule">${t('eqf_rule')}</span>${psSaveHTML()}<button type="button" class="btn small" data-act="eqf-clear">${t('f_clear')}</button><button type="button" class="btn small primary" data-act="eqf-done">${t('eqf_done')}</button></div>
       </div>
     </div>
+    <div class="presets" id="presets" ${presetsHTML()?'':'hidden'}>${presetsHTML()}</div>
     <div class="eqf-sel" id="eqf-sel">${eqSelHTML()}</div>
     <div id="results">${A.market?'':`<div class="empty">${t('loading')}</div>`}</div>
   </div>`;
+}
+/* saved market filters ("快捷"), kept on the account: a name and every filter on the page (search, equipment
+   filter, quality, level, price, ROLL, stats, sort). Clicking one replaces the current filters with it */
+function presets(){return A.me&&Array.isArray(A.me.filters)?A.me.filters:[];}
+function fNorm(f){
+  const d=defaultFilters(),x=f&&typeof f==='object'?f:{},e=x.eq&&typeof x.eq==='object'?x.eq:{};
+  Object.keys(d).forEach(k=>{if(k==='eq'||x[k]===undefined||x[k]===null)return;d[k]=Array.isArray(d[k])?(Array.isArray(x[k])?x[k].map(String):[]):String(x[k]);});
+  EQ_SECS.forEach(k=>{d.eq[k]=Array.isArray(e[k])?e[k].map(String):[];});
+  if(d.seller&&x.sellerName)d.sellerName=String(x.sellerName);
+  return d;
+}
+function fKey(f){const n=fNorm(f);delete n.sellerName;n.attrs=[...n.attrs].sort();EQ_SECS.forEach(k=>{n.eq[k]=[...n.eq[k]].sort();});return JSON.stringify(n);}
+function presetsHTML(){
+  const L=presets();if(!L.length)return '';
+  const cur=fKey(UI.filters);
+  return `<span class="flabel">${t('ps_label')}</span>`+L.map((p,i)=>{const on=fKey(p.f)===cur;
+    return `<span class="chip preset ${on?'on':''}"><button type="button" data-act="preset" data-i="${i}" title="${t('ps_apply_tip',{n:p.n})}" aria-pressed="${on}">${esc(p.n)}</button><button type="button" class="x" data-act="preset-del" data-i="${i}" aria-label="${t('ps_del_title')}: ${esc(p.n)}">×</button></span>`;}).join('');
+}
+function renderPresets(){const el=$('#presets');if(!el)return;const h=presetsHTML();el.innerHTML=h;el.hidden=!h;}
+function psSaveHTML(){
+  if(!A.me)return `<span class="muted small ps-save">${t('ps_login')}</span>`;
+  return `<span class="ps-save" title="${t('ps_what')}"><label for="ps-name">${t('ps_save_label')}</label><input id="ps-name" class="sm" maxlength="20" placeholder="${t('ps_ph')}" autocomplete="off"><button type="button" class="btn small primary" data-act="preset-save">${t('ps_save')}</button></span>`;
+}
+async function psStore(L,msg){
+  try{A.me=await api('hv_filters_save',{p_list:L});renderPresets();toast(msg);return true;}
+  catch(e){handleErr(e);return false;}
 }
 function pagerHTML(d){
   const pages=Math.max(1,Math.ceil(d.total/d.per)),p=Math.min(d.page,pages);
@@ -2725,6 +2807,19 @@ const H={
   attr(el){const a=el.dataset.v,arr=UI.filters.attrs,i=arr.indexOf(a);if(i>=0)arr.splice(i,1);else arr.push(a);renderMain();searchSoon(0);},
   'eqf-open'(){UI.eqOpen=!UI.eqOpen;renderEqf();if(UI.eqOpen){const c=$('#eqf-pop .chip');if(c)c.focus();}},
   'eqf-done'(){eqClose(true);},
+  async 'preset-save'(){
+    if(!A.me){mLogin();return;}
+    const inp=$('#ps-name'),n=(inp&&inp.value||'').trim().slice(0,20);
+    if(!n){toast(t('ps_need_name'),true);if(inp)inp.focus();return;}
+    const L=presets().slice(),i=L.findIndex(p=>String(p.n).toLowerCase()===n.toLowerCase()),snap={n,f:fNorm(UI.filters)};
+    if(i<0&&L.length>=20){toast(t('ps_max'),true);return;}
+    if(i>=0)L[i]=snap;else L.push(snap);
+    if(await psStore(L,t(i>=0?'ps_updated':'ps_saved',{n}))&&inp)inp.value='';
+  },
+  preset(el){const p=presets()[N(el.dataset.i)];if(!p)return;UI.filters=fNorm(p.f);UI.page=1;renderMain();searchSoon(0);toast(t('ps_applied',{n:p.n}));},
+  'preset-del'(el){const i=el.dataset.i,p=presets()[N(i)];if(!p)return;
+    openModal(t('ps_del_title'),`<p style="margin:0">${t('ps_del_confirm',{n:p.n})}</p>${okCancel('preset-del-ok',`data-i="${i}"`,t('ps_del_ok'))}`);},
+  async 'preset-del-ok'(el){const L=presets().slice(),i=N(el.dataset.i),p=L[i];closeModal();if(!p)return;L.splice(i,1);await psStore(L,t('ps_deleted',{n:p.n}));},
   eqf(el){const sec=el.dataset.sec,o=el.dataset.opt,arr=UI.filters.eq[sec],i=arr.indexOf(o);if(i>=0)arr.splice(i,1);else arr.push(o);
     renderEqf();const again=document.querySelector(`#eqf-pop [data-sec="${sec}"][data-opt="${CSS.escape(o)}"]`);if(again)again.focus();searchSoon(300);},
   'eqf-x'(el){const arr=UI.filters.eq[el.dataset.sec],i=arr.indexOf(el.dataset.opt);if(i>=0)arr.splice(i,1);renderEqf();searchSoon(0);},
@@ -2913,6 +3008,7 @@ const did=el.dataset&&(el.dataset.dprice||el.dataset.droll||el.dataset.dname);if
 window.addEventListener('beforeunload',()=>{for(const k of Object.keys(pendingSaves))runDraftSave(k);});
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target&&e.target.id==='bl-name'){e.preventDefault();H['bl-add']();return;}
+  if(e.key==='Enter'&&e.target&&e.target.id==='ps-name'){e.preventDefault();H['preset-save']();return;}
   if(e.key==='Enter'&&e.target&&e.target.id==='offer-in'){e.preventDefault();const b=$('[data-act="offer-send"]');if(b)b.click();return;}
   if(e.key==='Escape'&&UI.eqOpen&&!$('#modal-root').innerHTML){eqClose(true);return;}
   if(e.key==='Escape'&&$('#modal-root').innerHTML&&!UI.forcePw){if($('#modal-root .detail'))closeModal();else back();}
