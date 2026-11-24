@@ -319,6 +319,10 @@ tr.grp td{background:var(--panel-2);font-weight:700;font-size:13px;padding:7px 1
 .ps-save{display:inline-flex;gap:6px;align-items:center;margin-left:auto}.ps-save label{font-weight:700;font-size:13px}.ps-save input{width:9em}
 @media(max-width:620px){.eqf-foot .ps-save{order:9;flex-basis:100%;margin-left:0}.eqf-foot .ps-save input{flex:1;width:auto;min-width:0}}
 
+.bm-list{max-height:52vh;overflow:auto;margin-bottom:8px}.bm-list td{vertical-align:middle}.bm-list input.sm{width:8em}
+#modal-root input.chg{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}#modal-root input.bad{border-color:var(--bad);box-shadow:0 0 0 2px var(--bad-bg)}
+#modal-root .dtool.bp{margin:0}
+
 /* equipment name colours from HV综合汉化 (DDD) */
 @font-face {
 font-family: 'HV Ultimate Star Wheel';
@@ -696,7 +700,7 @@ const T={zh:{
  btn_go_drafts:"到未上架區",
  offer_after_relist:"已移回未上架區，重新上架後才能同意",
  ev_to_draft:"賣家把它移回未上架區調整",
- ssel_page:"選取清單裡全部可以移回的",
+ ssel_page:"選取清單裡全部可以批量處理的",
  ssel_hint:"可以移回未上架區，用批量填價一次改價格",
  ssel_draft:"移回未上架區（{n} 件）",
  td_title:"移回未上架區",
@@ -737,6 +741,27 @@ const T={zh:{
  ps_del_confirm:"要刪除快捷「{n}」嗎？",
  ps_del_ok:"刪除",
  ps_deleted:"已刪除快捷「{n}」",
+ ssel_sold:"標記已售出（{n} 件）",
+ ssel_price:"改價（{n} 件）",
+ ssel_wd:"下架（{n} 件）",
+ ssel_buyer:"勾選交易中的",
+ bk_deal:"成交價",
+ bk_price_now:"目前售價",
+ bk_price_new:"新售價",
+ bs_title:"標記已售出（{n} 件）",
+ bs_hint:"確認每件的成交價：預設是交易的價格（有議價的用議價），需要的話可以改。買家會收到已售出的通知。",
+ bs_ok:"標記 {n} 件已售出",
+ bpm_title:"改價（{n} 件）",
+ bpm_hint:"可以用上面的批量填價一次填好，也可以每件自己改。只會更新有改動的裝備，降價時收藏的人會收到通知。",
+ bpm_ok:"更新價格",
+ bpm_none:"價格都沒有改動",
+ bpm_filled:"已填入 {n} 件，確認沒問題後按「更新價格」",
+ bp_fill:"填入這 {n} 件",
+ bw_title:"下架（{n} 件）",
+ bw_hint:"收藏的人會收到下架通知。",
+ bw_ok:"下架 {n} 件",
+ bulk_done:"完成 {n} 件。",
+ bulk_fail:"{n} 件沒有成功（可能狀態剛好改變了），重新整理後再看看。",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -1067,7 +1092,7 @@ hans:{
  btn_go_drafts:"到未上架区",
  offer_after_relist:"已移回未上架区，重新上架后才能同意",
  ev_to_draft:"卖家把它移回未上架区调整",
- ssel_page:"选取清单里全部可以移回的",
+ ssel_page:"选取清单里全部可以批量处理的",
  ssel_hint:"可以移回未上架区，用批量填价一次改价格",
  ssel_draft:"移回未上架区（{n} 件）",
  td_title:"移回未上架区",
@@ -1108,6 +1133,27 @@ hans:{
  ps_del_confirm:"要删除快捷「{n}」吗？",
  ps_del_ok:"删除",
  ps_deleted:"已删除快捷「{n}」",
+ ssel_sold:"标记已售出（{n} 件）",
+ ssel_price:"改价（{n} 件）",
+ ssel_wd:"下架（{n} 件）",
+ ssel_buyer:"勾选交易中的",
+ bk_deal:"成交价",
+ bk_price_now:"目前售价",
+ bk_price_new:"新售价",
+ bs_title:"标记已售出（{n} 件）",
+ bs_hint:"确认每件的成交价：默认是交易的价格（有议价的用议价），需要的话可以改。买家会收到已售出的通知。",
+ bs_ok:"标记 {n} 件已售出",
+ bpm_title:"改价（{n} 件）",
+ bpm_hint:"可以用上面的批量填价一次填好，也可以每件自己改。只会更新有改动的装备，降价时收藏的人会收到通知。",
+ bpm_ok:"更新价格",
+ bpm_none:"价格都没有改动",
+ bpm_filled:"已填入 {n} 件，确认没问题后按「更新价格」",
+ bp_fill:"填入这 {n} 件",
+ bw_title:"下架（{n} 件）",
+ bw_hint:"收藏的人会收到下架通知。",
+ bw_ok:"下架 {n} 件",
+ bulk_done:"完成 {n} 件。",
+ bulk_fail:"{n} 件没有成功（可能状态刚好改变了），刷新后再看看。",
  E_NAME_REQ:"请输入账号。",
  E_NAME_LONG:"账号最多 30 个字符。",
  E_NAME_TAKEN:"这个账号已经有人使用。",
@@ -1438,7 +1484,7 @@ en:{
  btn_go_drafts:"Go to drafts",
  offer_after_relist:"In your drafts; you can accept once it is listed again",
  ev_to_draft:"Seller moved it back to drafts to adjust it",
- ssel_page:"Select every item on this list that can be moved",
+ ssel_page:"Select every item on this list that has a bulk action",
  ssel_hint:"Move them to your drafts to reprice them together with bulk pricing",
  ssel_draft:"Move {n} to drafts",
  td_title:"Move to drafts",
@@ -1479,6 +1525,27 @@ en:{
  ps_del_confirm:"Delete the shortcut \"{n}\"?",
  ps_del_ok:"Delete",
  ps_deleted:"Deleted \"{n}\"",
+ ssel_sold:"Mark {n} sold",
+ ssel_price:"Change price ({n})",
+ ssel_wd:"Withdraw {n}",
+ ssel_buyer:"select their items in trade",
+ bk_deal:"Final price",
+ bk_price_now:"Price now",
+ bk_price_new:"New price",
+ bs_title:"Mark {n} items sold",
+ bs_hint:"Check each final price: it starts at the trade price (the accepted offer, if any); change it if needed. Buyers are told the item is sold.",
+ bs_ok:"Mark {n} sold",
+ bpm_title:"Change price ({n} items)",
+ bpm_hint:"Fill them in at once with bulk pricing above, or edit each one. Only changed prices are saved; people who favourited an item are told when it gets cheaper.",
+ bpm_ok:"Update prices",
+ bpm_none:"No price was changed",
+ bpm_filled:"Filled in {n}; check them, then click \"Update prices\"",
+ bp_fill:"Fill in these {n}",
+ bw_title:"Withdraw {n} items",
+ bw_hint:"People who favourited them are told.",
+ bw_ok:"Withdraw {n}",
+ bulk_done:"Done: {n}.",
+ bulk_fail:"{n} did not go through (their state may have just changed); refresh and check.",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -2443,19 +2510,23 @@ function dqHTML(list){
 }
 function dqCntHTML(){if(!dqAny())return '';const all=A.drafts||[];return `<span class="muted small">${t('mf_shown',{n:dVis().length,m:all.length})}</span> <button class="btn small" data-act="dq-clear">${t('f_clear')}</button>`;}
 /* bulk pricing for the selected drafts: one price, ROLL × n, or a price per ROLL range */
-function bpHTML(){
-  bpFix();const b=P.bp,sel=(A.drafts||[]).filter(d=>UI.dsel.has(d.id)).length;
+/* the bulk pricing tool works on the ticked drafts, or (inside the "change price" dialog of My trades) on the
+   listed items in that dialog, where it only fills in the price boxes */
+function bpListed(){return !!document.querySelector('#modal-root #bp-box');}
+function bpItems(){return bpListed()?(UI.bpList||[]):(A.drafts||[]).filter(d=>UI.dsel.has(d.id));}
+function bpHTML(listed){
+  bpFix();const b=P.bp,sel=listed?(UI.bpList||[]).length:bpItems().length;
   const modes=['fixed','mul','range'].map(m=>`<option value="${m}" ${b.mode===m?'selected':''}>${t('bp_mode_'+m)}</option>`).join('');
   let inner='';
   if(b.mode==='fixed')inner=`<label class="sr" for="bp-fixed">${t('col_price')}</label><input id="bp-fixed" class="sm" data-bp="fixed" placeholder="${t('price_ph_s')}" value="${esc(b.fixed)}">`;
   else if(b.mode==='mul')inner=`<span class="bp-f">ROLL ×</span><label class="sr" for="bp-n">n</label><input id="bp-n" class="xs" data-bp="n" inputmode="decimal" value="${esc(b.n)}"><span class="bp-f">k</span>`;
   else inner=`<div class="rngs">${b.ranges.map((r,i)=>`<div class="rng"><input class="xs" data-rg="${i}" data-k="min" inputmode="decimal" placeholder="0" value="${esc(r.min)}" aria-label="${t('rng_min',{i:i+1})}"><span>~</span><input class="xs" data-rg="${i}" data-k="max" inputmode="decimal" placeholder="100" value="${esc(r.max)}" aria-label="${t('rng_max',{i:i+1})}"><span>% →</span><input class="sm" data-rg="${i}" data-k="price" placeholder="${t('price_ph_s')}" value="${esc(r.price)}" aria-label="${t('rng_price',{i:i+1})}"><button type="button" class="btn small" data-act="rng-del" data-i="${i}" aria-label="${t('rng_del',{i:i+1})}" ${b.ranges.length>1?'':'disabled'}>✕</button></div>`).join('')}<button type="button" class="btn small" data-act="rng-add">＋ ${t('rng_add')}</button></div>`;
   return `<div class="dtool bp"><span class="dt-h">${t('bp_title')}</span><label class="sr" for="bp-mode">${t('bp_title')}</label><select id="bp-mode" data-bp="mode">${modes}</select>${inner}
-    <button class="btn small" data-act="bp-apply" ${sel?'':'disabled'}>${t('bp_apply',{n:sel})}</button>
-    <div class="bp-prev small" id="bp-prev" aria-live="polite">${bpPreview()}</div></div>`;
+    <button class="btn small" data-act="bp-apply" ${sel?'':'disabled'}>${t(listed?'bp_fill':'bp_apply',{n:sel})}</button>
+    <div class="bp-prev small" id="bp-prev" aria-live="polite">${listed?'':bpPreview()}</div></div>`;
 }
 function bpCalc(){
-  bpFix();const b=P.bp,sel=(A.drafts||[]).filter(d=>UI.dsel.has(d.id)),out=[];let skip=0;
+  bpFix();const b=P.bp,sel=bpItems(),out=[];let skip=0;
   if(b.mode==='fixed'){const p=priceIn(b.fixed);if(!p)return {err:b.fixed.trim()?'price_invalid':'bp_need_price'};sel.forEach(d=>out.push([d.id,p]));}
   else if(b.mode==='mul'){const n=parseFloat(String(b.n).replace(',','.'));if(!(n>0))return {err:'bp_bad_n'};
     sel.forEach(d=>{if(d.roll==null){skip++;return;}const p=Math.round(Number(d.roll)*n*1000);if(p>0&&p<1e12)out.push([d.id,p]);else skip++;});}
@@ -2466,12 +2537,12 @@ function bpCalc(){
   return {out,skip};
 }
 function bpPreview(){
-  if(!UI.dsel.size)return `<span class="muted">${t('bp_none_sel')}</span>`;
+  const items=bpItems();if(!items.length)return `<span class="muted">${t('bp_none_sel')}</span>`;
   const c=bpCalc();if(c.err)return `<span class="bad-t">${t(c.err)}</span>`;
-  const ex=c.out.length&&P.bp.mode!=='fixed'?(()=>{const d=(A.drafts||[]).find(x=>x.id===c.out[0][0]);return d?' · '+t('bp_example',{r:d.roll,p:fmtPrice(c.out[0][1])}):'';})():'';
+  const ex=c.out.length&&P.bp.mode!=='fixed'?(()=>{const d=items.find(x=>x.id===c.out[0][0]);return d?' · '+t('bp_example',{r:d.roll,p:fmtPrice(c.out[0][1])}):'';})():'';
   return `<span class="muted">${t('bp_prev',{n:c.out.length})}${c.skip?' · '+t('bp_skip',{n:c.skip}):''}${ex}</span>`;
 }
-function renderBp(){const el=$('#bp-box');if(el)el.innerHTML=bpHTML();}
+function renderBp(){const el=$('#bp-box');if(el)el.innerHTML=bpHTML(bpListed());if(bpListed()){const pv=$('#bp-prev');if(pv)pv.innerHTML=bpPreview();}}
 function renderDrafts(){const el=$('#drafts-box');if(el)el.innerHTML=draftsHTML();}
 /* field edits are saved on their own shortly after typing stops, and before listing */
 const pendingSaves={};
@@ -2578,9 +2649,9 @@ function sellingListHTML(){
   let list=selling.filter(G[UI.mineStatus]||G.all);
   if(!UI.mf.sort)list=list.slice().sort((a,b)=>(MINE_RANK[a.status]-MINE_RANK[b.status])||(ts(b.created_at)-ts(a.created_at)));
   const shown=`<span class="muted small">${t('mf_shown',{n:list.length,m:A.mine.selling.length})}</span>`;
-  const can=!isBanned(A.me),mv=can?list.filter(movable):[];UI.sselPage=mv.map(l=>l.id);
+  const can=!isBanned(A.me),mv=can?list.filter(pickable):[];UI.sselPage=mv.map(l=>l.id);
   const ckTh=can?`<th class="ck">${mv.length?`<input type="checkbox" data-ssel-all aria-label="${t('ssel_page')}">`:''}</th>`:'';
-  const ckTd=l=>can?(movable(l)?`<td class="ck" data-act="noop"><input type="checkbox" data-ssel="${l.id}" ${UI.ssel.has(l.id)?'checked':''} aria-label="${t('sel_item')}"></td>`:'<td class="ck"></td>'):'';
+  const ckTd=l=>can?(pickable(l)?`<td class="ck" data-act="noop"><input type="checkbox" data-ssel="${l.id}" ${UI.ssel.has(l.id)?'checked':''} aria-label="${t('sel_item')}"></td>`:'<td class="ck"></td>'):'';
   return `<div class="filters chips">${chips}${shown}</div>`+(list.length?`<div class="tablewrap"><table><thead><tr>${ckTh}<th>${t('col_equip')}</th><th class="num">${t('col_lv')}</th><th>${t('col_attr')}</th><th>${t('col_avg')}</th><th class="num">${t('col_price')}</th><th>${t('col_status')}</th><th>${t('col_info')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${buyerRows(list,l=>`<tr class="row" data-act="open" data-lid="${l.id}">${ckTd(l)}<td>${nameCell(l)} ${worldBadge(l)}</td><td class="num">${l.level??'—'}</td><td>${attrCell(l)}</td><td>${avgHTML(l.roll)}</td><td class="num">${priceHTML(l.status==='sold'?l.sold_price:l.price)}</td><td>${pill(l.status)}</td><td class="small">${infoCell(l)}</td><td class="acts">${sellerBtns(l)}</td></tr>`,can?9:8)}</tbody></table></div><div class="ssel-slot"></div>`:`<div class="empty">${t('mf_none')}</div>`);
 }
 /* table rows; sorted by buyer, each buyer gets a heading with what is in trade with them (handy for the CoD) */
@@ -2591,16 +2662,51 @@ function buyerRows(list,rowHTML,cols){
   return groups.map(g=>{
     const tr=g.items.filter(l=>l.status==='in_trade'),sold=g.items.filter(l=>l.status==='sold').length;
     const sum=tr.reduce((s,l)=>s+(Number(l.deal_price||l.price)||0),0);
-    const head=g.name?`${t('grp_buyer',{name:g.name})} ${copyBtn(g.name)}${tr.length?' · '+t('grp_trade',{n:tr.length,p:{html:priceHTML(sum)}}):''}${sold?' · '+t('grp_sold',{n:sold}):''}`:t('grp_none');
+    const pick=tr.length&&!isBanned(A.me)?` <button type="button" class="link" data-act="ssel-buyer" data-name="${esc(g.name)}">${t('ssel_buyer')}</button>`:'';
+    const head=g.name?`${t('grp_buyer',{name:g.name})} ${copyBtn(g.name)}${tr.length?' · '+t('grp_trade',{n:tr.length,p:{html:priceHTML(sum)}}):''}${sold?' · '+t('grp_sold',{n:sold}):''}${pick}`:t('grp_none');
     return `<tr class="grp"><td colspan="${cols}">${head}</td></tr>`+g.items.map(rowHTML).join('');
   }).join('');
 }
 /* my listings that can go back to the drafts (for sale or expired), to reprice many with the drafts tools */
 function movable(l){return l.status==='available'||l.status==='expired';}
-function sselLive(){const ok=new Set(((A.mine&&A.mine.selling)||[]).filter(movable).map(l=>l.id));UI.ssel.forEach(id=>{if(!ok.has(id))UI.ssel.delete(id);});return UI.ssel.size;}
+/* rows that can be ticked for a bulk action: for sale / expired (price, drafts, withdraw) and in trade (mark sold) */
+function pickable(l){return movable(l)||l.status==='in_trade';}
+function sselRows(){return ((A.mine&&A.mine.selling)||[]).filter(l=>UI.ssel.has(l.id)&&pickable(l));}
+function sselLive(){const ok=new Set(((A.mine&&A.mine.selling)||[]).filter(pickable).map(l=>l.id));UI.ssel.forEach(id=>{if(!ok.has(id))UI.ssel.delete(id);});return UI.ssel.size;}
 function sselBarHTML(){
   const n=sselLive();if(!n)return '';
-  return `<div class="selbar" role="region" aria-label="${t('sel_bar')}"><b>${t('sel_n',{n})}</b><span class="muted small">${t('ssel_hint')}</span><span class="grow"></span><button type="button" class="btn small primary" data-act="ssel-draft">${t('ssel_draft',{n})}</button><button type="button" class="btn small" data-act="ssel-clear">${t('sel_clear')}</button></div>`;
+  const rows=sselRows(),tr=rows.filter(l=>l.status==='in_trade').length,av=rows.filter(movable).length;
+  const B=(act,k,c,cls)=>`<button type="button" class="btn small ${cls||''}" data-act="${act}">${t(k,{n:c})}</button>`;
+  return `<div class="selbar" role="region" aria-label="${t('sel_bar')}"><b>${t('sel_n',{n})}</b><span class="grow"></span>${tr?B('ssel-sold','ssel_sold',tr,'primary'):''}${av?B('ssel-price','ssel_price',av)+B('ssel-draft','ssel_draft',av)+B('ssel-wd','ssel_wd',av,'danger'):''}<button type="button" class="btn small" data-act="ssel-clear">${t('sel_clear')}</button></div>`;
+}
+/* the item list shown in the bulk dialogs */
+function bulkNames(rows){const nm=rows.map(l=>qName(l));return `<ul class="hist">${nm.slice(0,8).map(x=>`<li><b>${x}</b></li>`).join('')}${nm.length>8?`<li class="muted">${t('and_more',{n:nm.length-8})}</li>`:''}</ul>`;}
+function bulkTable(rows,cols){return `<div class="tablewrap bm-list"><table><thead><tr><th>${t('col_equip')}</th>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(l=>`<tr><td>${qName(l)}</td>${cols.map(c=>`<td>${c[1](l)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+function mBulkSold(rows){
+  openModal(t('bs_title',{n:rows.length}),`<p class="muted small" style="margin:0 0 8px">${t('bs_hint')}</p>${bulkTable(rows,[[t('col_buyer'),l=>esc(l.buyer||'?')],[t('bk_deal'),l=>`<input class="sm" data-bprice="${l.id}" value="${priceInput(l.deal_price||l.price)}" aria-label="${t('bk_deal')}">`]])}${okCancel('bulk-sold-ok','',t('bs_ok',{n:rows.length}))}`,{wide:true});
+}
+function mBulkPrice(rows){
+  UI.bpList=rows;
+  openModal(t('bpm_title',{n:rows.length}),`<div id="bp-box">${bpHTML(true)}</div><p class="muted small" style="margin:6px 0 8px">${t('bpm_hint')}</p>${bulkTable(rows,[['ROLL',l=>l.roll!=null?esc(l.roll)+'%':'—'],[t('bk_price_now'),l=>priceHTML(l.price)],[t('bk_price_new'),l=>`<input class="sm" data-bprice="${l.id}" data-was="${l.price}" value="${priceInput(l.price)}" aria-label="${t('bk_price_new')}">`]])}${okCancel('bulk-price-ok','',t('bpm_ok'))}`,{wide:true});
+  const pv=$('#bp-prev');if(pv)pv.innerHTML=bpPreview();
+}
+function mBulkWithdraw(rows){
+  openModal(t('bw_title',{n:rows.length}),`${bulkNames(rows)}<div class="form"><label for="m-reason">${t('reason')}</label><select id="m-reason">${['r_not_selling','r_sold_elsewhere'].map(r=>`<option value="${r}">${t(r)}</option>`).join('')}</select><p class="muted small" style="margin:0">${t('bw_hint')}</p></div>${okCancel('bulk-wd-ok','',t('bw_ok',{n:rows.length}),'danger')}`);
+}
+/* read the price boxes of a bulk dialog; null (and the bad box marked) when one cannot be read */
+function bulkPrices(){
+  const out=[];let bad=null;
+  document.querySelectorAll('#modal-root input[data-bprice]').forEach(i=>{const p=priceIn(i.value);i.classList.toggle('bad',!p);if(!p&&!bad)bad=i;else if(p)out.push([N(i.dataset.bprice),p,N(i.dataset.was||0)]);});
+  if(bad){bad.focus();toast(t('price_invalid'),true);return null;}
+  return out;
+}
+async function bulkRun(action,items,reason){
+  closeModal();let r=null;
+  /* the selection is cleared before the list reloads, so the boxes and the bar come back empty */
+  const ok=await act(async()=>{r=await api('hv_bulk',{p_action:action,p_items:items,p_reason:reason||null});UI.ssel.clear();});
+  if(!ok||!r)return;
+  const f=(r.fail||[]).length;
+  toast(t('bulk_done',{n:r.ok})+(f?' '+t('bulk_fail',{n:f}):''),f>0);
 }
 function renderSsel(){
   document.querySelectorAll('.ssel-slot').forEach(el=>el.innerHTML=sselBarHTML());
@@ -2850,6 +2956,13 @@ const H={
   'to-draft'(el,e){if(e)e.stopPropagation();mToDraft([N(el.dataset.lid)],[eqNm(el)]);},
   'ssel-draft'(){const all=((A.mine&&A.mine.selling)||[]).filter(l=>UI.ssel.has(l.id)&&movable(l));if(!all.length)return;mToDraft(all.map(l=>l.id),all.map(l=>qName(l)));},
   'ssel-clear'(){UI.ssel.clear();renderSsel();},
+  'ssel-buyer'(el,e){if(e)e.stopPropagation();const n=String(el.dataset.name||'').toLowerCase();((A.mine&&A.mine.selling)||[]).forEach(l=>{if(l.status==='in_trade'&&String(l.buyer||'').toLowerCase()===n)UI.ssel.add(l.id);});renderSsel();},
+  'ssel-sold'(){const rows=sselRows().filter(l=>l.status==='in_trade');if(rows.length)mBulkSold(rows);},
+  'ssel-price'(){const rows=sselRows().filter(movable);if(rows.length)mBulkPrice(rows);},
+  'ssel-wd'(){const rows=sselRows().filter(movable);if(rows.length)mBulkWithdraw(rows);},
+  'bulk-sold-ok'(){const ps=bulkPrices();if(!ps)return;bulkRun('sold',ps.map(([id,p])=>[id,p]));},
+  'bulk-price-ok'(){const ps=bulkPrices();if(!ps)return;const ch=ps.filter(([id,p,was])=>p!==was);if(!ch.length){toast(t('bpm_none'),true);return;}bulkRun('price',ch.map(([id,p])=>[id,p]));},
+  'bulk-wd-ok'(){const ids=sselRows().filter(movable).map(l=>l.id),r=val('m-reason');if(ids.length)bulkRun('withdraw',ids,r);},
   'to-draft-ok'(el){const ids=String(el.dataset.ids||'').split(',').map(N).filter(Boolean);closeModal();let r=null;
     act(async()=>{r=await api('hv_to_draft',{p_ids:ids});}).then(ok=>{if(!ok||!r)return;
       ids.forEach(id=>UI.ssel.delete(id));
@@ -2879,6 +2992,7 @@ const H={
   copy(el,e){if(e)e.stopPropagation();copyText(el.dataset.v,t('copied_x',{x:el.dataset.v}));},
   'sell-import'(){UI.sellText=val('sell-text');doImport();},
   'bp-apply'(){const c=bpCalc();if(c.err){toast(t(c.err),true);return;}if(!c.out.length){toast(t('bp_nothing'),true);return;}
+    if(bpListed()){c.out.forEach(([id,p])=>{const i=document.querySelector(`#modal-root input[data-bprice="${id}"]`);if(i){i.value=priceInput(p);i.classList.add('chg');}});toast(t('bpm_filled',{n:c.out.length}));return;}
     act(async()=>{await flushDraftSaves();await api('hv_draft_prices',{p_prices:c.out});},t('bp_done',{n:c.out.length})+(c.skip?' '+t('bp_skip',{n:c.skip}):''));},
   'rng-add'(){bpFix();if(P.bp.ranges.length<20){const last=P.bp.ranges[P.bp.ranges.length-1];const nx=last&&last.max.trim()&&!isNaN(parseFloat(last.max))?String(Math.round((parseFloat(last.max)+0.1)*10)/10):'';P.bp.ranges.push({min:nx,max:'',price:''});}savePrefs();renderBp();const ins=document.querySelectorAll('#bp-box input[data-k="max"]');if(ins.length)ins[ins.length-1].focus();},
   'rng-del'(el){bpFix();const i=N(el.dataset.i);if(P.bp.ranges.length>1)P.bp.ranges.splice(i,1);savePrefs();renderBp();},
@@ -2979,6 +3093,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('submit',e=>{e.preventDefault();const f=e.target.dataset.form;if(f==='login')doLogin();if(f==='reg')doRegister();if(f==='chpw')doChangePw();});
 document.addEventListener('input',e=>{
   const el=e.target;
+  if(el.dataset.bprice!==undefined){el.classList.remove('bad');el.classList.toggle('chg',el.dataset.was!==undefined&&priceIn(el.value)!==N(el.dataset.was));return;}
   if(el.id==='offer-in'){const c=el.value.replace(/[^0-9.,kKmMcC]/g,'');if(c!==el.value)el.value=c;offerPrev();return;}
   if(el.dataset.f){UI.filters[el.dataset.f]=el.value;searchSoon(el.tagName==='SELECT'?0:450);return;}
   if(el.id==='sell-text'){UI.sellText=el.value;return;}
