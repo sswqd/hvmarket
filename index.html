@@ -323,6 +323,10 @@ tr.grp td{background:var(--panel-2);font-weight:700;font-size:13px;padding:7px 1
 #modal-root input.chg{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}#modal-root input.bad{border-color:var(--bad);box-shadow:0 0 0 2px var(--bad-bg)}
 #modal-root .dtool.bp{margin:0}
 
+.rs-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.rs-form #rs-note{flex:1;min-width:200px}.rs-hit{display:inline-flex;gap:6px;align-items:center;margin:2px 10px 2px 0}
+
+.rs-h{margin:22px 0 4px;font-size:15px}tr.muted td{opacity:.6}
+
 /* equipment name colours from HV综合汉化 (DDD) */
 @font-face {
 font-family: 'HV Ultimate Star Wheel';
@@ -762,6 +766,45 @@ const T={zh:{
  bw_ok:"下架 {n} 件",
  bulk_done:"完成 {n} 件。",
  bulk_fail:"{n} 件沒有成功（可能狀態剛好改變了），重新整理後再看看。",
+ ad_reserved:"保留名稱",
+ rs_name:"名稱",
+ rs_name_ph:"例如 Noni",
+ rs_mode:"比對方式",
+ rs_mode_contains:"包含這段文字",
+ rs_mode_exact:"完全相同",
+ rs_note:"備註",
+ rs_note_ph:"備註（例如：論壇管理員）",
+ rs_add:"加入",
+ rs_desc:"加進來的名稱不能被註冊。比對時不分大小寫，空格、符號、全形字和看起來像字母的數字（0→o、1→i 等）都視為相同。「包含這段文字」會擋掉名稱裡有這段文字的帳號（例如 Noni 也會擋 DJNoni）；只想擋一模一樣的名稱就選「完全相同」。已經註冊的帳號不會被改動，符合的會列在表格裡，需要的話可以直接停權。",
+ rs_added:"加入日期",
+ rs_hits:"符合的現有帳號",
+ rs_none:"沒有",
+ rs_banned:"已停權",
+ rs_del:"移除",
+ rs_del_confirm:"要移除保留名稱「{n}」嗎？移除後就可以用這個名稱註冊。",
+ rs_empty:"還沒有保留名稱。",
+ rs_need:"請先填名稱",
+ rs_added_t:"已加入保留名稱「{n}」",
+ log_reserve_add:"加入保留名稱「{name}」（{mode}）",
+ log_reserve_del:"移除保留名稱「{name}」（{mode}）",
+ E_NAME_RESERVED:"這個名稱保留給其他人使用（例如論壇管理員），不能註冊，請換一個名稱。",
+ E_RESERVE_SHORT:"「包含這段文字」至少要 2 個字，避免擋掉太多名稱；只有 1 個字的請選「完全相同」。",
+ at_title:"嘗試註冊保留名稱的紀錄",
+ at_desc:"有人用保留名稱註冊被擋下時會記在這裡。網站會把同一個 IP 註冊、登入或開啟網站的帳號連起來列在右邊（之前或之後都算），你看不到 IP 本身。同 IP 也可能是同一個家庭或網咖，處置前請再確認。",
+ at_empty:"目前沒有紀錄。",
+ at_names:"嘗試的名稱",
+ at_hit:"符合保留名稱：{r}",
+ at_n:"次數",
+ at_when:"最近一次",
+ at_first:"第一次：{d}",
+ at_accounts:"同 IP 的帳號",
+ at_used:"（{a}～{b} 用過這個 IP）",
+ at_noacc:"還沒有帳號從這個 IP 註冊或登入",
+ at_mark:"標記已處理",
+ at_done:"已處理",
+ ad_tried:"曾在同一個 IP 嘗試註冊保留名稱：{names}",
+ n_reserved_try:"有人嘗試用保留名稱「{u}」（符合「{r}」）註冊，已被擋下。可到管理後台「保留名稱」查看同 IP 的帳號。",
+ log_attempt_done:"把嘗試註冊「{names}」的紀錄標記為已處理",
  E_NAME_REQ:"請輸入帳號。",
  E_NAME_LONG:"帳號最多 30 個字元。",
  E_NAME_TAKEN:"這個帳號已經有人使用。",
@@ -1154,6 +1197,45 @@ hans:{
  bw_ok:"下架 {n} 件",
  bulk_done:"完成 {n} 件。",
  bulk_fail:"{n} 件没有成功（可能状态刚好改变了），刷新后再看看。",
+ ad_reserved:"保留名称",
+ rs_name:"名称",
+ rs_name_ph:"例如 Noni",
+ rs_mode:"比对方式",
+ rs_mode_contains:"包含这段文字",
+ rs_mode_exact:"完全相同",
+ rs_note:"备注",
+ rs_note_ph:"备注（例如：论坛管理员）",
+ rs_add:"加入",
+ rs_desc:"加进来的名称不能被注册。比对时不分大小写，空格、符号、全形字和看起来像字母的数字（0→o、1→i 等）都视为相同。「包含这段文字」会挡掉名称里有这段文字的账号（例如 Noni 也会挡 DJNoni）；只想挡一模一样的名称就选「完全相同」。已经注册的账号不会被改动，符合的会列在表格里，需要的话可以直接封禁。",
+ rs_added:"加入日期",
+ rs_hits:"符合的现有账号",
+ rs_none:"没有",
+ rs_banned:"已封禁",
+ rs_del:"移除",
+ rs_del_confirm:"要移除保留名称「{n}」吗？移除后就可以用这个名称注册。",
+ rs_empty:"还没有保留名称。",
+ rs_need:"请先填名称",
+ rs_added_t:"已加入保留名称「{n}」",
+ log_reserve_add:"加入保留名称「{name}」（{mode}）",
+ log_reserve_del:"移除保留名称「{name}」（{mode}）",
+ E_NAME_RESERVED:"这个名称保留给其他人使用（例如论坛管理员），不能注册，请换一个名称。",
+ E_RESERVE_SHORT:"「包含这段文字」至少要 2 个字，避免挡掉太多名称；只有 1 个字的请选「完全相同」。",
+ at_title:"尝试注册保留名称的纪录",
+ at_desc:"有人用保留名称注册被挡下时会记在这里。网站会把同一个 IP 注册、登录或开启网站的账号连起来列在右边（之前或之后都算），你看不到 IP 本身。同 IP 也可能是同一个家庭或网吧，处置前请再确认。",
+ at_empty:"目前没有纪录。",
+ at_names:"尝试的名称",
+ at_hit:"符合保留名称：{r}",
+ at_n:"次数",
+ at_when:"最近一次",
+ at_first:"第一次：{d}",
+ at_accounts:"同 IP 的账号",
+ at_used:"（{a}～{b} 用过这个 IP）",
+ at_noacc:"还没有账号从这个 IP 注册或登录",
+ at_mark:"标记已处理",
+ at_done:"已处理",
+ ad_tried:"曾在同一个 IP 尝试注册保留名称：{names}",
+ n_reserved_try:"有人尝试用保留名称「{u}」（符合「{r}」）注册，已被挡下。可到管理后台「保留名称」查看同 IP 的账号。",
+ log_attempt_done:"把尝试注册「{names}」的纪录标记为已处理",
  E_NAME_REQ:"请输入账号。",
  E_NAME_LONG:"账号最多 30 个字符。",
  E_NAME_TAKEN:"这个账号已经有人使用。",
@@ -1546,6 +1628,45 @@ en:{
  bw_ok:"Withdraw {n}",
  bulk_done:"Done: {n}.",
  bulk_fail:"{n} did not go through (their state may have just changed); refresh and check.",
+ ad_reserved:"Reserved names",
+ rs_name:"Name",
+ rs_name_ph:"e.g. Noni",
+ rs_mode:"Match",
+ rs_mode_contains:"Contains",
+ rs_mode_exact:"Exact",
+ rs_note:"Note",
+ rs_note_ph:"Note (e.g. forum moderator)",
+ rs_add:"Add",
+ rs_desc:"Names added here cannot be registered. Matching ignores case, spaces, symbols, full-width letters and digits that look like letters (0→o, 1→i and so on). \"Contains\" blocks any name with this text in it (Noni also blocks DJNoni); choose \"Exact\" to block only that exact name. Existing accounts are not changed: any that match are listed, and you can ban them from here.",
+ rs_added:"Added",
+ rs_hits:"Existing accounts that match",
+ rs_none:"None",
+ rs_banned:"banned",
+ rs_del:"Remove",
+ rs_del_confirm:"Remove the reserved name \"{n}\"? It can then be registered.",
+ rs_empty:"No reserved names yet.",
+ rs_need:"Enter a name first",
+ rs_added_t:"Reserved \"{n}\"",
+ log_reserve_add:"Reserved name \"{name}\" ({mode})",
+ log_reserve_del:"Removed reserved name \"{name}\" ({mode})",
+ E_NAME_RESERVED:"This name is reserved (for example for a forum moderator) and cannot be registered. Please choose another name.",
+ E_RESERVE_SHORT:"\"Contains\" needs at least 2 characters so it does not block too many names; for a single character choose \"Exact\".",
+ at_title:"Attempts to register a reserved name",
+ at_desc:"Registrations blocked because of a reserved name are listed here. Accounts registered, logged in or opening the site from the same IP (before or after) are linked on the right; the IP itself is never shown. A shared IP can also be a household or an internet café, so check before acting.",
+ at_empty:"Nothing yet.",
+ at_names:"Names tried",
+ at_hit:"Matched: {r}",
+ at_n:"Times",
+ at_when:"Last",
+ at_first:"First: {d}",
+ at_accounts:"Accounts on the same IP",
+ at_used:"(used this IP {a} – {b})",
+ at_noacc:"No account has registered or logged in from this IP yet",
+ at_mark:"Mark handled",
+ at_done:"Handled",
+ ad_tried:"Tried to register a reserved name from the same IP: {names}",
+ n_reserved_try:"Someone tried to register \"{u}\" (matches the reserved name \"{r}\") and was blocked. See Admin → Reserved names for accounts on the same IP.",
+ log_attempt_done:"Marked attempts to register \"{names}\" as handled",
  E_NAME_REQ:"Enter a username.",
  E_NAME_LONG:"Usernames can be at most 30 characters.",
  E_NAME_TAKEN:"That username is taken.",
@@ -2776,10 +2897,10 @@ function viewAdmin(){
   if(!isAdmin())return needLogin('login_needed');
   const D=A.admin;const head=`<div class="mhead"><h1>${t('nav_admin')}</h1><button class="btn small" data-act="reload">${t('refresh')}</button></div>`;
   if(!D)return head+LOADING();
-  const openN=D.reports.filter(r=>r.status==='open').length,ipN=D.ip_groups.filter(g=>!g.dismissed).length;
-  const tabs=[['reports','ad_reports',openN],['users','ad_users',0],['ip','ad_ip',ipN],['trades','ad_trades',0],['season','ad_season',0],['log','ad_log',0]];
+  const openN=D.reports.filter(r=>r.status==='open').length,ipN=D.ip_groups.filter(g=>!g.dismissed).length,tryN=(D.attempts||[]).filter(g=>!g.done).length;
+  const tabs=[['reports','ad_reports',openN],['users','ad_users',0],['reserved','ad_reserved',tryN],['ip','ad_ip',ipN],['trades','ad_trades',0],['season','ad_season',0],['log','ad_log',0]];
   let body='';
-  switch(UI.adminTab){case 'users':body=adUsers(D);break;case 'ip':body=adIp(D);break;case 'trades':body=adTrades(D);break;case 'season':body=adSeason(D);break;case 'log':body=adLogView(D);break;default:body=adReports(D);}
+  switch(UI.adminTab){case 'users':body=adUsers(D);break;case 'reserved':body=adReserved(D);break;case 'ip':body=adIp(D);break;case 'trades':body=adTrades(D);break;case 'season':body=adSeason(D);break;case 'log':body=adLogView(D);break;default:body=adReports(D);}
   return head+`<div class="tabs">${tabs.map(([v,k,n])=>`<button class="tab ${UI.adminTab===v?'on':''}" data-act="admin-tab" data-v="${v}">${t(k)}${n?` <span class="cnt hot">${n}</span>`:''}</button>`).join('')}</div><div class="panel">${body}</div>`;
 }
 const statsText=(name,s)=>t('ad_target_stats',{name,buy:s.buy,cancel:s.cancel,rep:s.rep,age:s.age});
@@ -2801,7 +2922,7 @@ function adUsers(D){
   const rows=D.users.map(u=>{
     const st=isBanned(u)?`<span class="pill bad">${u.banned_until==='infinity'?t('ad_banned_perm'):t('ad_banned_until',{d:fmtDate(ts(u.banned_until))})}</span>`:`<span class="pill available">${t('ad_normal')}</span>`;
     const isAdm=u.role==='admin';
-    return `<tr><td><b>${esc(u.name)}</b>${isAdm?` <span class="tag">${t('role_admin')}</span>`:''}${u.pw_reset?` <span class="tag">${t('pw_pending')}</span>`:''}${u.ip_with?`<div class="warn-t small">${t('ad_ip_with',{names:u.ip_with})}</div>`:''}</td><td class="num">${fmtDate(ts(u.created_at))}</td><td class="num">${u.listed}</td><td class="num">${u.sold}</td><td class="num">${u.bought}</td><td class="num ${u.cancel30>=3?'bad-t':''}">${u.cancel30}</td><td class="num">${u.reports}</td><td>${st}${u.warnings?` <span class="muted small">${t('ad_warned',{n:u.warnings})}</span>`:''}</td>
+    return `<tr><td><b>${esc(u.name)}</b>${isAdm?` <span class="tag">${t('role_admin')}</span>`:''}${u.pw_reset?` <span class="tag">${t('pw_pending')}</span>`:''}${u.ip_with?`<div class="warn-t small">${t('ad_ip_with',{names:u.ip_with})}</div>`:''}${u.tried?`<div class="bad-t small">${t('ad_tried',{names:u.tried})}</div>`:''}</td><td class="num">${fmtDate(ts(u.created_at))}</td><td class="num">${u.listed}</td><td class="num">${u.sold}</td><td class="num">${u.bought}</td><td class="num ${u.cancel30>=3?'bad-t':''}">${u.cancel30}</td><td class="num">${u.reports}</td><td>${st}${u.warnings?` <span class="muted small">${t('ad_warned',{n:u.warnings})}</span>`:''}</td>
     <td class="acts">${isAdm?'':modBtns(u.id,u.name,isBanned(u))+`<button class="btn small" data-act="ad-pw" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_reset_pw')}</button><button class="btn small danger" data-act="ad-del" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_delete')}</button>`}</td></tr>`;
   }).join('');
   return `<div class="tablewrap"><table><thead><tr><th>${t('ad_u_name')}</th><th class="num">${t('ad_u_joined')}</th><th class="num">${t('ad_u_listing')}</th><th class="num">${t('ad_u_sold')}</th><th class="num">${t('ad_u_bought')}</th><th class="num">${t('ad_u_cancel')}</th><th class="num">${t('ad_u_reports')}</th><th>${t('ad_u_state')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
@@ -2819,6 +2940,25 @@ function adTrades(D){
   if(!list.length)return `<div class="pad"><div class="notice info">${t('ad_trade_hint')}</div></div><div class="empty">${t('mine_empty')}</div>`;
   return `<div class="pad"><div class="notice info">${t('ad_trade_hint')}</div></div><div class="tablewrap"><table><thead><tr><th>${t('col_date')}</th><th>${t('col_equip')}</th><th class="num">${t('col_sold_price')}</th><th>${t('col_seller')}</th><th>${t('col_buyer')}</th><th>${t('col_ref')}</th></tr></thead><tbody>${list.map(l=>`<tr class="row" data-act="open" data-lid="${l.id}"><td class="num">${fmtDate(ts(l.sold_at))}</td><td>${nameCell(l)} ${worldBadge(l)}${l.world==='isekai'?` <span class="muted small">${esc(l.season??'?')}</span>`:''}</td><td class="num">${priceHTML(l.sold_price)}</td><td>${esc(l.seller)}</td><td>${esc(l.buyer)}</td><td class="acts">${l.excluded?`<span class="pill bad">${t('ad_excluded')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_include')}</button>`:`<span class="pill available">${t('ad_included')}</span> <button class="btn small" data-act="ad-excl" data-lid="${l.id}">${t('ad_exclude')}</button>`}</td></tr>`).join('')}</tbody></table></div>`;
 }
+/* reserved names: nobody can register them (or names containing them); accounts that already match are listed */
+function adReserved(D){
+  const L=D.reserved||[];
+  const form=`<div class="card-a rs-form"><label for="rs-name">${t('rs_name')}</label><input id="rs-name" class="sm" maxlength="30" placeholder="${t('rs_name_ph')}" autocomplete="off"><label class="sr" for="rs-mode">${t('rs_mode')}</label><select id="rs-mode"><option value="contains">${t('rs_mode_contains')}</option><option value="exact">${t('rs_mode_exact')}</option></select><label class="sr" for="rs-note">${t('rs_note')}</label><input id="rs-note" maxlength="200" placeholder="${t('rs_note_ph')}"><button class="btn small primary" data-act="rs-add">${t('rs_add')}</button></div><p class="muted small" style="margin:8px 0 12px">${t('rs_desc')}</p>`;
+  const hit=u=>`<span class="rs-hit"><b>${esc(u.name)}</b>${u.role==='admin'?` <span class="tag">${t('role_admin')}</span>`:u.banned?` <span class="muted small">${t('rs_banned')}</span>`:` <button class="btn small danger" data-act="ad-ban" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_ban')}</button>`}</span>`;
+  const rows=L.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${t('rs_mode_'+r.mode)}</td><td>${r.note?esc(r.note):'—'}</td><td class="num">${fmtDate(ts(r.created_at))}</td><td>${r.matches.length?r.matches.map(hit).join(''):`<span class="muted">${t('rs_none')}</span>`}</td><td class="acts"><button class="btn small" data-act="rs-del" data-id="${r.id}" data-name="${esc(r.name)}">${t('rs_del')}</button></td></tr>`).join('');
+  return `<div class="pad">${form}${L.length?`<div class="tablewrap"><table><thead><tr><th>${t('rs_name')}</th><th>${t('rs_mode')}</th><th>${t('rs_note')}</th><th class="num">${t('rs_added')}</th><th>${t('rs_hits')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty">${t('rs_empty')}</div>`}${adAttempts(D)}</div>`;
+}
+/* blocked registrations under a reserved name, one row per IP (never shown, only used to link), with the
+   accounts used from that same IP before or after */
+function adAttempts(D){
+  const G=D.attempts||[];
+  const head=`<h3 class="rs-h">${t('at_title')}</h3><p class="muted small" style="margin:0 0 8px">${t('at_desc')}</p>`;
+  if(!G.length)return head+`<div class="empty">${t('at_empty')}</div>`;
+  const dt=x=>{const d=new Date(ts(x));return fmtDate(d)+' '+d.toTimeString().slice(0,5);};
+  const acc=u=>`<div class="rs-hit"><b>${esc(u.name)}</b>${u.role==='admin'?` <span class="tag">${t('role_admin')}</span>`:''} <span class="muted small">${t('at_used',{a:fmtDate(ts(u.first_at)),b:fmtDate(ts(u.last_at))})}</span>${u.role==='admin'?'':u.banned?` <span class="muted small">${t('rs_banned')}</span>`:` <button class="btn small danger" data-act="ad-ban" data-uid="${u.id}" data-name="${esc(u.name)}">${t('ad_ban')}</button>`}</div>`;
+  const rows=G.map(g=>`<tr class="${g.done?'muted':''}"><td>${g.names.slice(0,6).map(x=>`<b>${esc(x)}</b>`).join(', ')}${g.names.length>6?' '+t('and_more',{n:g.names.length-6}):''}<div class="muted small">${t('at_hit',{r:g.reserved.join(', ')})}</div></td><td class="num">${g.n}</td><td class="small">${dt(g.last_at)}${g.n>1?`<div class="muted">${t('at_first',{d:dt(g.first_at)})}</div>`:''}</td><td>${g.accounts.length?g.accounts.map(acc).join(''):`<span class="muted small">${t('at_noacc')}</span>`}</td><td class="acts">${g.done?`<span class="muted small">${t('at_done')}</span>`:`<button class="btn small" data-act="att-done" data-ids="${g.ids.join(',')}">${t('at_mark')}</button>`}</td></tr>`).join('');
+  return head+`<div class="tablewrap"><table><thead><tr><th>${t('at_names')}</th><th class="num">${t('at_n')}</th><th>${t('at_when')}</th><th>${t('at_accounts')}</th><th>${t('col_actions')}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
 function adSeason(D){
   return `<div class="pad" style="display:grid;gap:12px;max-width:640px"><h2>${t('ad_season_now',{n:D.season})}</h2>
   <div class="card-a"><label for="season-n">${t('season_set')}</label><input id="season-n" class="sm" style="width:110px" maxlength="20" placeholder="2026-2" value="${esc(D.season)}"><button class="btn small" data-act="season-set">${t('save')}</button></div>
@@ -2826,7 +2966,7 @@ function adSeason(D){
 }
 function adLogView(D){
   if(!D.log.length)return `<div class="empty">${t('ad_log_empty')}</div>`;
-  return `<ol class="loglist" reversed>${D.log.map(e=>{const p=Object.assign({},e.params);if(p.dk)p.dur=t(p.dk);if(p.item)p.item=eqZh(p.item);if(e.kind==='exclude'||e.kind==='include')p.item=(p.item||'')+' · '+fmtPrice(p.p||0);const d=new Date(ts(e.at));return `<li><span class="muted small">${fmtDate(d)} ${d.toTimeString().slice(0,5)}</span> · ${t('log_'+e.kind,p)}</li>`;}).join('')}</ol>`;
+  return `<ol class="loglist" reversed>${D.log.map(e=>{const p=Object.assign({},e.params);if(p.dk)p.dur=t(p.dk);if(e.kind.startsWith('reserve_')&&p.mode)p.mode=t('rs_mode_'+p.mode);if(p.item)p.item=eqZh(p.item);if(e.kind==='exclude'||e.kind==='include')p.item=(p.item||'')+' · '+fmtPrice(p.p||0);const d=new Date(ts(e.at));return `<li><span class="muted small">${fmtDate(d)} ${d.toTimeString().slice(0,5)}</span> · ${t('log_'+e.kind,p)}</li>`;}).join('')}</ol>`;
 }
 
 /* ================= modals ================= */
@@ -3048,6 +3188,10 @@ const H={
   'ad-resolve'(el){const id=N(el.dataset.id);act(()=>api('hv_admin_resolve',{p_report:id,p_note:val('res-'+id).trim()}),t('toast_done'));},
   'ad-ip-ok'(el){act(()=>api('hv_admin_ip_ok',{p_key:el.dataset.key}),t('toast_done'));},
   'ad-excl'(el){act(()=>api('hv_admin_exclude',{p_id:N(el.dataset.lid)}));},
+  'rs-add'(){const n=val('rs-name').trim(),m=val('rs-mode')||'contains',note=val('rs-note').trim();if(!n){toast(t('rs_need'),true);$('#rs-name').focus();return;}act(()=>api('hv_admin_reserve',{p_name:n,p_mode:m,p_note:note}),t('rs_added_t',{n}));},
+  'att-done'(el){const ids=String(el.dataset.ids||'').split(',').map(N).filter(Boolean);act(()=>api('hv_admin_attempts_done',{p_ids:ids}),t('toast_done'));},
+  'rs-del'(el){openModal(t('rs_del'),`<p style="margin:0">${t('rs_del_confirm',{n:el.dataset.name})}</p>${okCancel('rs-del-ok',`data-id="${el.dataset.id}"`,t('rs_del'),'danger')}`);},
+  'rs-del-ok'(el){const id=N(el.dataset.id);closeModal();act(()=>api('hv_admin_unreserve',{p_id:id}),t('toast_done'));},
   'season-set'(){const v=val('season-n').trim();if(!SEASON_RE.test(v)){toast(t('E_SEASON'),true);return;}act(()=>api('hv_admin_set_season',{p_season:v}),t('season_saved'));},
   season(){mSeason();},
   'season-ok'(){const v=val('season-next').trim();if(!SEASON_RE.test(v)){toast(t('E_SEASON'),true);return;}closeModal();let r=null;act(async()=>{r=await api('hv_admin_season_end',{p_next:v});}).then(ok=>{if(ok&&r)toast(t('ad_season_done',{n:r.n,s:r.s}));});},
@@ -3069,6 +3213,7 @@ async function doRegister(){
   if(pw!==pw2){setErr('err_pw_match');return;}
   try{
     const r=await rpc('hv_register',{p_name:name,p_pw:pw});
+    if(r&&r.error){setErr(r.error);return;}
     P.token=r.token;A.me=r.me;savePrefs();closeModal();toast(t('reg_done'));await refresh(true);
   }catch(e){if(e.code&&T.zh[e.code]!==undefined&&e.code!=='E_NET'&&e.code!=='E_CFG'&&e.code!=='E_SERVER')setErr(e.code);else handleErr(e);}
 }
@@ -3123,6 +3268,7 @@ const did=el.dataset&&(el.dataset.dprice||el.dataset.droll||el.dataset.dname);if
 window.addEventListener('beforeunload',()=>{for(const k of Object.keys(pendingSaves))runDraftSave(k);});
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target&&e.target.id==='bl-name'){e.preventDefault();H['bl-add']();return;}
+  if(e.key==='Enter'&&e.target&&(e.target.id==='rs-name'||e.target.id==='rs-note')){e.preventDefault();H['rs-add']();return;}
   if(e.key==='Enter'&&e.target&&e.target.id==='ps-name'){e.preventDefault();H['preset-save']();return;}
   if(e.key==='Enter'&&e.target&&e.target.id==='offer-in'){e.preventDefault();const b=$('[data-act="offer-send"]');if(b)b.click();return;}
   if(e.key==='Escape'&&UI.eqOpen&&!$('#modal-root').innerHTML){eqClose(true);return;}
